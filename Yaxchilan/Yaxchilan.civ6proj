@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Name>Yaxchilan</Name>
+    <Guid>3b857081-842a-484a-86d8-10acf5e62b61</Guid>
+    <ProjectGuid>5d160bf3-6062-4b6a-b301-da3b294956ea</ProjectGuid>
+    <ModVersion>1</ModVersion>
+    <Teaser>Introducing the Yaxchilan District, which unlocks the potential to work the 4th and 5th ring in your cities.</Teaser>
+    <Description>Introducing the Yaxchilan District, which unlocks the potential to work the 4th and 5th ring in your cities.</Description>
+    <Authors>Fuzzle</Authors>
+    <SpecialThanks>Civ VI Modding Helpline</SpecialThanks>
+    <AffectsSavedGames>true</AffectsSavedGames>
+    <SupportsSinglePlayer>true</SupportsSinglePlayer>
+    <SupportsMultiplayer>true</SupportsMultiplayer>
+    <SupportsHotSeat>true</SupportsHotSeat>
+    <CompatibleVersions>1.2,2.0</CompatibleVersions>
+    <AssemblyName>Yaxchilan</AssemblyName>
+    <RootNamespace>Yaxchilan</RootNamespace>
+    <Homepage>https://discord.gg/zNqNDCt</Homepage>
+    <AssociationData><![CDATA[<Associations>
+  <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
+  <Reference type="Mod" title="CQUI" id="1d44b5e7-753e-405b-af24-5ee634ec8a01" />
+  <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
+</Associations>]]></AssociationData>
+    <ActionCriteriaData><![CDATA[
+<ActionCriteria>
+  <Criteria id="HAS_MOD_CQUI" any="1">
+    <ModInUse>1d44b5e7-753e-405b-af24-5ee634ec8a01</ModInUse>
+    <ModInUse>20c0bddb-67bf-6e15-8328-60c977b3031e</ModInUse>
+  </Criteria>
+  <Criteria id="HAS_MOD_SSUA" any="1">
+    <ModInUse>805cc499-c534-4e0a-bdce-32fb3c53ba38</ModInUse>
+  </Criteria>
+</ActionCriteria>]]></ActionCriteriaData>
+    <InGameActionData><![CDATA[
+<InGameActions>
+  <!-- Gameplay -->
+  <UpdateDatabase id="Gameplay">
+    <File>Gameplay/Yaxchilan.sql</File>
+  </UpdateDatabase>
+  <!-- Icons -->
+  <UpdateIcons id="Icons">
+    <File>Icons/Yaxchilan_Icons.xml</File>
+  </UpdateIcons>
+  <!-- Text -->
+  <UpdateText id="Text">
+    <File>Text/Yaxchilan_Text.sql</File>
+  </UpdateText>
+  <!-- Import -->
+  <ImportFiles id="Import_Script">
+    <File>Scripts/Yaxchilan_District.lua</File>
+    <File>Scripts/Yaxchilan_Utility.lua</File>
+  </ImportFiles>
+  <ImportFiles id="Import_UI">
+    <Properties>
+      <LoadOrder>100</LoadOrder>
+    </Properties>
+    <File>UI/PlotToolTip_Yaxchilan.lua</File>
+    <File>UI/PlotInfo_Yaxchilan.lua</File>
+    <File>UI/Yaxchilan_ExposedMembers.lua</File>
+    <File>UI/Yaxchilan_ExposedMembers.xml</File>
+  </ImportFiles>
+  <ImportFiles id="Import_UI_SSUA">
+    <Criteria>HAS_MOD_SSUA</Criteria>
+    <Properties>
+      <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>UI/ThirdParty/SSUA/Suk_PlotTooltips.lua</File>
+    <File>UI/ThirdParty/SSUA/Suk_CityPanelOverview.lua</File>
+    <File>UI/ThirdParty/SSUA/PlotInfo_Citizens.lua</File>
+    <File>UI/PlotInfo_Citizens_Yaxchilan.lua</File>
+  </ImportFiles>
+  <ImportFiles id="Import_UI_CQUI">
+    <Criteria>HAS_MOD_CQUI</Criteria>
+    <File>UI/ThirdParty/CQUI/productionpanel_CQUI.lua</File>
+  </ImportFiles>
+  <ImportFiles id="Import_Icons">
+    <!-- TODO -->
+  </ImportFiles>
+  <!-- UserInterfaces -->
+  <AddUserInterfaces id="UserInterfaces">
+    <Properties>
+      <Context>InGame</Context>
+    </Properties>
+    <File>UI/Yaxchilan_ExposedMembers.xml</File>
+  </AddUserInterfaces>
+  <!-- ReplaceUIScript -->
+  <ReplaceUIScript id="ReplaceUIScript_PlotToolTip">
+    <Properties>
+      <LoadOrder>14050</LoadOrder>
+      <LuaContext>PlotToolTip</LuaContext>
+      <LuaReplace>UI/PlotToolTip_Yaxchilan.lua</LuaReplace>
+    </Properties>
+  </ReplaceUIScript>
+  <ReplaceUIScript id="ReplaceUIScript_PlotInfo">
+    <Properties>
+      <LuaContext>PlotInfo</LuaContext>
+      <LuaReplace>UI/PlotInfo_Yaxchilan.lua</LuaReplace>
+    </Properties>
+  </ReplaceUIScript>
+  <ReplaceUIScript id="ReplaceUIScript_PlotInfo_Citizens" criteria="HAS_MOD_SSUA">
+    <Properties>
+      <LuaContext>PlotInfo_Citizens</LuaContext>
+      <LuaReplace>UI/PlotInfo_Citizens_Yaxchilan.lua</LuaReplace>
+    </Properties>
+  </ReplaceUIScript>
+</InGameActions>]]></InGameActionData>
+    <FrontEndActionData><![CDATA[
+<FrontEndActions>
+</FrontEndActions>]]></FrontEndActionData>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
+    <OutputPath>.</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Gameplay\" />
+    <Folder Include="Icons\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Scripts\" />
+    <Folder Include="Text\" />
+    <Folder Include="UI\" />
+    <Folder Include="UI\Replacements\" />
+    <Folder Include="UI\ThirdParty\" />
+    <Folder Include="UI\ThirdParty\SSUA\" />
+    <Folder Include="UI\ThirdParty\CQUI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Yaxchilan.Art.xml" />
+    <!-- Gameplay -->
+    <Content Include="Gameplay\Yaxchilan.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <!-- Icons -->
+    <Content Include="Icons\Yaxchilan_Icons.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <!-- Text -->
+    <Content Include="Text\Yaxchilan_Text.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <!-- Scripts -->
+    <Content Include="Scripts\Yaxchilan_District.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Scripts\Yaxchilan_Utility.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <!-- UI -->
+    <Content Include="UI\Replacements\CitySupport.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ThirdParty\CQUI\productionpanel_CQUI.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ThirdParty\SSUA\PlotInfo_Citizens.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ThirdParty\SSUA\Suk_CityPanelOverview.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\ThirdParty\SSUA\Suk_PlotTooltips.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Yaxchilan_ExposedMembers.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\Yaxchilan_ExposedMembers.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\PlotInfo_Yaxchilan.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\PlotInfo_Citizens_Yaxchilan.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\PlotToolTip_Yaxchilan.lua">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)Civ6.targets" />
+</Project>
