@@ -235,7 +235,7 @@ function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchi
   local tWorkableOuterPlotData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_WORKABLE_OUTER_RING_TILES);
   local iAssignedNbhWorkerCount = 0;
   local tOuterRingPlotsData = {};
-  for _, xOuterRingPlotInfo in pairs(tWorkableOuterPlotData) do
+  for _, xOuterRingPlotInfo in ipairs(tWorkableOuterPlotData) do
     -- Set data
     local xPlotData = {};
     xPlotData.bIsWorked = iAssignedNbhWorkerCount < iYaxchilanWorkerCount;
@@ -802,11 +802,11 @@ local function YaxchilanLateInitialize()
   Events.CityInitialized.Add(                           YaxchilanOnCityInitialized);                -- cleanup
   GameEvents.BuildingPillageStateChanged.Add(           YaxchilanOnBuildingPillageStateChanged);    -- pillaged
   -- Custom game event subscriptions
-  GameEvents.Yaxchilan_CC_YaxchilanPurchasePlot.Add(    YaxchilanPurchasePlot);
-  GameEvents.Yaxchilan_CC_YaxchilanSwapTile.Add(        YaxchilanSwapTile)
-  GameEvents.Yaxchilan_CC_YaxchilanTogglePlotLock.Add(  YaxchilanTogglePlotLock);                   -- plots + score + slots + yields
+  GameEvents.Yaxchilan_CC_PurchasePlot.Add(             YaxchilanPurchasePlot);
+  GameEvents.Yaxchilan_CC_SwapTile.Add(                 YaxchilanSwapTile)
+  GameEvents.Yaxchilan_CC_TogglePlotLock.Add(           YaxchilanTogglePlotLock);                   -- plots + score + slots + yields
   -- Log the initialization
-  print("Yaxchilan_Script_NeighborhoodTe.lua initialized!");
+  print("Yaxchilan_District.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------

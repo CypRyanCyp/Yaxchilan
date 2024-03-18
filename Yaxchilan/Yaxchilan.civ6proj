@@ -105,6 +105,10 @@
       <LuaReplace>UI/PlotInfo_Citizens_Yaxchilan.lua</LuaReplace>
     </Properties>
   </ReplaceUIScript>
+  <!-- Scripts -->
+  <AddGameplayScripts id="Scripts">
+    <File>Scripts/Yaxchilan_District.lua</File>
+  </AddGameplayScripts>
 </InGameActions>]]></InGameActionData>
     <FrontEndActionData><![CDATA[
 <FrontEndActions>

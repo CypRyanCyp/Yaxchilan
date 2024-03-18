@@ -119,7 +119,7 @@ function YaxchilanOnClickOuterRingCitizen( iPlayer : number, iCity : number, iPl
   tParameters.iPlayer = iPlayer;
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
-  tParameters.OnStart = "Yaxchilan_CC_NbhTeTogglePlotLock";
+  tParameters.OnStart = "Yaxchilan_CC_TogglePlotLock";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   return true;
 end
@@ -241,6 +241,11 @@ function YaxchilanPlotInfoShowOuterRingCitizens()
   -- Get outer ring plot data
   local tOuterRingPlotsData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA);
   if tOuterRingPlotsData == nil or table.count(tOuterRingPlotsData) == 0 then return end
+  
+  print("tOuterRingPlotsData");
+  for iPlot, _ in pairs(tOuterRingPlotsData) do
+    print(">", "iPlot", iPlot);
+  end
 
   -- Show icon on each worked outer ring plot and disable shadow hex
   m_YaxchilanUiWorkableCityPlotsLensMask = {};
@@ -320,7 +325,7 @@ function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : numbe
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
   tParameters.iGoldCost = iGoldCost;
-  tParameters.OnStart = "Yaxchilan_CC_NbhTePurchasePlot";
+  tParameters.OnStart = "Yaxchilan_CC_PurchasePlot";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   
   -- Play UI sound
@@ -375,7 +380,7 @@ function YaxchilanPlotInfoOnClickSwapTile( iPlot : number )
   tParameters.iPlayer = iPlayer;
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
-  tParameters.OnStart = "Yaxchilan_CC_NbhTeSwapTile";
+  tParameters.OnStart = "Yaxchilan_CC_SwapTile";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   
   -- Play UI sound

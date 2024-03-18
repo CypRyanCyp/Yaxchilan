@@ -50,7 +50,7 @@ local function YaxchilanExposedMembersInitialize()
   if not ExposedMembers.Yaxchilan then ExposedMembers.Yaxchilan = {} end
   ExposedMembers.Yaxchilan.CityGetLockedPlots = YaxchilanCityGetLockedPlots;
   -- Initialized
-  print("Yaxchilan_UI_Core.lua initialized!");
+  print("Yaxchilan_ExposedMembers.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------

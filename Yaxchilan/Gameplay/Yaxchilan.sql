@@ -12,6 +12,7 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 INSERT INTO "Districts"
 ("DistrictType",        "Name",                       "Description",                        "PrereqTech", "PrereqCivic",  "Cost", "RequiresPlacement",  "NoAdjacentCity", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "MilitaryDomain") VALUES 
 ('DISTRICT_YAXCHILAN', 'LOC_DISTRICT_YAXCHILAN_NAME', 'LOC_DISTRICT_YAXCHILAN_DESCRIPTION', NULL,         NULL,           27,     1,                    0,                0,          0,              0,                          0,                            'PLUNDER_GOLD', 'NO_DOMAIN');
+-- TODO: Set PrereqTech, PrereqCivic and maybe change PlunderType
 
 --------------------------------------------------------------
 -- Temporary list for binary digits
@@ -131,7 +132,7 @@ JOIN "YaxchilanTmpBinaryDigits" bd
 ORDER BY y.YieldType, bd.BinaryDigit;
 -- BuildingModifiers
 INSERT INTO "BuildingModifiers" ("BuildingType", "ModifierId")
-SELECT  'BUILDING_YAXCHILAN_POPULATION'                                                     "BuildingType",
+SELECT  'BUILDING_YAXCHILAN'                                                     "BuildingType",
         'MOD_BUILDING_YAXCHILAN_BONUS_' || y.YieldType || '_' || bd.BinaryDigit             "ModifierId"
 FROM "Yields" y
 JOIN "YaxchilanTmpBinaryDigits" bd
@@ -159,7 +160,7 @@ FROM "Yields" y;
 -- RequirementArguments (PropertyMinimum)
 INSERT INTO "RequirementArguments" ("RequirementId", "Name", "Value")
 SELECT  'REQUIRES_YAXCHILAN_PLOT_HAS_PROPERTY_MINUS_' || y.YieldType                        "RequirementId",
-        'Proper tyMinimum'                                                                  "Name",
+        'PropertyMinimum'                                                                   "Name",
         '1'                                                                                 "Value"
 FROM "Yields" y;
 -- RequirementSetRequirements
@@ -187,7 +188,7 @@ SELECT  'MOD_BUILDING_YAXCHILAN_MALUS_' || y.YieldType                          
 FROM "Yields" y;
 -- BuildingModifiers
 INSERT INTO "BuildingModifiers" ("BuildingType", "ModifierId")
-SELECT  'BUILDING_YAXCHILAN_POPULATION'                                                     "BuildingType",
+SELECT  'BUILDING_YAXCHILAN'                                                     "BuildingType",
         'MOD_BUILDING_YAXCHILAN_MALUS_' || y.YieldType                                      "ModifierId"
 FROM "Yields" y;
 
