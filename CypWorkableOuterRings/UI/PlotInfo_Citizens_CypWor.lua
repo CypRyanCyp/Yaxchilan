@@ -8,7 +8,7 @@
 -- INCLUDES
 -- ===========================================================================
 -- Utility
-include "Yaxchilan_Utility.lua"
+include "CypWor_Utility.lua"
 -- Original
 include "PlotInfo_Citizens"
 
@@ -36,9 +36,9 @@ local m_hoveredCityId                         = nil;
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoCitizensGetCity
+-- CypWorPlotInfoCitizensGetCity
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoCitizensGetCity( iPlayer : number, iCity : number )
+function CypWorPlotInfoCitizensGetCity( iPlayer : number, iCity : number )
   
   -- Validate is local player
 	if iPlayer ~= Game.GetLocalPlayer() then return nil end
@@ -67,7 +67,7 @@ end
 -- ---------------------------------------------------------------------------
 -- Override
 -- ---------------------------------------------------------------------------
-YaxchilanOriginal_ShowCityYields = ShowCityYields;
+CypWorOriginal_ShowCityYields = ShowCityYields;
 
 -- ---------------------------------------------------------------------------
 -- ShowCityYields
@@ -77,18 +77,18 @@ function ShowCityYields( tPlots : table )
   -- Get city
   local iPlayer = m_hoveredCityPlayerId;
   local iCity = m_hoveredCityId;
-  local pCity = YaxchilanPlotInfoCitizensGetCity(iPlayer, iCity);
+  local pCity = CypWorPlotInfoCitizensGetCity(iPlayer, iCity);
   if pCity == nil then return end
   
   -- Merge inner and outer ring plots
-  local tOuterRingPlotsData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA);
+  local tOuterRingPlotsData : table = pCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
   if tOuterRingPlotsData ~= nil and table.count(tOuterRingPlotsData) > 0 then return end
   for iPlot, _ in pairs(tOuterRingPlotsData) do
     table.insert(tPlots, iPlot);
   end
 
   -- Call original
-  YaxchilanOriginal_ShowCityYields(tPlots);
+  CypWorOriginal_ShowCityYields(tPlots);
 end
 
 
@@ -98,27 +98,25 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoCitizensHideDistrict
+-- CypWorPlotInfoCitizensHideDistrict
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoCitizensHideDistrict( pCity )
-  -- Validate city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local pYaxchilanDistrict = pCity:GetDistricts():GetDistrict(YAXCHILAN_DISTRICT_TYPE);
-  local pYaxchilanPlot = Map.GetPlot(pYaxchilanDistrict:GetX(), pYaxchilanDistrict:GetY());
-  local iYaxchilanPlot = pYaxchilanPlot:GetIndex();
+function CypWorPlotInfoCitizensHideDistrict( pCity )
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
   -- Hide instance
-  local pInstance = GetInstanceAt(iYaxchilanPlot);
+  local pInstance = GetInstanceAt(iCypWorPlot);
   if pInstance == nil then return end
 	pInstance.Anchor:SetHide(true);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoCitizensShowOuterRingCitizens
+-- CypWorPlotInfoCitizensShowOuterRingCitizens
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoCitizensShowOuterRingCitizens( pCity )
+function CypWorPlotInfoCitizensShowOuterRingCitizens( pCity )
   
   -- Get outer ring plot data
-  local tOuterRingPlotsData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA);
+  local tOuterRingPlotsData : table = pCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
   if tOuterRingPlotsData == nil or table.count(tOuterRingPlotsData) == 0 then return end
   
   -- Show icon on each worked outer ring plot
@@ -137,7 +135,7 @@ end
 -- ---------------------------------------------------------------------------
 -- Override
 -- ---------------------------------------------------------------------------
-YaxchilanOriginal_ShowCitizens = ShowCitizens;
+CypWorOriginal_ShowCitizens = ShowCitizens;
 
 -- ---------------------------------------------------------------------------
 -- ShowCitizens
@@ -146,15 +144,15 @@ function ShowCitizens( iPlayer : number, iCity : number )
   -- Call original
   m_hoveredCityPlayerId = iPlayer;
   m_hoveredCityId = iCity;
-  YaxchilanOriginal_ShowCitizens(iPlayer, iCity);
+  CypWorOriginal_ShowCitizens(iPlayer, iCity);
   -- Get city
-  local pCity = YaxchilanPlotInfoCitizensGetCity(iPlayer, iCity);
+  local pCity = CypWorPlotInfoCitizensGetCity(iPlayer, iCity);
   if pCity == nil then return end
-  -- Hide NBH citizens
-  YaxchilanPlotInfoCitizensHideDistrict(pCity);
+  -- Hide WOR citizens
+  CypWorPlotInfoCitizensHideDistrict(pCity);
   -- Show outer ring workers
-  YaxchilanPlotInfoCitizensShowOuterRingCitizens(pCity);
+  CypWorPlotInfoCitizensShowOuterRingCitizens(pCity);
 end
 
 -- Log init
-print("PlotInfo_Citizens_Yaxchilan.lua initialized!");
+print("PlotInfo_Citizens_CypWor.lua initialized!");

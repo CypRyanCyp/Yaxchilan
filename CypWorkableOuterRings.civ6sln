@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # ModBuddy Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{5DAE07AF-E217-45C1-8DE7-FF99D6011E8A}") = "Yaxchilan", "Yaxchilan\Yaxchilan.civ6proj", "{5D160BF3-6062-4B6A-B301-DA3B294956EA}"
+Project("{5DAE07AF-E217-45C1-8DE7-FF99D6011E8A}") = "CypWorkableOuterRings", "CypWorkableOuterRings\CypWorkableOuterRings.civ6proj", "{5D160BF3-6062-4B6A-B301-DA3B294956EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

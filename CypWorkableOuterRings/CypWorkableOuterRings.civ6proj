@@ -8,17 +8,20 @@
     <ModVersion>1</ModVersion>
     <Teaser>Introducing the Yaxchilan District, which unlocks the potential to work the 4th and 5th ring in your cities.</Teaser>
     <Description>Introducing the Yaxchilan District, which unlocks the potential to work the 4th and 5th ring in your cities.</Description>
-    <Authors>Fuzzle</Authors>
+    <Authors>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan</Authors>
     <SpecialThanks>Civ VI Modding Helpline</SpecialThanks>
     <AffectsSavedGames>true</AffectsSavedGames>
     <SupportsSinglePlayer>true</SupportsSinglePlayer>
     <SupportsMultiplayer>true</SupportsMultiplayer>
     <SupportsHotSeat>true</SupportsHotSeat>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
-    <AssemblyName>Yaxchilan</AssemblyName>
-    <RootNamespace>Yaxchilan</RootNamespace>
+    <AssemblyName>CypWor</AssemblyName>
+    <RootNamespace>CypWor</RootNamespace>
     <Homepage>https://discord.gg/zNqNDCt</Homepage>
     <AssociationData><![CDATA[<Associations>
+  <Reference type="Dlc" title="Expansion: Gathering Storm" id="4873eb62-8ccc-4574-b784-dda455e74e68" />
+  <Reference type="Dlc" title="Expansion: Rise and Fall" id="1B28771A-C749-434B-9053-D1380C553DE9" />
+  <Reference type="Mod" title="CypRyan's Wide and Tall" id="96b6e6ba-8ee9-4ddd-9891-fd5a3996a491" />
   <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
   <Reference type="Mod" title="CQUI" id="1d44b5e7-753e-405b-af24-5ee634ec8a01" />
   <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
@@ -37,29 +40,32 @@
 <InGameActions>
   <!-- Gameplay -->
   <UpdateDatabase id="Gameplay">
-    <File>Gameplay/Yaxchilan.sql</File>
+    <File>Gameplay/CypWor.sql</File>
   </UpdateDatabase>
   <!-- Icons -->
   <UpdateIcons id="Icons">
-    <File>Icons/Yaxchilan_Icons.xml</File>
+    <File>Icons/Icons.xml</File>
   </UpdateIcons>
   <!-- Text -->
   <UpdateText id="Text">
-    <File>Text/Yaxchilan_Text.sql</File>
+    <File>Text/CypWor_Text.sql</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
-    <File>Scripts/Yaxchilan_District.lua</File>
-    <File>Scripts/Yaxchilan_Utility.lua</File>
+    <File>Scripts/CypWor_District.lua</File>
+    <File>Scripts/CypWor_Utility.lua</File>
+  </ImportFiles>
+  <ImportFiles id="Import_UI_Replacements">
+    <File>UI/Replacements/CitySupport.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI">
     <Properties>
       <LoadOrder>100</LoadOrder>
     </Properties>
-    <File>UI/PlotToolTip_Yaxchilan.lua</File>
-    <File>UI/PlotInfo_Yaxchilan.lua</File>
-    <File>UI/Yaxchilan_ExposedMembers.lua</File>
-    <File>UI/Yaxchilan_ExposedMembers.xml</File>
+    <File>UI/PlotToolTip_CypWor.lua</File>
+    <File>UI/PlotInfo_CypWor.lua</File>
+    <File>UI/CypWor_ExposedMembers.lua</File>
+    <File>UI/CypWor_ExposedMembers.xml</File>
   </ImportFiles>
   <ImportFiles id="Import_UI_SSUA">
     <Criteria>HAS_MOD_SSUA</Criteria>
@@ -69,7 +75,7 @@
     <File>UI/ThirdParty/SSUA/Suk_PlotTooltips.lua</File>
     <File>UI/ThirdParty/SSUA/Suk_CityPanelOverview.lua</File>
     <File>UI/ThirdParty/SSUA/PlotInfo_Citizens.lua</File>
-    <File>UI/PlotInfo_Citizens_Yaxchilan.lua</File>
+    <File>UI/PlotInfo_Citizens_CypWor.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI_CQUI">
     <Criteria>HAS_MOD_CQUI</Criteria>
@@ -83,31 +89,31 @@
     <Properties>
       <Context>InGame</Context>
     </Properties>
-    <File>UI/Yaxchilan_ExposedMembers.xml</File>
+    <File>UI/CypWor_ExposedMembers.xml</File>
   </AddUserInterfaces>
   <!-- ReplaceUIScript -->
   <ReplaceUIScript id="ReplaceUIScript_PlotToolTip">
     <Properties>
       <LoadOrder>14050</LoadOrder>
       <LuaContext>PlotToolTip</LuaContext>
-      <LuaReplace>UI/PlotToolTip_Yaxchilan.lua</LuaReplace>
+      <LuaReplace>UI/PlotToolTip_CypWor.lua</LuaReplace>
     </Properties>
   </ReplaceUIScript>
   <ReplaceUIScript id="ReplaceUIScript_PlotInfo">
     <Properties>
       <LuaContext>PlotInfo</LuaContext>
-      <LuaReplace>UI/PlotInfo_Yaxchilan.lua</LuaReplace>
+      <LuaReplace>UI/PlotInfo_CypWor.lua</LuaReplace>
     </Properties>
   </ReplaceUIScript>
   <ReplaceUIScript id="ReplaceUIScript_PlotInfo_Citizens" criteria="HAS_MOD_SSUA">
     <Properties>
       <LuaContext>PlotInfo_Citizens</LuaContext>
-      <LuaReplace>UI/PlotInfo_Citizens_Yaxchilan.lua</LuaReplace>
+      <LuaReplace>UI/PlotInfo_Citizens_CypWor.lua</LuaReplace>
     </Properties>
   </ReplaceUIScript>
   <!-- Scripts -->
   <AddGameplayScripts id="Scripts">
-    <File>Scripts/Yaxchilan_District.lua</File>
+    <File>Scripts/CypWor_District.lua</File>
   </AddGameplayScripts>
 </InGameActions>]]></InGameActionData>
     <FrontEndActionData><![CDATA[
@@ -130,24 +136,24 @@
     <Folder Include="UI\ThirdParty\CQUI\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Yaxchilan.Art.xml" />
+    <None Include="CypWorkableOuterRings.Art.xml" />
     <!-- Gameplay -->
-    <Content Include="Gameplay\Yaxchilan.sql">
+    <Content Include="Gameplay\CypWor.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Icons -->
-    <Content Include="Icons\Yaxchilan_Icons.xml">
+    <Content Include="Icons\Icons.xml">
       <SubType>Content</SubType>
     </Content>
     <!-- Text -->
-    <Content Include="Text\Yaxchilan_Text.sql">
+    <Content Include="Text\CypWor_Text.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->
-    <Content Include="Scripts\Yaxchilan_District.lua">
+    <Content Include="Scripts\CypWor_District.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Scripts\Yaxchilan_Utility.lua">
+    <Content Include="Scripts\CypWor_Utility.lua">
       <SubType>Content</SubType>
     </Content>
     <!-- UI -->
@@ -166,19 +172,19 @@
     <Content Include="UI\ThirdParty\SSUA\Suk_PlotTooltips.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\Yaxchilan_ExposedMembers.lua">
+    <Content Include="UI\CypWor_ExposedMembers.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\Yaxchilan_ExposedMembers.xml">
+    <Content Include="UI\CypWor_ExposedMembers.xml">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\PlotInfo_Yaxchilan.lua">
+    <Content Include="UI\PlotInfo_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\PlotInfo_Citizens_Yaxchilan.lua">
+    <Content Include="UI\PlotInfo_Citizens_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\PlotToolTip_Yaxchilan.lua">
+    <Content Include="UI\PlotToolTip_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

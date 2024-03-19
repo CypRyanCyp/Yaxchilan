@@ -599,15 +599,15 @@ function GetCityData( pCity:table )
 	data.YieldFilters[YieldTypes.SCIENCE]	= GetYieldState(YieldTypes.SCIENCE);
 	data = UpdateYieldData( pCity, data );
 
-  -- YAXCHILAN PREPARE START
+  -- CYP_WOR PREPARE START
   local tInvisibleUiBuildingIds : table = {};
-  for row in GameInfo.YaxchilanUiInvisibleBuildings() do
+  for row in GameInfo.CypWtUiInvisibleBuildings() do
     local pBuilding = GameInfo.Buildings[row.BuildingType];
     if pBuilding ~= nil then
       tInvisibleUiBuildingIds[pBuilding.Index] = true;
     end
   end
-  -- YAXCHILAN PREPARE END
+  -- CYP_WOR PREPARE END
 
 	-- Determine builds, districts, and wonders
 	local pCityBuildings	:table = pCity:GetBuildings();
@@ -615,16 +615,16 @@ function GetCityData( pCity:table )
 	if (kCityPlots ~= nil) then
 		for _,plotID in pairs(kCityPlots) do
 			local kPlot:table =  Map.GetPlotByIndex(plotID);
-      -- YAXCHILAN A REMOVE ORIGINAL
+      -- CYP_WOR A REMOVE ORIGINAL
 			--local kBuildingTypes:table = pCityBuildings:GetBuildingsAtLocation(plotID);
-      -- YAXCHILAN A START
+      -- CYP_WOR A START
       local kBuildingTypes:table = {};
       for i, buildingType in ipairs(pCityBuildings:GetBuildingsAtLocation(plotID)) do
         if not tInvisibleUiBuildingIds[buildingType] then
           kBuildingTypes[i] = buildingType;
         end
       end
-      -- YAXCHILAN A END
+      -- CYP_WOR A END
 			for _, type in ipairs(kBuildingTypes) do
 				local building	= GameInfo.Buildings[type];
         table.insert( data.Buildings, { 
@@ -706,16 +706,16 @@ function GetCityData( pCity:table )
 			}
 		};
 
-    -- YAXCHILAN B REMOVE ORIGINAL
+    -- CYP_WOR B REMOVE ORIGINAL
 		--local buildingTypes = pCityBuildings:GetBuildingsAtLocation(plotID);
-    -- YAXCHILAN B START
+    -- CYP_WOR B START
     local buildingTypes = {};
     for i, buildingType in ipairs(pCityBuildings:GetBuildingsAtLocation(plotID)) do
       if not tInvisibleUiBuildingIds[buildingType] then
         buildingTypes[i] = buildingType;
       end
     end
-    -- YAXCHILAN B END
+    -- CYP_WOR B END
     
 		for _, buildingType in ipairs(buildingTypes) do
 			local building		:table = GameInfo.Buildings[buildingType];

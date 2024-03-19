@@ -7,23 +7,43 @@
 -- ===========================================================================
 -- CONSTANTS
 -- ===========================================================================
-YAXCHILAN_DISTRICT_TYPE = 'DISTRICT_YAXCHILAN';
-YAXCHILAN_DISTRICT_ID = nil;
-local YAXCHILAN_DISTRICT = GameInfo.Districts[YAXCHILAN_DISTRICT_TYPE];
-if YAXCHILAN_DISTRICT ~= nil then
-  YAXCHILAN_DISTRICT_ID = YAXCHILAN_DISTRICT.Index;
+-- District
+CYP_WOR_DISTRICT_TYPE = 'DISTRICT_CYP_WOR';
+CYP_WOR_DISTRICT_ID = nil;
+local CYP_WOR_DISTRICT = GameInfo.Districts[CYP_WOR_DISTRICT_TYPE];
+if CYP_WOR_DISTRICT ~= nil then
+  CYP_WOR_DISTRICT_ID = CYP_WOR_DISTRICT.Index;
 end
-YAXCHILAN_BUILDING_TYPE = 'BUILDING_YAXCHILAN';
-YAXCHILAN_BUILDING_ID = nil;
-local YAXCHILAN_BUILDING = GameInfo.Buildings[YAXCHILAN_BUILDING_TYPE];
-if YAXCHILAN_BUILDING ~= nil then
-  YAXCHILAN_BUILDING_ID = YAXCHILAN_BUILDING.Index;
+-- Building A
+CYP_WOR_BUILDING_A_TYPE = 'BUILDING_CYP_WOR_CUSTOMS_HOUSE';
+CYP_WOR_BUILDING_A_ID = nil;
+local CYP_WOR_BUILDING_A = GameInfo.Buildings[CYP_WOR_BUILDING_A_TYPE];
+if CYP_WOR_BUILDING_A ~= nil then
+  CYP_WOR_BUILDING_A_ID = CYP_WOR_BUILDING_A.Index;
 end
-YAXCHILAN_PROPERTY_YIELDS_WITH_COMPENSATIONS = "YAXCHILAN_YIELDS_WITH_COMPENSATION";
-YAXCHILAN_PROPERTY_YIELD_VALUES = "YAXCHILAN_YIELDS";
-YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA = "YAXCHILAN_OUTER_RING_PLOTS_DATA";
-YAXCHILAN_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT = "YAXCHILAN_TOTAL_WORKABLE_OUTER_RING_TILE_COUNT";
-YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS = "YAXCHILAN_WORKER_LOCKED_OUTER_RING_PLOTS";
+-- Building B
+CYP_WOR_BUILDING_B_TYPE = 'BUILDING_CYP_WOR_LOGISTICS_CENTER';
+CYP_WOR_BUILDING_B_ID = nil;
+local CYP_WOR_BUILDING_B = GameInfo.Buildings[CYP_WOR_BUILDING_B_TYPE];
+if CYP_WOR_BUILDING_B ~= nil then
+  CYP_WOR_BUILDING_B_ID = CYP_WOR_BUILDING_B.Index;
+end
+-- Internal building
+CYP_WOR_BUILDING_TYPE = 'BUILDING_CYP_WOR';
+CYP_WOR_BUILDING_ID = nil;
+local CYP_WOR_BUILDING = GameInfo.Buildings[CYP_WOR_BUILDING_TYPE];
+if CYP_WOR_BUILDING ~= nil then
+  CYP_WOR_BUILDING_ID = CYP_WOR_BUILDING.Index;
+end
+-- Properties
+CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS = "CYP_WOR_YIELDS_WITH_COMPENSATION";
+CYP_WOR_PROPERTY_YIELD_VALUES = "CYP_WOR_YIELDS";
+CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA = "CYP_WOR_OUTER_RING_PLOTS_DATA";
+CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT = "CYP_WOR_TOTAL_WORKABLE_OUTER_RING_TILE_COUNT";
+CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS = "CYP_WOR_WORKER_LOCKED_OUTER_RING_PLOTS";
+-- Configurations
+CYP_WOR_DST_MIN = 4;
+CYP_WOR_DST_MAX = 5;
 
 
 
@@ -32,10 +52,49 @@ YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS = "YAXCHILAN_WORKER_LOCKED_OUTER_RING
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanGetRingPlotsByDistanceAndOwner
+-- CypWorDistrictExists
+-- ---------------------------------------------------------------------------
+function CypWorDistrictExists( pCity )
+  print("CypWorDistrictExists", pCity:GetDistricts():HasDistrict(CYP_WOR_DISTRICT_ID));
+  if not pCity:GetDistricts():HasDistrict(CYP_WOR_DISTRICT_ID) then return false end
+  local pDistrict = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID);
+  return pDistrict:IsComplete();
+  
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorDistrictPlotId
+-- ---------------------------------------------------------------------------
+function CypWorDistrictPlotId( pCity )
+  local pDistrict = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID);
+  local iX = pDistrict:GetX();
+  local iY = pDistrict:GetY();
+  local pPlot = Map.GetPlot(iX, iY);
+  local iPlot = pPlot:GetIndex();
+  return iPlot, iX, iY;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorBuildingAExists
+-- ---------------------------------------------------------------------------
+function CypWorBuildingAExists( pCity )
+  if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_A_ID) then return false end
+  return not pCity:GetBuildings():IsPillaged(CYP_WOR_BUILDING_A_ID);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorBuildingBExists
+-- ---------------------------------------------------------------------------
+function CypWorBuildingBExists( pCity )
+  if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_B_ID) then return false end
+  return not pCity:GetBuildings():IsPillaged(CYP_WOR_BUILDING_B_ID);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetRingPlotsByDistanceAndOwner
 -- Get plots in the nth ring of a city.
 -- ---------------------------------------------------------------------------
-function YaxchilanGetRingPlotsByDistanceAndOwner( iX : number, iY : number, iPlayer : number, iCity : number, iMinDistance : number, iMaxDistance : number, bExcludeCity )
+function CypWorGetRingPlotsByDistanceAndOwner( iX : number, iY : number, iPlayer : number, iCity : number, iMinDistance : number, iMaxDistance : number, bExcludeCity )
   local tPlots :table = {};
   -- Validate input
   if bWantOwnedByPlayerButNotCity == nil then bWantOwnedByPlayerButNotCity = false end
@@ -78,9 +137,9 @@ function YaxchilanGetRingPlotsByDistanceAndOwner( iX : number, iY : number, iPla
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanReverseTable
+-- CypWorReverseTable
 -- ---------------------------------------------------------------------------
-function YaxchilanReverseTable(t:table)
+function CypWorReverseTable(t:table)
   local n = table.count(t);
   local reversedT :table = {};
   for i = 1, n do
@@ -91,9 +150,9 @@ function YaxchilanReverseTable(t:table)
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanTableContains
+-- CypWorTableContains
 -- ---------------------------------------------------------------------------
-function YaxchilanTableContains( tTable, x )
+function CypWorTableContains( tTable, x )
   for _, v in pairs(tTable) do
     if v == x then return true end
   end
@@ -101,10 +160,10 @@ function YaxchilanTableContains( tTable, x )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanDecimalToBinaryArray
+-- CypWorDecimalToBinaryArray
 -- Convert decimal number to binary number represented in a array of 0 and 1.
 -- ---------------------------------------------------------------------------
-function YaxchilanDecimalToBinaryArray( decimal : number )
+function CypWorDecimalToBinaryArray( decimal : number )
   if decimal < 0 then
     decimal = 0;
   end
@@ -118,11 +177,11 @@ function YaxchilanDecimalToBinaryArray( decimal : number )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanApplyPropertiesToPlotWithBinaryConvertedValue
+-- CypWorApplyPropertiesToPlotWithBinaryConvertedValue
 -- Create desired properties determined by value that is to be 
 -- converted to binary representation.
 -- ---------------------------------------------------------------------------
-function YaxchilanApplyPropertiesToPlotWithBinaryConvertedValue(
+function CypWorApplyPropertiesToPlotWithBinaryConvertedValue(
             iValue : number, 
             iMaxDigits : number, 
             sPropertyPrefix, 
@@ -132,9 +191,9 @@ function YaxchilanApplyPropertiesToPlotWithBinaryConvertedValue(
   local xHashProperty = pPlot:GetProperty(sHashPropertyName);
   if xHashProperty ~= nil and xHashProperty == iValue then return end
   -- Convert base10 to base2 (binary)
-  local tValuesBinary = YaxchilanDecimalToBinaryArray(iValue);
+  local tValuesBinary = CypWorDecimalToBinaryArray(iValue);
   -- Reverse, so that we can loop from smallest digit (2^0) to largest digit (2^n)
-  local tValuesBinaryReversed = YaxchilanReverseTable(tValuesBinary);
+  local tValuesBinaryReversed = CypWorReverseTable(tValuesBinary);
   -- Loop 
   for i = 1, iMaxDigits do
     local iValueBinaryDigit = tValuesBinaryReversed[i];

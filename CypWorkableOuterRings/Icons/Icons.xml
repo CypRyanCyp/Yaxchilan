@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <IconTextureAtlases>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="256"  IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_256.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="128"  IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_128.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="80"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_80.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="64"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_64.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="50"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_50.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="38"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_38.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="32"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_32.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_ICONS"  IconSize="22"   IconsPerRow="8" IconsPerColumn="6" Filename="CYP_WOR_Icons_22.dds"/>
+  </IconTextureAtlases>
+  <IconDefinitions>
+    <Row Name="ICON_DISTRICT_CYP_WOR" Atlas="ICON_ATLAS_CYP_WOR_ICONS" Index="0"/>
+  </IconDefinitions>
+</GameData>

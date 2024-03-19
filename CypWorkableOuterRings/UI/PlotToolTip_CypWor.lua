@@ -8,7 +8,7 @@
 -- INCLUDES
 -- ===========================================================================
 -- Utility
-include "Yaxchilan_Utility.lua"
+include "CypWor_Utility.lua"
 -- Original
 local includeFileVersions = {
 	"Suk_PlotTooltips.lua",
@@ -28,11 +28,11 @@ end
 -- CONSTANTS
 -- ===========================================================================
 -- Invisible UI building types
-local YAXCHILAN_INVISIBLE_BUILDING_IDS : table = {};
-local YAXCHILAN_INVISIBLE_BUILDING_NAMES : table = {};
-for row in GameInfo.YaxchilanUiInvisibleBuildings() do
-  YAXCHILAN_INVISIBLE_BUILDING_IDS[GameInfo.Buildings[row.BuildingType].Index] = true;
-  YAXCHILAN_INVISIBLE_BUILDING_NAMES[row.Name] = true;
+local CYP_WOR_INVISIBLE_BUILDING_IDS : table = {};
+local CYP_WOR_INVISIBLE_BUILDING_NAMES : table = {};
+for row in GameInfo.CypWtUiInvisibleBuildings() do
+  CYP_WOR_INVISIBLE_BUILDING_IDS[GameInfo.Buildings[row.BuildingType].Index] = true;
+  CYP_WOR_INVISIBLE_BUILDING_NAMES[row.Name] = true;
 end
 
 
@@ -43,18 +43,18 @@ end
 -- ---------------------------------------------------------------------------
 -- CACHE ORIGINAL
 -- ---------------------------------------------------------------------------
-YaxchilanOriginal_GetDetails = GetDetails;
+CypWorOriginal_GetDetails = GetDetails;
 
 -- ---------------------------------------------------------------------------
--- YaxchilanModifyDataHideInternalBuildings
+-- CypWorModifyDataHideInternalBuildings
 -- Hide internal buildings.
 -- ---------------------------------------------------------------------------
-function YaxchilanModifyDataHideInternalBuildings( data : table )
+function CypWorModifyDataHideInternalBuildings( data : table )
   -- Remove invisible buildings from names
   local tRemoveBuildingNames = {};
   if data.BuildingNames ~= nil and table.count(data.BuildingNames) > 0 then
     for i, sBuildingName in pairs(data.BuildingNames) do
-      if YAXCHILAN_INVISIBLE_BUILDING_NAMES[sBuildingName] then
+      if CYP_WOR_INVISIBLE_BUILDING_NAMES[sBuildingName] then
         tRemoveBuildingNames[i] = sBuildingName;
       end
     end
@@ -66,7 +66,7 @@ function YaxchilanModifyDataHideInternalBuildings( data : table )
   local tRemoveBuildingTypes = {};
   if data.BuildingTypes ~= nil and table.count(data.BuildingTypes) > 0 then
     for i, sBuildingType in pairs(data.BuildingTypes) do
-      if YAXCHILAN_INVISIBLE_BUILDING_IDS[sBuildingType] then
+      if CYP_WOR_INVISIBLE_BUILDING_IDS[sBuildingType] then
         tRemoveBuildingTypes[i] = sBuildingType;
       end
     end
@@ -77,23 +77,23 @@ function YaxchilanModifyDataHideInternalBuildings( data : table )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanModifyDataNbhTeSpecialists
+-- CypWorModifyDataWorTeSpecialists
 -- Show outer ring worker yields as specialist yields.
 -- ---------------------------------------------------------------------------
-function YaxchilanModifyDataNbhTeSpecialists(data)
+function CypWorModifyDataWorTeSpecialists(data)
   -- Check if is district
   if data.DistrictID == -1 or data.DistrictType == nil then return end
   -- Yields are not shown to other players -> nothing to modify
   if data.Owner == nil or data.Owner ~= Game.GetLocalPlayer() then return end
   -- Only if has workers
   if data.Workers == nil or data.Workers == 0 then return end
-  -- Only if has population TE (that's why we don't have to check for district type)
-  if data.BuildingTypes == nil or not YaxchilanTableContains(data.BuildingTypes, YAXCHILAN_BUILDING_ID) then return end
+  -- Only if this is wor district
+  if data.DistrictID ~= CYP_WOR_DISTRICT_ID then return end
   -- Set specialist yields and remove specialist yields from district yields (including building yields)
   local tYields = {}
   local tDistrictYields = {};
   -- Get property stored yields
-  local tYieldValues = data.OwnerCity:GetProperty(YAXCHILAN_PROPERTY_YIELD_VALUES);
+  local tYieldValues = data.OwnerCity:GetProperty(CYP_WOR_PROPERTY_YIELD_VALUES);
   if tYieldValues == nil then return end
   -- Modify district and plot/specialist yields
   for dYield in GameInfo.Yields() do
@@ -109,17 +109,17 @@ function YaxchilanModifyDataNbhTeSpecialists(data)
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanModifyDataCityCenterYields
+-- CypWorModifyDataCityCenterYields
 -- Remove negative outer ring worker compensation yields from city center plot.
 -- ---------------------------------------------------------------------------
-local function YaxchilanModifyDataCityCenterYields(data)
+local function CypWorModifyDataCityCenterYields(data)
   -- Check if is city
   if not data.IsCity then return end
   -- Get plot
   local pPlot = Map.GetPlotByIndex(data.Index);
   if pPlot == nil then return end
   -- Try to get yields from property and validate that it is not empty
-  local tYieldSums = pPlot:GetProperty(YAXCHILAN_PROPERTY_YIELDS_WITH_COMPENSATIONS);
+  local tYieldSums = pPlot:GetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS);
   if tYieldSums == nil then return end
   -- Add amount to negative compensation yield
   for dYield in GameInfo.Yields() do
@@ -140,10 +140,10 @@ local function YaxchilanModifyDataCityCenterYields(data)
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanModifyDataWorkedOuterRingPlots
+-- CypWorModifyDataWorkedOuterRingPlots
 -- Set worker count for outer ring plots.
 -- ---------------------------------------------------------------------------
-local function YaxchilanModifyDataWorkedOuterRingPlots(data)
+local function CypWorModifyDataWorkedOuterRingPlots(data)
   -- Ignore city centers
   if data.IsCity then return end
   -- Ignore districts
@@ -153,7 +153,7 @@ local function YaxchilanModifyDataWorkedOuterRingPlots(data)
   -- Ignore if already has worker assigned
   if data.Workers ~= nil and data.Workers > 1 then return end
   -- Get outer ring plot data
-  local tOuterRingPlotsData : table = data.OwnerCity:GetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA);
+  local tOuterRingPlotsData : table = data.OwnerCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
   if tOuterRingPlotsData == nil or table.count(tOuterRingPlotsData) == 0 then return end
   -- Check if plot is worked
   local xPlotData = tOuterRingPlotsData[data.Index];
@@ -168,12 +168,12 @@ end
 -- Overwrites original PlotToolTip.GetDetails function.
 -- ---------------------------------------------------------------------------
 function GetDetails( data )
-  YaxchilanModifyDataWorkedOuterRingPlots(data);
-  YaxchilanModifyDataCityCenterYields(data);
-  YaxchilanModifyDataNbhTeSpecialists(data);
-  YaxchilanModifyDataHideInternalBuildings(data);
-  return YaxchilanOriginal_GetDetails(data);
+  CypWorModifyDataWorkedOuterRingPlots(data);
+  CypWorModifyDataCityCenterYields(data);
+  CypWorModifyDataWorTeSpecialists(data);
+  CypWorModifyDataHideInternalBuildings(data);
+  return CypWorOriginal_GetDetails(data);
 end
 
 -- Log init
-print("PlotToolTip_Yaxchilan.lua initialized!");
+print("PlotToolTip_CypWor.lua initialized!");

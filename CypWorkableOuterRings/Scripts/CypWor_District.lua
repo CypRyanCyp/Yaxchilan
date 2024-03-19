@@ -1,5 +1,5 @@
 -- ===========================================================================
--- Yaxchilan District
+-- Workable outer ring district.
 -- ===========================================================================
 
 
@@ -8,7 +8,7 @@
 -- INCLUDES
 -- ===========================================================================
 include("SupportFunctions");
-include "Yaxchilan_Utility.lua"
+include "CypWor_Utility.lua"
 
 
 
@@ -16,23 +16,23 @@ include "Yaxchilan_Utility.lua"
 -- CONSTANTS
 -- ===========================================================================
 -- Buildings
-local YAXCHILAN_BUILDING_INTERNAL_WORKERS_TYPE = "BUILDING_YAXCHILAN_WORKERS_" -- example: BUILDING_YAXCHILAN_WORKERS_2
+local CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE = "BUILDING_CYP_WOR_WORKERS_" -- example: BUILDING_CYP_WOR_WORKERS_2
 -- Plot yield score
-local YAXCHILAN_YIELD_SCORE_DEFAULT = 1;
-local YAXCHILAN_YIELD_SCORE_FAVORED = 4;
-local YAXCHILAN_YIELD_SCORE_DISFAVORED = 0;
-local YAXCHILAN_YIELD_BINARY_DIGITS = 11;
-local YAXCHILAN_WORKERS_BINARY_DIGITS = 7;
+local CYP_WOR_YIELD_SCORE_DEFAULT = 1;
+local CYP_WOR_YIELD_SCORE_FAVORED = 4;
+local CYP_WOR_YIELD_SCORE_DISFAVORED = 0;
+local CYP_WOR_YIELD_BINARY_DIGITS = 11;
+local CYP_WOR_WORKERS_BINARY_DIGITS = 7;
 -- Specialist compensation yields
-local YAXCHILAN_SPECIALIST_COMPENSATION_YIELD_AMOUNT = 20;
+local CYP_WOR_SPECIALIST_COMPENSATION_YIELD_AMOUNT = 20;
 -- Plot properties
-local YAXCHILAN_PROPERTY_YIELD_BONUS_PREFIX = "YAXCHILAN_BONUS_";
-local YAXCHILAN_PROPERTY_YIELD_MALUS_PREFIX = "YAXCHILAN_MALUS_";
-local YAXCHILAN_PROPERTY_YIELD_MALUS_AMOUNT = 1024;
+local CYP_WOR_PROPERTY_YIELD_BONUS_PREFIX = "CYP_WOR_BONUS_";
+local CYP_WOR_PROPERTY_YIELD_MALUS_PREFIX = "CYP_WOR_MALUS_";
+local CYP_WOR_PROPERTY_YIELD_MALUS_AMOUNT = 1024;
 -- City properties
-local YAXCHILAN_PROPERTY_YIELD_HASH = "YAXCHILAN_YIELD_HASH";
-local YAXCHILAN_PROPERTY_WORKABLE_OUTER_RING_TILES = "YAXCHILAN_WORKER_WORKABLE_OUTER_RING_TILES";
-local YAXCHILAN_PROPERTY_SPECIALIST_SLOT_COUNT = "YAXCHILAN_SPECIALIST_SLOT_COUNT";
+local CYP_WOR_PROPERTY_YIELD_HASH = "CYP_WOR_YIELD_HASH";
+local CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES = "CYP_WOR_WORKER_WORKABLE_OUTER_RING_TILES";
+local CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT = "CYP_WOR_SPECIALIST_SLOT_COUNT";
 
 
 
@@ -40,9 +40,9 @@ local YAXCHILAN_PROPERTY_SPECIALIST_SLOT_COUNT = "YAXCHILAN_SPECIALIST_SLOT_COUN
 -- MEMBERS
 -- ===========================================================================
 -- City plot yields changed
-local m_YaxchilanCityChangedPlotYields = {};
+local m_CypWorCityChangedPlotYields = {};
 -- Currently updating cities
-local m_YaxchilanCityIsUpdatingSpecialists = {};
+local m_CypWorCityIsUpdatingSpecialists = {};
 
 
 
@@ -51,21 +51,21 @@ local m_YaxchilanCityIsUpdatingSpecialists = {};
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanGetCityRingPlots
+-- CypWorGetCityRingPlots
 -- Get plots in the nth ring of a city.
 -- ---------------------------------------------------------------------------
-function YaxchilanGetCityRingPlots(pCity, iMin : number, iMax : number)
+function CypWorGetCityRingPlots(pCity, iMin : number, iMax : number)
   -- Validate city
   if pCity == nil then return {} end
   -- Get plots
-  return YaxchilanGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), pCity:GetOwner(), pCity:GetID(), iMin, iMax);
+  return CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), pCity:GetOwner(), pCity:GetID(), iMin, iMax);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanDeterminePlotHasAnyYield
+-- CypWorDeterminePlotHasAnyYield
 -- Determine if this plot has any yield.
 -- ---------------------------------------------------------------------------
-function YaxchilanDeterminePlotHasAnyYield(pPlot)
+function CypWorDeterminePlotHasAnyYield(pPlot)
   for pYield in GameInfo.Yields() do
     if pPlot:GetYield(pYield.Index) > 0 then return true end
   end
@@ -73,10 +73,10 @@ function YaxchilanDeterminePlotHasAnyYield(pPlot)
 end
 
 -- ---------------------------------------------------------------------------
---	YaxchilanPlotIsWorkable
+--	CypWorPlotIsWorkable
 --  Determine if plot can be worked.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotIsWorkable(pPlot)
+function CypWorPlotIsWorkable(pPlot)
   -- Check wonder (not workable)
   if pPlot:GetWonderType() ~= -1 then return false end
   -- Check improvement (not workable)
@@ -91,7 +91,7 @@ function YaxchilanPlotIsWorkable(pPlot)
     if pFeature.DangerValue ~= nil and pFeature.DangerValue > 0 then return false end
   end
   -- Check has any yields
-  if not YaxchilanDeterminePlotHasAnyYield(pPlot) then return false end
+  if not CypWorDeterminePlotHasAnyYield(pPlot) then return false end
   -- Check disasters
   if GameClimate.GetActiveDroughtAtPlot(pPlot) ~= nil 
   or GameClimate.GetActiveStormAtPlot(pPlot) ~= nil then return false end
@@ -100,10 +100,10 @@ function YaxchilanPlotIsWorkable(pPlot)
 end
 
 -- ---------------------------------------------------------------------------
---	YaxchilanGetPlotWorkerSlots
+--	CypWorGetPlotWorkerSlots
 --  Determine amount of available worker slots.
 -- ---------------------------------------------------------------------------
-function YaxchilanGetPlotWorkerSlots(pCity, pPlot)
+function CypWorGetPlotWorkerSlots(pCity, pPlot)
   -- District tile
   if pPlot:GetDistrictType() ~= -1 then
     local iWorkerSlots = 0;
@@ -119,18 +119,18 @@ function YaxchilanGetPlotWorkerSlots(pCity, pPlot)
       end
     end
   -- Normal tile
-  elseif YaxchilanPlotIsWorkable(pPlot) then
+  elseif CypWorPlotIsWorkable(pPlot) then
     return 1;
   end
   return 0;
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanCreateDummyBuildingWithBinaryConvertedValue
+-- CypWorCreateDummyBuildingWithBinaryConvertedValue
 -- Create desired dummy buildings determined by value that is to be converted
 -- to binary representation.
 -- ---------------------------------------------------------------------------
-function YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
+function CypWorCreateDummyBuildingWithBinaryConvertedValue(
             iValue : number, 
             iMaxDigits : number, 
             sBuildingTypePrefix, 
@@ -138,9 +138,9 @@ function YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
             pBuildingPlotIndex) 
   -- Hash is handled before thi
   -- Convert base10 to base2 (binary)
-  local tValueBinary = YaxchilanDecimalToBinaryArray(iValue);
+  local tValueBinary = CypWorDecimalToBinaryArray(iValue);
   -- Reverse, so that we can loop from smallest digit (2^0) to largest digit (2^n)
-  local tValueBinaryReversed = YaxchilanReverseTable(tValueBinary);
+  local tValueBinaryReversed = CypWorReverseTable(tValueBinary);
   -- Loop twice: first add then remove buildings so that assigned
   -- specialists won't be removed due to temporary missing slots
   for iAdd = 1, 0, -1 do
@@ -154,8 +154,8 @@ function YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
         -- Determine if desired and actual existence states match and...
         local bBuildingShouldExist = iValueBinaryDigit == 1;
         local sBuildingType = sBuildingTypePrefix .. i;
-        local iBuilding = GameInfo.Buildings[sBuildingType].Index
-        local bBuildingExists = pCity:GetBuildings():HasBuilding(iBuilding)
+        local iBuilding = GameInfo.Buildings[sBuildingType].Index;
+        local bBuildingExists = pCity:GetBuildings():HasBuilding(iBuilding);
         -- ... if not setup desired state
         if bBuildingShouldExist ~= bBuildingExists then
           if bBuildingExists then -- Remove building if exists
@@ -170,11 +170,11 @@ function YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanDeterminePlotScore
+-- CypWorDeterminePlotScore
 -- Determine score of plot considering Multipliers.
 -- A plot score is the sum of weighted yield type sums.
 -- ---------------------------------------------------------------------------
-function YaxchilanDeterminePlotScore( pPlot, tYieldMultipliers :table )
+function CypWorDeterminePlotScore( pPlot, tYieldMultipliers :table )
   -- Determine score
   local iScore = 0;
   for pYield in GameInfo.Yields() do
@@ -184,18 +184,18 @@ function YaxchilanDeterminePlotScore( pPlot, tYieldMultipliers :table )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanCitizenYieldFavorMultiplier
+-- CypWorCitizenYieldFavorMultiplier
 -- Determine yield multiplier/weight based on citizen favor.
 -- This determines how much the amount of yields of a certain type is weighted.
 -- ---------------------------------------------------------------------------
-function YaxchilanCitizenYieldFavorMultiplier( pCitizens, pYield )
+function CypWorCitizenYieldFavorMultiplier( pCitizens, pYield )
   local iYield = pYield.Index;
   if pCitizens:IsYieldFavored(iYield) then
-    return YAXCHILAN_YIELD_SCORE_FAVORED;
+    return CYP_WOR_YIELD_SCORE_FAVORED;
   elseif pCitizens:IsYieldDisfavored(iYield) then
-    return YAXCHILAN_YIELD_SCORE_DISFAVORED;
+    return CYP_WOR_YIELD_SCORE_DISFAVORED;
   else
-    return YAXCHILAN_YIELD_SCORE_DEFAULT;
+    return CYP_WOR_YIELD_SCORE_DEFAULT;
   end
 end
 
@@ -206,9 +206,9 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanRefreshWorkerYields
+-- CypWorRefreshWorkerYields
 -- ---------------------------------------------------------------------------
-function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchilanPlot : number, iYaxchilanWorkerCount : number, bForceFocusRefresh )
+function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlot : number, iCypWorWorkerCount : number, bForceFocusRefresh )
   
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
@@ -218,10 +218,10 @@ function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchi
   local pCityPlot = pCity:GetPlot();
   if pCityPlot == nil then return end
   
-  -- Get assigned specialists of NBH TE
-  local pYaxchilanPlot = Map.GetPlotByIndex(iYaxchilanPlot);
-  if iYaxchilanWorkerCount == nil or iYaxchilanWorkerCount < 0 then
-    iYaxchilanWorkerCount = pYaxchilanPlot:GetWorkerCount();
+  -- Get assigned specialists
+  local pCypWorPlot = Map.GetPlotByIndex(iCypWorPlot);
+  if iCypWorWorkerCount == nil or iCypWorWorkerCount < 0 then
+    iCypWorWorkerCount = pCypWorPlot:GetWorkerCount();
   end
   
   -- Prepare yield sum
@@ -231,20 +231,21 @@ function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchi
   end
   
   -- Determine to be worked outer ring plots
-  -- Get n best workable outer ring tiles, while n is the amount of NBH specialists
-  local tWorkableOuterPlotData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_WORKABLE_OUTER_RING_TILES);
-  local iAssignedNbhWorkerCount = 0;
+  -- Get n best workable outer ring tiles, while n is the amount of specialists
+  local tWorkableOuterPlotData : table = pCity:GetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES);
+  print("tWorkableOuterPlotData", table.count(tWorkableOuterPlotData));
+  local iAssignedDistrictWorkerCount = 0;
   local tOuterRingPlotsData = {};
   for _, xOuterRingPlotInfo in ipairs(tWorkableOuterPlotData) do
     -- Set data
     local xPlotData = {};
-    xPlotData.bIsWorked = iAssignedNbhWorkerCount < iYaxchilanWorkerCount;
+    xPlotData.bIsWorked = iAssignedDistrictWorkerCount < iCypWorWorkerCount;
     xPlotData.iPlot = xOuterRingPlotInfo.iPlot;
     xPlotData.bIsLocked = xOuterRingPlotInfo.bIsLocked;
     tOuterRingPlotsData[xPlotData.iPlot] = xPlotData;
     -- Count yield sum and assigned
     if xPlotData.bIsWorked then 
-      iAssignedNbhWorkerCount = iAssignedNbhWorkerCount + 1;
+      iAssignedDistrictWorkerCount = iAssignedDistrictWorkerCount + 1;
       local pPlot = Map.GetPlotByIndex(xOuterRingPlotInfo.iPlot); 
       for pYield in GameInfo.Yields() do
         tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] + pPlot:GetYield(pYield.Index);
@@ -253,40 +254,40 @@ function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchi
   end
   
   -- Store properties
-  pCity:SetProperty(YAXCHILAN_PROPERTY_YIELD_VALUES, tYieldSums);
+  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_VALUES, tYieldSums);
   -- Compensate ingame specialist yields and set property
   for pYield in GameInfo.Yields() do
-    tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] - (iYaxchilanWorkerCount * YAXCHILAN_SPECIALIST_COMPENSATION_YIELD_AMOUNT);
+    tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] - (iCypWorWorkerCount * CYP_WOR_SPECIALIST_COMPENSATION_YIELD_AMOUNT);
   end
-  pCityPlot:SetProperty(YAXCHILAN_PROPERTY_YIELDS_WITH_COMPENSATIONS, tYieldSums);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA, tOuterRingPlotsData);
+  pCityPlot:SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, tYieldSums);
+  pCity:SetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, tOuterRingPlotsData);
 
   -- Check hash (determines if desired yields already applied)
   local sCityOuterRingYieldHash = '|';
   for pYield in GameInfo.Yields() do
     sCityOuterRingYieldHash = sCityOuterRingYieldHash .. tYieldSums[pYield.YieldType] .. '|';
   end
-  local sStoredHash = pCity:GetProperty(YAXCHILAN_PROPERTY_YIELD_HASH);
+  local sStoredHash = pCity:GetProperty(CYP_WOR_PROPERTY_YIELD_HASH);
   if sStoredHash ~= sCityOuterRingYieldHash then
     -- Force focus refresh
     if not bForceFocusRefresh then bForceFocusRefresh = true end
     -- Store hash
-    pCity:SetProperty(YAXCHILAN_PROPERTY_YIELD_HASH, sCityOuterRingYieldHash);
+    pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_HASH, sCityOuterRingYieldHash);
     -- Apply yield properties to add worked plot yields
     for sYieldType, iYieldAmount in pairs(tYieldSums) do
       -- Handle negative yield part
-      local sNegativeYieldPropertyName = YAXCHILAN_PROPERTY_YIELD_MALUS_PREFIX .. sYieldType;
+      local sNegativeYieldPropertyName = CYP_WOR_PROPERTY_YIELD_MALUS_PREFIX .. sYieldType;
       local iNegativeYield = 0;
       if iYieldAmount < 0 then
         iNegativeYield = 1;
-        iYieldAmount = YAXCHILAN_PROPERTY_YIELD_MALUS_AMOUNT + iYieldAmount;
+        iYieldAmount = CYP_WOR_PROPERTY_YIELD_MALUS_AMOUNT + iYieldAmount;
       end
       pCityPlot:SetProperty(sNegativeYieldPropertyName, iNegativeYield);
       -- Handle positie yield part
-      YaxchilanApplyPropertiesToPlotWithBinaryConvertedValue(
+      CypWorApplyPropertiesToPlotWithBinaryConvertedValue(
           iYieldAmount, 
-          YAXCHILAN_YIELD_BINARY_DIGITS, 
-          YAXCHILAN_PROPERTY_YIELD_BONUS_PREFIX .. sYieldType .. "_",
+          CYP_WOR_YIELD_BINARY_DIGITS, 
+          CYP_WOR_PROPERTY_YIELD_BONUS_PREFIX .. sYieldType .. "_",
           pCityPlot);
     end
   end
@@ -297,37 +298,43 @@ function YaxchilanRefreshWorkerYields( iPlayer : number, iCity : number, iYaxchi
   tParameters.iCity = iCity;
   tParameters.iWantedOuterRingWorkers = iWantedOuterRingWorkers;
   tParameters.bForceFocusRefresh = bForceFocusRefresh;
-  ReportingEvents.SendLuaEvent("YaxchilanOuterRingSpecialistsChanged", tParameters);
+  ReportingEvents.SendLuaEvent("CypWorOuterRingSpecialistsChanged", tParameters);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanDetermineAutoAssignedOuterRingWorkers
+-- CypWorDetermineAutoAssignedOuterRingWorkers
 -- ---------------------------------------------------------------------------
-function YaxchilanDetermineAutoAssignedOuterRingWorkers( pCity, iYaxchilanPlot : number, tCityLockedPlots : table, tCityLockedOuterRingPlots : table )
+function CypWorDetermineAutoAssignedOuterRingWorkers( pCity, iCypWorPlot : number, tCityLockedPlots : table, tCityLockedOuterRingPlots : table )
 
   -- Determine yield multipliers (depends on city yield favor)
   local pCitizens = pCity:GetCitizens();
   local tYieldMultipliers = {};
   for pYield in GameInfo.Yields() do
-    tYieldMultipliers[pYield.Index] = YaxchilanCitizenYieldFavorMultiplier(pCitizens, pYield);
+    tYieldMultipliers[pYield.Index] = CypWorCitizenYieldFavorMultiplier(pCitizens, pYield);
+  end
+  
+  -- Determine maximum ring
+  local iWorMaxRange = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then
+    iWorMaxRange = CYP_WOR_DST_MAX;
   end
   
   -- Determine all city tiles with scores (include inner and outer rings)
   local tCityPlots : table = {};
   local iCityPlot = pCity:GetPlot():GetIndex();
-  for _, pPlot in pairs(YaxchilanGetCityRingPlots(pCity, 1, 5)) do
-    -- Ignore NBH TE
+  for _, pPlot in pairs(CypWorGetCityRingPlots(pCity, 1, iWorMaxRange)) do
+    -- Ignore WOR district
     local iPlot = pPlot:GetIndex();
-    if iPlot ~= iYaxchilanPlot and iPlot ~= iCityPlot then
+    if iPlot ~= iCypWorPlot and iPlot ~= iCityPlot then
       -- Store info
       local xPlotInfo = {};
       xPlotInfo.iPlot = iPlot;
       xPlotInfo.pPlot = pPlot;
       -- Determine score
       xPlotInfo.iScore = 0;
-      local iPlotWorkerSlots = YaxchilanGetPlotWorkerSlots(pCity, pPlot); -- Also checks if plot is workable
+      local iPlotWorkerSlots = CypWorGetPlotWorkerSlots(pCity, pPlot); -- Also checks if plot is workable
       if iPlotWorkerSlots > 0 then
-        xPlotInfo.iScore = YaxchilanDeterminePlotScore(pPlot, tYieldMultipliers);
+        xPlotInfo.iScore = CypWorDeterminePlotScore(pPlot, tYieldMultipliers);
       end
       -- Determine if is inner ring
       xPlotInfo.bIsInnerRing = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY()) <= 3;
@@ -409,35 +416,36 @@ function YaxchilanDetermineAutoAssignedOuterRingWorkers( pCity, iYaxchilanPlot :
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanRefreshCityNbhWorkerSlots
+-- CypWorRefreshCityWorWorkerSlots
 -- ---------------------------------------------------------------------------
-function YaxchilanRefreshCityNbhWorkerSlots( iPlayer : number, iCity : number, bForceFocusRefresh )
+function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bForceFocusRefresh )
 
   -- Remove from list
-  m_YaxchilanCityChangedPlotYields[iCity] = nil;
+  m_CypWorCityChangedPlotYields[iCity] = nil;
 
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
   
-  -- Validate city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local iYaxchilanPlot = pCity:GetBuildings():GetBuildingLocation(YAXCHILAN_BUILDING_ID);
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
   
   -- Prepare
   local iOuterRingTileSpecialistSlots = 0;
   local tWorkableOuterPlotData = {};
   local iWorkableOuterRingTilesCountPropertyValue = nil;
   
-  -- Check NBH TE pillaged state
-  local bYaxchilanIsPillaged = pCity:GetBuildings():IsPillaged(YAXCHILAN_BUILDING_ID);
+  -- Check WOR pillaged state
+  local bCypWorIsPillaged = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID):IsPillaged();
+  print("CypWorRefreshCityWorWorkerSlots", "bCypWorIsPillaged", bCypWorIsPillaged);
   
-  -- Remove all specialist slots when building is pillaged
-  if not bYaxchilanIsPillaged then
+  -- Remove all specialist slots when pillaged
+  if not bCypWorIsPillaged then
     
     -- Determine locked plots
-    local tCityLockedPlots, iCityLockedCount = ExposedMembers.Yaxchilan.CityGetLockedPlots(iPlayer, iCity);
-    local tCityLockedOuterRingPlots = pCity:GetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    local tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
+    local tCityLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
     if tCityLockedOuterRingPlots == nil then tCityLockedOuterRingPlots = {} end
     
     -- Correct too high amount of locked outer ring plots
@@ -459,88 +467,57 @@ function YaxchilanRefreshCityNbhWorkerSlots( iPlayer : number, iCity : number, b
           end          
         end
         tCityLockedOuterRingPlots = tCorrectedCityLockedOuterRingPlots;
-        pCity:SetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS, tCityLockedOuterRingPlots);
+        pCity:SetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tCityLockedOuterRingPlots);
       end
     end
     
     -- Add one specialist slot for each workable outer ring tile that should be worked (city AI)
     -- Auto assigned tiles are workable only (for the game)
-    tWorkableOuterPlotData, iOuterRingTileSpecialistSlots = YaxchilanDetermineAutoAssignedOuterRingWorkers(pCity, iYaxchilanPlot, tCityLockedPlots, tCityLockedOuterRingPlots);
-    pCity:SetProperty(YAXCHILAN_PROPERTY_WORKABLE_OUTER_RING_TILES, tWorkableOuterPlotData);
+    tWorkableOuterPlotData, iOuterRingTileSpecialistSlots = CypWorDetermineAutoAssignedOuterRingWorkers(pCity, iCypWorPlot, tCityLockedPlots, tCityLockedOuterRingPlots);
   end
   
   -- Store amount of actual workable outer ring tiles (used in UI)
-  pCity:SetProperty(YAXCHILAN_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, table.count(tWorkableOuterPlotData));
+  pCity:SetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, tWorkableOuterPlotData);
+  pCity:SetProperty(CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, table.count(tWorkableOuterPlotData));
   
   -- Check if to be worked outer ring tiles count has changed
-  local iPropertyStoredCount = pCity:GetProperty(YAXCHILAN_PROPERTY_SPECIALIST_SLOT_COUNT);
+  local iPropertyStoredCount = pCity:GetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT);
   -- Always update, caching worker count leads to bugs
   if iPropertyStoredCount ~= iOuterRingTileSpecialistSlots then
     -- Force focus refresh
     if not bForceFocusRefresh then bForceFocusRefresh = true end
     -- Store cache
-    pCity:SetProperty(YAXCHILAN_PROPERTY_SPECIALIST_SLOT_COUNT, iOuterRingTileSpecialistSlots);
-    --- Apply amount of NBH TE specialist slots (if worked count changed)
-    m_YaxchilanCityIsUpdatingSpecialists[iCity] = true;
-    YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
+    pCity:SetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, iOuterRingTileSpecialistSlots);
+    --- Apply amount of specialist slots (if worked count changed)
+    m_CypWorCityIsUpdatingSpecialists[iCity] = true;
+    CypWorCreateDummyBuildingWithBinaryConvertedValue(
         iOuterRingTileSpecialistSlots, 
-        YAXCHILAN_WORKERS_BINARY_DIGITS, 
-        YAXCHILAN_BUILDING_INTERNAL_WORKERS_TYPE,
+        CYP_WOR_WORKERS_BINARY_DIGITS, 
+        CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE,
         pCity,
-        iYaxchilanPlot);
-    m_YaxchilanCityIsUpdatingSpecialists[iCity] = false;
+        iCypWorPlot);
+    m_CypWorCityIsUpdatingSpecialists[iCity] = false;
   end
   
   -- Update yields
-  YaxchilanRefreshWorkerYields(iPlayer, iCity, iYaxchilanPlot, iOuterRingTileSpecialistSlots, bForceFocusRefresh);
+  CypWorRefreshWorkerYields(iPlayer, iCity, iCypWorPlot, iOuterRingTileSpecialistSlots, bForceFocusRefresh);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanCleanupProperties
+-- CypWorCleanupProperties
 -- ---------------------------------------------------------------------------
-function YaxchilanCleanupProperties( iPlayer : number, iCity : number )
-
+function CypWorCleanupProperties( iPlayer : number, iCity : number )
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
-  
   -- Clear properties
-  pCity:SetProperty(YAXCHILAN_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, nil);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA, nil);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_YIELD_HASH, nil);
-  pCity:SetProperty(YAXCHILAN_PROPERTY_YIELD_VALUES, nil);
-  pCity:GetPlot():SetProperty(YAXCHILAN_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
-  
-  -- Check if city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local iYaxchilanPlot = pCity:GetBuildings():GetBuildingLocation(YAXCHILAN_BUILDING_ID);
-  
-  -- Clear buildings
-  if pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then
-    pCity:GetBuildings():RemoveBuilding(YAXCHILAN_BUILDING_ID);
-  end
-  -- Clear workers
-  YaxchilanCreateDummyBuildingWithBinaryConvertedValue(
-      0, 
-      YAXCHILAN_WORKERS_BINARY_DIGITS, 
-      YAXCHILAN_BUILDING_INTERNAL_WORKERS_TYPE,
-      pCity,
-      iYaxchilanPlot);
-  -- Clear city center yields
-  local pCityPlot = pCity:GetPlot();
-  for row in GameInfo.Yields() do
-    local sYieldType = row.YieldType;
-    -- Handle negative yield part
-    local sNegativeYieldPropertyName = YAXCHILAN_PROPERTY_YIELD_MALUS_PREFIX .. sYieldType;
-    pCityPlot:SetProperty(sNegativeYieldPropertyName, nil);
-    YaxchilanApplyPropertiesToPlotWithBinaryConvertedValue(
-        0, 
-        YAXCHILAN_YIELD_BINARY_DIGITS, 
-        YAXCHILAN_PROPERTY_YIELD_BONUS_PREFIX .. sYieldType .. "_",
-        pCityPlot);
-  end
+  pCity:SetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
+  pCity:SetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
+  pCity:SetProperty(CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, nil);
+  pCity:SetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, nil);
+  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_HASH, nil);
+  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_VALUES, nil);
+  pCity:GetPlot():SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
 end
 
 
@@ -550,22 +527,21 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnOnMapYieldsChanged
+-- CypWorOnOnMapYieldsChanged
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnOnMapYieldsChanged()
-  for iCity, iPlayer in ipairs(m_YaxchilanCityChangedPlotYields) do
-    YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
+local function CypWorOnOnMapYieldsChanged()
+  for iCity, iPlayer in ipairs(m_CypWorCityChangedPlotYields) do
+    CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
   end
   -- Make sure list is cleared after
-  m_YaxchilanCityChangedPlotYields = {};
+  m_CypWorCityChangedPlotYields = {};
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnPlotYieldChanged
--- Add to list of changed cities that will be processed in 
--- YaxchilanOnOnMapYieldsChanged.
+-- CypWorOnPlotYieldChanged
+-- Add to list of changed cities that will be processed in CypWorOnOnMapYieldsChanged.
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnPlotYieldChanged(iX : number, iY : number)
+local function CypWorOnPlotYieldChanged(iX : number, iY : number)
   -- Get city
   local pCity = Cities.GetPlotWorkingCity(iX, iY);
   if pCity == nil then return end
@@ -575,48 +551,47 @@ local function YaxchilanOnPlotYieldChanged(iX : number, iY : number)
   local pPlayer = Players[iPlayer];
   -- Ignore city center
   if iX == pCity:GetX() and iY == pCity:GetY() then return end
-  -- Ignore NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local iYaxchilanPlot = pCity:GetBuildings():GetBuildingLocation(YAXCHILAN_BUILDING_ID);
-  local pYaxchilanPlot = Map.GetPlotByIndex(iYaxchilanPlot);
-  if iX == pYaxchilanPlot:GetX() and iY == pYaxchilanPlot:GetY() then return end
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot, iWorX, iWorY = CypWorDistrictPlotId(pCity);
+  if iX == iWorX and iY == iWorY then return end
   -- Check if is player turn
   if pPlayer:IsTurnActive() then
-    YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
+    CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
   else
-    m_YaxchilanCityChangedPlotYields[iCity] = iPlayer;
+    m_CypWorCityChangedPlotYields[iCity] = iPlayer;
   end
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnPlayerTurnActivated
+-- CypWorOnPlayerTurnActivated
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnPlayerTurnActivated( iPlayer : number )
+local function CypWorOnPlayerTurnActivated( iPlayer : number )
   -- Update all changed yields on any turn activation
-  YaxchilanOnOnMapYieldsChanged(); 
+  CypWorOnOnMapYieldsChanged(); 
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnCityTileOwnershipChanged
+-- CypWorOnCityTileOwnershipChanged
 -- New tiles can shift inner/outer ring worker distribution.
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnCityTileOwnershipChanged(iPlayer : number, iCity : number, iX : number, iY : number)
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
+local function CypWorOnCityTileOwnershipChanged(iPlayer : number, iCity : number, iX : number, iY : number)
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnCityFocusChanged
+-- CypWorOnCityFocusChanged
 -- Recalculate all slots, since plot score depends on city focus.
 -- Changing focus can shift inner/outer ring worker distribution.
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnCityFocusChanged(iPlayer : number, iCity : number)
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
+local function CypWorOnCityFocusChanged(iPlayer : number, iCity : number)
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnBuildingConstructed
+-- CypWorOnBuildingConstructed
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnDistrictBuildProgressChanged( 
+local function CypWorOnDistrictBuildProgressChanged(
                 iPlayer : number, 
                 iDistrict : number, 
                 iCity : number, 
@@ -626,71 +601,113 @@ local function YaxchilanOnDistrictBuildProgressChanged(
                 iEra : number,
                 iCiv : number,
                 iPercent : number)
-  -- Only when NBH TE has been built
-  if iDistrictType ~= YAXCHILAN_DISTRICT_ID then return end
+  -- Only when WOR has been built
+  if iDistrictType ~= CYP_WOR_DISTRICT_ID then return end
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
   -- Get plot
-  local pYaxchilanPlot = Map.GetPlot(iX, iY);
-  if pYaxchilanPlot == nil then return end
-  local iYaxchilanPlot = pYaxchilanPlot:GetIndex();
+  local pCypWorPlot = Map.GetPlot(iX, iY);
+  if pCypWorPlot == nil then return end
+  local iCypWorPlot = pCypWorPlot:GetIndex();
   -- Place internal specialist yield building
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then
-    pCity:GetBuildQueue():CreateIncompleteBuilding(YAXCHILAN_BUILDING_ID, iYaxchilanPlot, 100);
+  if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_ID) then
+    pCity:GetBuildQueue():CreateIncompleteBuilding(CYP_WOR_BUILDING_ID, iCypWorPlot, 100);
   end
   -- Update worker slots
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, true);
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, true);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnCityWorkerChanged
+-- CypWorOnBuildingAddedToMap
 -- ---------------------------------------------------------------------------
-local function YaxchilanOnCityWorkerChanged( iPlayer : number, iCity : number, iX : number, iY : number )
+local function CypWorOnBuildingAddedToMap( iX : number, iY : number, iBuilding : number, iPlayer : number )
+  -- Validate is building A
+  if iBuilding ~= CYP_WOR_BUILDING_A_ID then return end
   -- Get city
-  local pCity = CityManager.GetCity(iPlayer, iCity);
+  local pCity = Cities.GetPlotWorkingCity(iX, iY);
   if pCity == nil then return end
-  -- Validate NBH TE exists
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local iYaxchilanPlot = pCity:GetBuildings():GetBuildingLocation(YAXCHILAN_BUILDING_ID);
-  -- Validate not currently updating specialists
-  if m_YaxchilanCityIsUpdatingSpecialists[iCity] then return end
-  -- Refresh yields
-  YaxchilanRefreshWorkerYields(iPlayer, iCity, iYaxchilanPlot, nil, false);
-end
-
--- ---------------------------------------------------------------------------
--- YaxchilanOnCityTransfered
--- ---------------------------------------------------------------------------
-local function YaxchilanOnCityTransfered(iPlayer : number, iCity : number, iOldPlayer : number, xTransferType)
-  YaxchilanCleanupProperties(iPlayer, iCity);
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
-end
-
--- ---------------------------------------------------------------------------
--- YaxchilanOnCityInitialized
--- ---------------------------------------------------------------------------
-local function YaxchilanOnCityInitialized(iPlayer : number, iCity : number, iX : number, iY : number)
-  YaxchilanCleanupProperties(iPlayer, iCity);
-end
-
--- ---------------------------------------------------------------------------
--- YaxchilanOnBuildingPillageStateChanged
--- ---------------------------------------------------------------------------
-local function YaxchilanOnBuildingPillageStateChanged( iPlayer : number, iCity : number, iBuilding : number, bPillageState )
-  -- Get city
-  local pCity = CityManager.GetCity(iPlayer, iCity);
-  if pCity == nil then return end
-  -- Validate NBH TE
-  if iBuilding ~= YAXCHILAN_BUILDING_ID then return end
+  local iCity = pCity:GetID();
   -- Update worker slots
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, false);
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, true);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPurchasePlot
+-- CypWorOnBuildingConstructed
 -- ---------------------------------------------------------------------------
-local function YaxchilanPurchasePlot( iPlayer : number, tParameters : table )
+local function CypWorOnBuildingConstructed( iPlayer : number, iCity : number, iBuilding : number )
+  -- Validate is building A
+  if iBuilding ~= CYP_WOR_BUILDING_A_ID then return end
+  -- Update worker slots
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, true);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnCityWorkerChanged
+-- ---------------------------------------------------------------------------
+local function CypWorOnCityWorkerChanged( iPlayer : number, iCity : number, iX : number, iY : number )
+  -- Get city
+  local pCity = CityManager.GetCity(iPlayer, iCity);
+  if pCity == nil then return end
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
+  -- Validate not currently updating specialists
+  if m_CypWorCityIsUpdatingSpecialists[iCity] then return end
+  -- Refresh yields
+  CypWorRefreshWorkerYields(iPlayer, iCity, iCypWorPlot, nil, false);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnCityTransfered
+-- ---------------------------------------------------------------------------
+local function CypWorOnCityTransfered( iPlayer : number, iCity : number, iOldPlayer : number, xTransferType )
+  CypWorCleanupProperties(iPlayer, iCity);
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnCityInitialized
+-- ---------------------------------------------------------------------------
+local function CypWorOnCityInitialized( iPlayer : number, iCity : number, iX : number, iY : number )
+  CypWorCleanupProperties(iPlayer, iCity);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnDistrictRemovedFromMap
+-- ---------------------------------------------------------------------------
+local function CypWorOnDistrictRemovedFromMap( iPlayer : number, iDistrict : number, iCity : number, iX : number, iY : number, iDistrictType : number )
+  -- Validate WOR
+  if iDistrictType ~= CYP_WOR_DISTRICT_ID then return end
+  -- Cleanup
+  CypWorCleanupProperties(iPlayer, iCity);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnDistrictPillaged
+-- ---------------------------------------------------------------------------
+local function CypWorOnDistrictPillaged( iPlayer : number, iDistrict : number, iCity : number, iX : number, iY : number, iDistrictType : number, iPercent : number, bPillaged)
+  print("CypWorOnDistrictPillaged");
+  -- Validate WOR
+  if iDistrictType ~= CYP_WOR_DISTRICT_ID then return end
+  -- Update worker slots
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorOnBuildingPillageStateChanged
+-- ---------------------------------------------------------------------------
+local function CypWorOnBuildingPillageStateChanged( iPlayer : number, iCity : number, iBuilding : number, bPillageState )
+  -- Validate WOR A
+  if iBuilding ~= CYP_WOR_BUILDING_A_ID then return end
+  -- Update worker slots
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorPurchasePlot
+-- ---------------------------------------------------------------------------
+local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   -- Get params
   local iCity = tParameters.iCity;
   local iPlot = tParameters.iPlot;
@@ -702,17 +719,19 @@ local function YaxchilanPurchasePlot( iPlayer : number, tParameters : table )
   local pTreasury = pPlayer:GetTreasury();
 	local iPlayerGold	:number = pTreasury:GetGoldBalance();
   if iPlayerGold < iGoldCost then return end
+  -- Get city
+	local pCity = CityManager.GetCity(iPlayer, iCity);
+  if pCity == nil then return end
+  -- Validate city has required building
+  if not CypWorBuildingBExists(pCity) then return end
   -- Get plot
 	local pPlot = Map.GetPlotByIndex(iPlot);
   if pPlot == nil then return end
   -- Validate unowned
   if pPlot:GetOwner() ~= -1 then return end
-  -- Get city
-	local pCity = CityManager.GetCity(iPlayer, iCity);
-  if pCity == nil then return end
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < 4 or iDistance > 5 then return end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
   -- Set plot owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Update player gold
@@ -720,13 +739,13 @@ local function YaxchilanPurchasePlot( iPlayer : number, tParameters : table )
     pTreasury:ChangeGoldBalance(-iGoldCost);
   end
   -- Update info
-  YaxchilanOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
+  CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanSwapTile
+-- CypWorSwapTile
 -- ---------------------------------------------------------------------------
-local function YaxchilanSwapTile( iPlayer : number, tParameters : table )
+local function CypWorSwapTile( iPlayer : number, tParameters : table )
   -- Get params
   local iCity = tParameters.iCity;
   local iPlot = tParameters.iPlot;
@@ -740,17 +759,17 @@ local function YaxchilanSwapTile( iPlayer : number, tParameters : table )
   if pCity == nil then return end
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < 4 or iDistance > 5 then return end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
   -- Set plot owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Update info
-  YaxchilanOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
+  CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanTogglePlotLock
+-- CypWorTogglePlotLock
 -- ---------------------------------------------------------------------------
-local function YaxchilanTogglePlotLock( iPlayer : number, tParameters : table )
+local function CypWorTogglePlotLock( iPlayer : number, tParameters : table )
   -- Get params
   local iCity = tParameters.iCity;
   local iPlot = tParameters.iPlot;
@@ -760,10 +779,10 @@ local function YaxchilanTogglePlotLock( iPlayer : number, tParameters : table )
   -- Get city
   local pCity = pPlayer:GetCities():FindID(iCity);
   if pCity == nil then return end
-  -- Validate NBH TE exists
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
   -- Get locked outer ring plots
-  local tLockedOuterRingPlots = pCity:GetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+  local tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
   if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
   -- Get old locked state
   local bWasLocked = tLockedOuterRingPlots[iPlot] == true;
@@ -774,10 +793,10 @@ local function YaxchilanTogglePlotLock( iPlayer : number, tParameters : table )
   else
     tLockedOuterRingPlots[iPlot] = nil;
   end
-  pCity:SetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS, tLockedOuterRingPlots);
+  pCity:SetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tLockedOuterRingPlots);
   -- Refresh yields
   local bForceRefresh = true;
-  YaxchilanRefreshCityNbhWorkerSlots(iPlayer, iCity, bForceRefresh);
+  CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, bForceRefresh);
 end
 
 
@@ -787,37 +806,41 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanLateInitialize
+-- CypWorLateInitialize
 -- ---------------------------------------------------------------------------
-local function YaxchilanLateInitialize()
+local function CypWorLateInitialize()
   -- Event and GameEvent subscriptions
-  Events.PlotYieldChanged.Add(                          YaxchilanOnPlotYieldChanged);
-  Events.PlayerTurnActivated.Add(                       YaxchilanOnPlayerTurnActivated);
-	Events.MapYieldsChanged.Add(                          YaxchilanOnOnMapYieldsChanged);             -- plots + score + slots + yields
-  Events.CityTileOwnershipChanged.Add(                  YaxchilanOnCityTileOwnershipChanged);       -- plots + score + slots + yields
-  Events.DistrictBuildProgressChanged.Add(              YaxchilanOnDistrictBuildProgressChanged);   -- plots + score + slots + yields
-  Events.CityFocusChanged.Add(                          YaxchilanOnCityFocusChanged);               -- plots + score + slots + yields
-  Events.CityWorkerChanged.Add(                         YaxchilanOnCityWorkerChanged);              --                         yields
-  Events.CityTransfered.Add(                            YaxchilanOnCityTransfered);                 -- cleanup
-  Events.CityInitialized.Add(                           YaxchilanOnCityInitialized);                -- cleanup
-  GameEvents.BuildingPillageStateChanged.Add(           YaxchilanOnBuildingPillageStateChanged);    -- pillaged
+  Events.PlotYieldChanged.Add(                          CypWorOnPlotYieldChanged);
+  Events.PlayerTurnActivated.Add(                       CypWorOnPlayerTurnActivated);
+	Events.MapYieldsChanged.Add(                          CypWorOnOnMapYieldsChanged);            -- plots + score + slots + yields
+  Events.CityTileOwnershipChanged.Add(                  CypWorOnCityTileOwnershipChanged);      -- plots + score + slots + yields
+  Events.DistrictBuildProgressChanged.Add(              CypWorOnDistrictBuildProgressChanged);  -- plots + score + slots + yields
+  Events.BuildingAddedToMap.Add(                        CypWorOnBuildingAddedToMap);            -- plots + score + slots + yields
+  GameEvents.BuildingConstructed.Add(                   CypWorOnBuildingConstructed);           -- plots + score + slots + yields
+  Events.CityFocusChanged.Add(                          CypWorOnCityFocusChanged);              -- plots + score + slots + yields
+  Events.CityWorkerChanged.Add(                         CypWorOnCityWorkerChanged);             --                         yields
+  Events.CityTransfered.Add(                            CypWorOnCityTransfered);                -- cleanup
+  Events.CityInitialized.Add(                           CypWorOnCityInitialized);               -- cleanup
+  Events.DistrictRemovedFromMap.Add(                    CypWorOnDistrictRemovedFromMap);        -- cleanup
+  GameEvents.BuildingPillageStateChanged.Add(           CypWorOnBuildingPillageStateChanged);   -- pillaged
+  Events.DistrictPillaged.Add(                          CypWorOnDistrictPillaged);              -- pillaged
   -- Custom game event subscriptions
-  GameEvents.Yaxchilan_CC_PurchasePlot.Add(             YaxchilanPurchasePlot);
-  GameEvents.Yaxchilan_CC_SwapTile.Add(                 YaxchilanSwapTile)
-  GameEvents.Yaxchilan_CC_TogglePlotLock.Add(           YaxchilanTogglePlotLock);                   -- plots + score + slots + yields
+  GameEvents.CypWor_CC_PurchasePlot.Add(                CypWorPurchasePlot);
+  GameEvents.CypWor_CC_SwapTile.Add(                    CypWorSwapTile)
+  GameEvents.CypWor_CC_TogglePlotLock.Add(              CypWorTogglePlotLock);                   -- plots + score + slots + yields
   -- Log the initialization
-  print("Yaxchilan_District.lua initialized!");
+  print("CypWor_District.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanMain
+-- CypWorMain
 -- ---------------------------------------------------------------------------
-local function YaxchilanMain()
+local function CypWorMain()
   -- LateInititalize subscription
-  Events.LoadScreenClose.Add(YaxchilanLateInitialize);
+  Events.LoadScreenClose.Add(CypWorLateInitialize);
 end
 
 -- ---------------------------------------------------------------------------
 -- Start
 -- ---------------------------------------------------------------------------
-YaxchilanMain();
+CypWorMain();

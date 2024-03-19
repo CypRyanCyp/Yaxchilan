@@ -8,7 +8,7 @@
 -- INCLUDES
 -- ===========================================================================
 -- Utility
-include "Yaxchilan_Utility.lua"
+include "CypWor_Utility.lua"
 -- Original
 local tBaseFileVersions = {
     "PlotInfo_CQUI",  -- CQUI
@@ -43,13 +43,13 @@ local YIELD_VARIATION_MAP		:table = {
 -- ===========================================================================
 -- MEMBERS
 -- ===========================================================================
-local m_YaxchilanPlotIM				                  :table = InstanceManager:new("InfoInstance",	"Anchor", Controls.PlotInfoContainer);
-local m_YaxchilanUiCitizens			                :table = {};
-local m_YaxchilanUiWorkableCityPlotsLensMask	  :table = {};
-local m_YaxchilanUiPurchase			                :table = {};
-local m_YaxchilanUiPurchasableCityPlotsLensMask	:table = {};
-local m_YaxchilanUiSwapTiles		                :table = {};
-local m_YaxchilanUiSwapTilesCityPlotsLensMask	  :table = {};
+local m_CypWorPlotIM				                  :table = InstanceManager:new("InfoInstance",	"Anchor", Controls.PlotInfoContainer);
+local m_CypWorUiCitizens			                :table = {};
+local m_CypWorUiWorkableCityPlotsLensMask	    :table = {};
+local m_CypWorUiPurchase			                :table = {};
+local m_CypWorUiPurchasableCityPlotsLensMask	:table = {};
+local m_CypWorUiSwapTiles		                  :table = {};
+local m_CypWorUiSwapTilesCityPlotsLensMask	  :table = {};
 
 
 
@@ -58,10 +58,10 @@ local m_YaxchilanUiSwapTilesCityPlotsLensMask	  :table = {};
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanCanToggleCitizenPlot
--- Note: Must be defined before YaxchilanOnClickOuterRingCitizen.
+-- CypWorCanToggleCitizenPlot
+-- Note: Must be defined before CypWorOnClickOuterRingCitizen.
 -- ---------------------------------------------------------------------------
-function YaxchilanCanToggleCitizenPlot( iPlayer : number, iCity : number, iPlot : number, bIsInnerRing )
+function CypWorCanToggleCitizenPlot( iPlayer : number, iCity : number, iPlot : number, bIsInnerRing )
   -- Get and validate city
   local pCity :table = UI.GetHeadSelectedCity();
   if pCity == nil then return false end
@@ -75,11 +75,11 @@ function YaxchilanCanToggleCitizenPlot( iPlayer : number, iCity : number, iPlot 
   -- Determine if is locked
   local bPlotIsLocked = false;
   if bIsInnerRing then
-    tCityLockedPlots, iCityLockedCount = ExposedMembers.Yaxchilan.CityGetLockedPlots(iPlayer, iCity);
+    tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
     bHasInnerRingData = true;
     bPlotIsLocked = tCityLockedPlots[iPlot] ~= nil;
   else
-    tLockedOuterRingPlots = pCity:GetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
     if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
     bHasOuterRingData = true;
     bPlotIsLocked = tLockedOuterRingPlots[iPlot] == true;
@@ -87,10 +87,10 @@ function YaxchilanCanToggleCitizenPlot( iPlayer : number, iCity : number, iPlot 
   if bPlotIsLocked then return true end
   -- Get missing data
   if not bHasInnerRingData then
-    tCityLockedPlots, iCityLockedCount = ExposedMembers.Yaxchilan.CityGetLockedPlots(iPlayer, iCity);
+    tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
   end
   if not bHasOuterRingData then
-    tLockedOuterRingPlots = pCity:GetProperty(YAXCHILAN_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
     if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
   end
   -- Count locks
@@ -108,18 +108,18 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanOnClickOuterRingCitizen
+-- CypWorOnClickOuterRingCitizen
 -- ---------------------------------------------------------------------------
-function YaxchilanOnClickOuterRingCitizen( iPlayer : number, iCity : number, iPlot : number )
+function CypWorOnClickOuterRingCitizen( iPlayer : number, iCity : number, iPlot : number )
   -- Check if can toggle lock
-  local bCanToggleCitizenPlot = YaxchilanCanToggleCitizenPlot(iPlayer, iCity, iPlot, false);
+  local bCanToggleCitizenPlot = CypWorCanToggleCitizenPlot(iPlayer, iCity, iPlot, false);
   if not bCanToggleCitizenPlot then return false end
   -- Toggle lock
   local tParameters = {};
   tParameters.iPlayer = iPlayer;
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
-  tParameters.OnStart = "Yaxchilan_CC_TogglePlotLock";
+  tParameters.OnStart = "CypWor_CC_TogglePlotLock";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   return true;
 end
@@ -130,10 +130,10 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoGetPlotYieldsWithWorkerCompensations
+-- CypWorPlotInfoGetPlotYieldsWithWorkerCompensations
 -- Get corrected yields for city center plot with yield bonuses.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoGetPlotYieldsWithWorkerCompensations( iPlot : number, yields : table, tYieldSums : table )
+function CypWorPlotInfoGetPlotYieldsWithWorkerCompensations( iPlot : number, yields : table, tYieldSums : table )
   -- Get plot
 	local pPlot = Map.GetPlotByIndex(iPlot);
   -- Set corrected yields
@@ -167,13 +167,13 @@ function YaxchilanPlotInfoGetPlotYieldsWithWorkerCompensations( iPlot : number, 
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoGetOuterRingInstanceAt
+-- CypWorPlotInfoGetOuterRingInstanceAt
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoGetOuterRingInstanceAt( iPlot : number )
-	local pInstance = m_YaxchilanUiCitizens[iPlot];
+function CypWorPlotInfoGetOuterRingInstanceAt( iPlot : number )
+	local pInstance = m_CypWorUiCitizens[iPlot];
 	if pInstance == nil then
-		pInstance = m_YaxchilanPlotIM:GetInstance();
-		m_YaxchilanUiCitizens[iPlot] = pInstance;
+		pInstance = m_CypWorPlotIM:GetInstance();
+		m_CypWorUiCitizens[iPlot] = pInstance;
 		local worldX, worldY = UI.GridToWorld(iPlot);
 		pInstance.Anchor:SetWorldPositionVal(worldX, worldY, 20);
 		pInstance.Anchor:SetHide(false);
@@ -182,49 +182,46 @@ function YaxchilanPlotInfoGetOuterRingInstanceAt( iPlot : number )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoReleaseOuterRingInstanceAt
+-- CypWorPlotInfoReleaseOuterRingInstanceAt
 -- Note: This is actually never used, just like the original in PlotInfo.lua.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoReleaseOuterRingInstanceAt( iPlot : number )
-	local pInstance = m_YaxchilanUiCitizens[iPlot];
+function CypWorPlotInfoReleaseOuterRingInstanceAt( iPlot : number )
+	local pInstance = m_CypWorUiCitizens[iPlot];
   if pInstance == nil then return end
   pInstance.Anchor:SetHide(true);
-  m_YaxchilanUiCitizens[iPlot] = nil;
+  m_CypWorUiCitizens[iPlot] = nil;
 end
 
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoUpdateNbhCitizens
--- Override visualization of NBH citizens, when autto assigned
+-- CypWorPlotInfoUpdateWorCitizens
+-- Override visualization of WOR citizens, when autto assigned
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoUpdateNbhCitizens()
+function CypWorPlotInfoUpdateWorCitizens()
   
   -- Get city
   local pCity :table = UI.GetHeadSelectedCity();
 	if pCity == nil then return end
-  local iCity = pCity:GetID();
   
-  -- Validate city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
-  local pNbhDistrict = pCity:GetDistricts():GetDistrict(YAXCHILAN_DISTRICT_TYPE);
-  local pNbhTePlot = Map.GetPlot(pNbhDistrict:GetX(), pNbhDistrict:GetY());
-  local iNbhTePlot = pNbhTePlot:GetIndex();
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
   
   -- Get instance
-  local pInstance : table = GetInstanceAt(iNbhTePlot);
+  local pInstance : table = GetInstanceAt(iCypWorPlot);
   if pInstance == nil then return end
-  table.insert(m_YaxchilanUiCitizens, pInstance);
+  table.insert(m_CypWorUiCitizens, pInstance);
   
   -- Hide instance
 	pInstance.Anchor:SetHide(true);
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoShowOuterRingCitizens
+-- CypWorPlotInfoShowOuterRingCitizens
 -- Update outer ring workers. This is only called when the city management 
 -- UI lens is already selected.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoShowOuterRingCitizens()
+function CypWorPlotInfoShowOuterRingCitizens()
   
   -- Get city
   local pCity :table = UI.GetHeadSelectedCity();
@@ -239,21 +236,16 @@ function YaxchilanPlotInfoShowOuterRingCitizens()
 	if UI.GetInterfaceMode() ~= InterfaceModeTypes.CITY_MANAGEMENT then return end
   
   -- Get outer ring plot data
-  local tOuterRingPlotsData : table = pCity:GetProperty(YAXCHILAN_PROPERTY_OUTER_RING_PLOTS_DATA);
+  local tOuterRingPlotsData : table = pCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
   if tOuterRingPlotsData == nil or table.count(tOuterRingPlotsData) == 0 then return end
   
-  print("tOuterRingPlotsData");
-  for iPlot, _ in pairs(tOuterRingPlotsData) do
-    print(">", "iPlot", iPlot);
-  end
-
   -- Show icon on each worked outer ring plot and disable shadow hex
-  m_YaxchilanUiWorkableCityPlotsLensMask = {};
+  m_CypWorUiWorkableCityPlotsLensMask = {};
   for iPlot, xPlotData in pairs(tOuterRingPlotsData) do
     -- Add to lens hexes
-		table.insert(m_YaxchilanUiWorkableCityPlotsLensMask, iPlot);
+		table.insert(m_CypWorUiWorkableCityPlotsLensMask, iPlot);
   -- Update instance
-    local pInstance = YaxchilanPlotInfoGetOuterRingInstanceAt(iPlot);
+    local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
     if pInstance ~= nil then
       if xPlotData.bIsWorked then
         pInstance.CitizenButton:SetTextureOffsetVal(0, CITIZEN_BUTTON_HEIGHT*4);
@@ -265,29 +257,29 @@ function YaxchilanPlotInfoShowOuterRingCitizens()
       pInstance.LockedIcon:SetHide(not xPlotData.bIsLocked);
       pInstance.CitizenButton:SetVoid1(iPlot);
       pInstance.CitizenButton:SetDisabled(false);
-      pInstance.CitizenButton:RegisterCallback( Mouse.eLClick, function() YaxchilanOnClickOuterRingCitizen( iPlayer, iCity, iPlot ); end );
+      pInstance.CitizenButton:RegisterCallback( Mouse.eLClick, function() CypWorOnClickOuterRingCitizen( iPlayer, iCity, iPlot ); end );
     end
   end
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoHideOuterRingCitizens
+-- CypWorPlotInfoHideOuterRingCitizens
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoHideOuterRingCitizens()
-	for iPlot, pInstance in pairs(m_YaxchilanUiCitizens) do
-		--YaxchilanPlotInfoReleaseOuterRingInstanceAt(iPlot);
+function CypWorPlotInfoHideOuterRingCitizens()
+	for iPlot, pInstance in pairs(m_CypWorUiCitizens) do
+		--CypWorPlotInfoReleaseOuterRingInstanceAt(iPlot);
 		pInstance.CitizenButton:SetHide(true);
 		pInstance.CitizenMeterBG:SetHide(true);
 	end
-  m_YaxchilanUiCitizens = {};
-  m_YaxchilanUiWorkableCityPlotsLensMask = {};
+  m_CypWorUiCitizens = {};
+  m_CypWorUiWorkableCityPlotsLensMask = {};
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoOnClickPurchasePlot
+-- CypWorPlotInfoOnClickPurchasePlot
 -- Execute outer ring plot purchase.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : number )
+function CypWorPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : number )
   
   -- Validate placing mode
 	if UI.GetInterfaceMode() == InterfaceModeTypes.DISTRICT_PLACEMENT then return false end 
@@ -297,6 +289,9 @@ function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : numbe
   local pCity :table = UI.GetHeadSelectedCity();
 	if pCity == nil then return false end
   local iCity = pCity:GetID();
+  
+  -- Validate city has required building
+  if not CypWorBuildingBExists(pCity) then return false end
   
   -- Get player
   local iPlayer = pCity:GetOwner();
@@ -317,7 +312,7 @@ function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : numbe
   
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < 4 or iDistance > 5 then return false end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return false end
   
   -- Notify script context to purchase plot
   local tParameters = {};
@@ -325,7 +320,7 @@ function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : numbe
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
   tParameters.iGoldCost = iGoldCost;
-  tParameters.OnStart = "Yaxchilan_CC_PurchasePlot";
+  tParameters.OnStart = "CypWor_CC_PurchasePlot";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   
   -- Play UI sound
@@ -337,10 +332,10 @@ function YaxchilanPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : numbe
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoOnClickSwapTile
+-- CypWorPlotInfoOnClickSwapTile
 -- Execute outer ring tile swap.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoOnClickSwapTile( iPlot : number )
+function CypWorPlotInfoOnClickSwapTile( iPlot : number )
   
   -- Validate placing mode
 	if UI.GetInterfaceMode() == InterfaceModeTypes.DISTRICT_PLACEMENT then return false end 
@@ -373,14 +368,14 @@ function YaxchilanPlotInfoOnClickSwapTile( iPlot : number )
   
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < 4 or iDistance > 5 then return false end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return false end
   
   -- Notify script context to purchase plot
   local tParameters = {};
   tParameters.iPlayer = iPlayer;
   tParameters.iCity = iCity;
   tParameters.iPlot = iPlot;
-  tParameters.OnStart = "Yaxchilan_CC_SwapTile";
+  tParameters.OnStart = "CypWor_CC_SwapTile";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   
   -- Play UI sound
@@ -392,9 +387,9 @@ function YaxchilanPlotInfoOnClickSwapTile( iPlot : number )
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoGetGoldCostInfo
+-- CypWorPlotInfoGetGoldCostInfo
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoGetGoldCostInfo(pPlayer)
+function CypWorPlotInfoGetGoldCostInfo(pPlayer)
 
   -- Base cost
   local iPlotBuyBaseCost = GameInfo.GlobalParameters["PLOT_BUY_BASE_COST"].Value;
@@ -467,9 +462,9 @@ function YaxchilanPlotInfoGetGoldCostInfo(pPlayer)
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoGetPlotGoldCost
+-- CypWorPlotInfoGetPlotGoldCost
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot)
+function CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot)
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   local iGoldCost = iDistance * iGoldCostPerDistance;
   for iModifierId, tArgs in pairs(tTerrainModifierScalings) do
@@ -485,11 +480,11 @@ function YaxchilanPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifier
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoShowOuterRingPurchases
+-- CypWorPlotInfoShowOuterRingPurchases
 -- Update outer ring purchases. This is only called when the city management 
 -- UI lens is already selected.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoShowOuterRingPurchases()
+function CypWorPlotInfoShowOuterRingPurchases()
   
   -- Do not show when any placement filter is set, since districts and buildings
   -- can't be placed in the outer rings anyway.
@@ -507,15 +502,15 @@ function YaxchilanPlotInfoShowOuterRingPurchases()
   local pPlayer = Players[iPlayer];
   if pPlayer == nil then return end
   
-  -- Validate city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
+  -- Validate city has required building
+  if not CypWorBuildingBExists(pCity) then return end
   
   -- Get player info
 	local iPlayerGold	:number = pPlayer:GetTreasury():GetGoldBalance();
-  local iGoldCostPerDistance, tTerrainModifierScalings = YaxchilanPlotInfoGetGoldCostInfo(pPlayer);
+  local iGoldCostPerDistance, tTerrainModifierScalings = CypWorPlotInfoGetGoldCostInfo(pPlayer);
   
   -- Get unowned plots in outer rings
-  local tUnownedOuterRingPlots = YaxchilanGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, 4, 5);
+  local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, 4, 5);
   if tUnownedOuterRingPlots == nil or table.count(tUnownedOuterRingPlots) == 0 then return end
   
   -- Filter unreachable unowned tiles (= tiles that are not adjacent to a tiled already owned by this city)
@@ -537,12 +532,12 @@ function YaxchilanPlotInfoShowOuterRingPurchases()
   for _,pPlot in pairs(tReachableUnownedOuterRingPlots) do
     local iPlot = pPlot:GetIndex();
     -- Add to lens hexes
-    table.insert(m_YaxchilanUiPurchasableCityPlotsLensMask, iPlot);
+    table.insert(m_CypWorUiPurchasableCityPlotsLensMask, iPlot);
     -- Add icon
-    local pInstance = YaxchilanPlotInfoGetOuterRingInstanceAt(iPlot);
+    local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
     if pInstance ~= nil then
       -- Gold cost
-      local iGoldCost = YaxchilanPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot);
+      local iGoldCost = CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot);
       pInstance.PurchaseButton:SetText(tostring(iGoldCost));
       -- Button
       AutoSizeGridButton(pInstance.PurchaseButton,51,30,25,"H");
@@ -552,7 +547,7 @@ function YaxchilanPlotInfoShowOuterRingPurchases()
       else
         pInstance.PurchaseButton:GetTextControl():SetColorByName("ResGoldLabelCS");
       end
-      pInstance.PurchaseButton:RegisterCallback( Mouse.eLClick, function() YaxchilanPlotInfoOnClickPurchasePlot( iPlot, iGoldCost ); end );
+      pInstance.PurchaseButton:RegisterCallback( Mouse.eLClick, function() CypWorPlotInfoOnClickPurchasePlot( iPlot, iGoldCost ); end );
       pInstance.PurchaseAnim:SetColor( (iGoldCost > iPlayerGold ) and UI.GetColorValueFromHexLiteral(0xbb808080) or UI.GetColorValueFromHexLiteral(0xffffffff) ) ;
 			pInstance.PurchaseAnim:RegisterEndCallback( OnSpinningCoinAnimDone );
 			if ( iGoldCost > iPlayerGold ) then
@@ -563,27 +558,27 @@ function YaxchilanPlotInfoShowOuterRingPurchases()
 				pInstance.PurchaseButton:SetToolTipString("");
 			end
 			pInstance.PurchaseButton:SetHide( false );
-			table.insert(m_YaxchilanUiPurchase, pInstance);
+			table.insert(m_CypWorUiPurchase, pInstance);
     end    
   end
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoHideOuterRingPurchases
+-- CypWorPlotInfoHideOuterRingPurchases
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoHideOuterRingPurchases()
-	for _, pInstance in pairs(m_YaxchilanUiPurchase) do
+function CypWorPlotInfoHideOuterRingPurchases()
+	for _, pInstance in pairs(m_CypWorUiPurchase) do
 		pInstance.PurchaseButton:SetHide( true );
     -- Note: Instances are removed by worker plot function
 	end
-  m_YaxchilanUiPurchase = {};
-  m_YaxchilanUiPurchasableCityPlotsLensMask = {};
+  m_CypWorUiPurchase = {};
+  m_CypWorUiPurchasableCityPlotsLensMask = {};
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoShowOuterRingSwapTiles
+-- CypWorPlotInfoShowOuterRingSwapTiles
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoShowOuterRingSwapTiles()
+function CypWorPlotInfoShowOuterRingSwapTiles()
   
   -- Do not show when any placement filter is set, since districts and buildings
   -- can't be placed in the outer rings anyway.
@@ -601,11 +596,11 @@ function YaxchilanPlotInfoShowOuterRingSwapTiles()
   local pPlayer = Players[iPlayer];
   if pPlayer == nil then return end
   
-  -- Validate city has NBH TE
-  if not pCity:GetBuildings():HasBuilding(YAXCHILAN_BUILDING_ID) then return end
+  -- Validate city has WOR district
+  --if not CypWorDistrictExists(pCity) then return end
   
   -- Get swappable outer ring tiles
-  local tSwappableOuterRingPlots = YaxchilanGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), iPlayer, iCity, 4, 5, true);
+  local tSwappableOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), iPlayer, iCity, CYP_WOR_DST_MIN, CYP_WOR_DST_MAX, true);
   if tSwappableOuterRingPlots == nil or table.count(tSwappableOuterRingPlots) == 0 then return end
   
   -- Show swap icons
@@ -620,30 +615,30 @@ function YaxchilanPlotInfoShowOuterRingSwapTiles()
     end
     if not bPlotIsInInner2RingsOfOwnedCity then
       -- Add to lens hexes
-      table.insert(m_YaxchilanUiSwapTilesCityPlotsLensMask, iPlot);
+      table.insert(m_CypWorUiSwapTilesCityPlotsLensMask, iPlot);
       -- Add icon
-      local pInstance = YaxchilanPlotInfoGetOuterRingInstanceAt(iPlot);
+      local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
       if pInstance ~= nil then
           pInstance.SwapTileOwnerButton:SetVoid1(iPlot);
-          pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() YaxchilanPlotInfoOnClickSwapTile( iPlot ); end );
+          pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() CypWorPlotInfoOnClickSwapTile( iPlot ); end );
           pInstance.SwapTileOwnerButton:SetHide(false);
           pInstance.SwapTileOwnerButton:SetSizeX(pInstance.SwapLabel:GetSizeX() + PADDING_SWAP_BUTTON);
-          table.insert( m_YaxchilanUiSwapTiles, pInstance );
+          table.insert( m_CypWorUiSwapTiles, pInstance );
       end
     end
   end
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoHideOuterRingSwapTiles
+-- CypWorPlotInfoHideOuterRingSwapTiles
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoHideOuterRingSwapTiles()
-  for _,pInstance in ipairs(m_YaxchilanUiSwapTiles) do
+function CypWorPlotInfoHideOuterRingSwapTiles()
+  for _,pInstance in ipairs(m_CypWorUiSwapTiles) do
 		pInstance.SwapTileOwnerButton:SetHide( true );
     -- Note: Instances are removed by worker plot function
 	end
-	m_YaxchilanUiSwapTiles = {};
-	m_YaxchilanUiSwapTilesCityPlotsLensMask = {};
+	m_CypWorUiSwapTiles = {};
+	m_CypWorUiSwapTilesCityPlotsLensMask = {};
 end
 
 
@@ -656,21 +651,21 @@ end
 -- CACHE ORIGINAL
 -- ---------------------------------------------------------------------------
 -- Plot yields
-YaxchilanOriginal_GetPlotYields = GetPlotYields;
+CypWorOriginal_GetPlotYields = GetPlotYields;
 -- Citizens
-YaxchilanOriginal_ShowCitizens = ShowCitizens;
-YaxchilanOriginal_HideCitizens = HideCitizens;
-YaxchilanOriginal_OnClickCitizen = OnClickCitizen;
+CypWorOriginal_ShowCitizens = ShowCitizens;
+CypWorOriginal_HideCitizens = HideCitizens;
+CypWorOriginal_OnClickCitizen = OnClickCitizen;
 -- Purchase tiles
-YaxchilanOriginal_ShowPurchases = ShowPurchases;
-YaxchilanOriginal_HidePurchases = HidePurchases;
+CypWorOriginal_ShowPurchases = ShowPurchases;
+CypWorOriginal_HidePurchases = HidePurchases;
 -- Swap tiles
-YaxchilanOriginal_ShowSwapTiles = ShowSwapTiles;
-YaxchilanOriginal_HideSwapTiles = HideSwapTiles;
+CypWorOriginal_ShowSwapTiles = ShowSwapTiles;
+CypWorOriginal_HideSwapTiles = HideSwapTiles;
 -- Lens hexes
-YaxchilanOriginal_AggregateLensHexes = AggregateLensHexes;
+CypWorOriginal_AggregateLensHexes = AggregateLensHexes;
 -- Cleanup
-YaxchilanOriginal_ClearEverything = ClearEverything;
+CypWorOriginal_ClearEverything = ClearEverything;
 
 -- ---------------------------------------------------------------------------
 -- GetPlotYields
@@ -684,13 +679,13 @@ function GetPlotYields( iPlot : number, tYields : table)
   local tYieldSums = nil;
 	local districtType = pPlot:GetDistrictType();
   if districtType == CITY_CENTER_DISTRICT_INDEX then
-    tYieldSums = pPlot:GetProperty(YAXCHILAN_PROPERTY_YIELDS_WITH_COMPENSATIONS);
+    tYieldSums = pPlot:GetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS);
   end
   -- Get yields
   if tYieldSums ~= nil then
-    return YaxchilanPlotInfoGetPlotYieldsWithWorkerCompensations(iPlot, tYields, tYieldSums);
+    return CypWorPlotInfoGetPlotYieldsWithWorkerCompensations(iPlot, tYields, tYieldSums);
   else
-    return YaxchilanOriginal_GetPlotYields(iPlot, tYields);
+    return CypWorOriginal_GetPlotYields(iPlot, tYields);
   end
 end
 
@@ -701,11 +696,11 @@ end
 -- ---------------------------------------------------------------------------
 function ShowCitizens()
   -- Call original
-  YaxchilanOriginal_ShowCitizens();
-  -- Update NBH specialists
-  YaxchilanPlotInfoUpdateNbhCitizens();
+  CypWorOriginal_ShowCitizens();
+  -- Update WOR specialists
+  CypWorPlotInfoUpdateWorCitizens();
   -- Show outer ring workers
-  YaxchilanPlotInfoShowOuterRingCitizens();
+  CypWorPlotInfoShowOuterRingCitizens();
 end
 
 -- ---------------------------------------------------------------------------
@@ -715,9 +710,9 @@ end
 -- ---------------------------------------------------------------------------
 function HideCitizens()
   -- Call original
-  YaxchilanOriginal_HideCitizens();
+  CypWorOriginal_HideCitizens();
   -- Hide outer ring workers
-  YaxchilanPlotInfoHideOuterRingCitizens();
+  CypWorPlotInfoHideOuterRingCitizens();
 end
 
 
@@ -732,10 +727,10 @@ function OnClickCitizen( iPlot : number )
   -- Get and validate player
   local iPlayer = pCity:GetOwner();
   -- Check if can toggle lock
-  local bCanToggleCitizenPlot = YaxchilanCanToggleCitizenPlot(iPlayer, iCity, iPlot, true);
+  local bCanToggleCitizenPlot = CypWorCanToggleCitizenPlot(iPlayer, iCity, iPlot, true);
   if not bCanToggleCitizenPlot then return false end
   -- Call original
-	return YaxchilanOriginal_OnClickCitizen(iPlot);
+	return CypWorOriginal_OnClickCitizen(iPlot);
 end
 
 -- ---------------------------------------------------------------------------
@@ -745,9 +740,9 @@ end
 -- ---------------------------------------------------------------------------
 function ShowPurchases()
   -- Call original
-  YaxchilanOriginal_ShowPurchases();
+  CypWorOriginal_ShowPurchases();
   -- Show outer ring workers
-  YaxchilanPlotInfoShowOuterRingPurchases();
+  CypWorPlotInfoShowOuterRingPurchases();
 end
 
 -- ---------------------------------------------------------------------------
@@ -757,9 +752,9 @@ end
 -- ---------------------------------------------------------------------------
 function HidePurchases()
   -- Call original
-  YaxchilanOriginal_HidePurchases();
+  CypWorOriginal_HidePurchases();
   -- Hide outer ring workers
-  YaxchilanPlotInfoHideOuterRingPurchases();
+  CypWorPlotInfoHideOuterRingPurchases();
 end
 
 -- ---------------------------------------------------------------------------
@@ -769,9 +764,9 @@ end
 -- ---------------------------------------------------------------------------
 function ShowSwapTiles()
   -- Call original
-  YaxchilanOriginal_ShowSwapTiles();
+  CypWorOriginal_ShowSwapTiles();
   -- Show outer ring swap tiles
-  YaxchilanPlotInfoShowOuterRingSwapTiles();
+  CypWorPlotInfoShowOuterRingSwapTiles();
 end
 
 -- ---------------------------------------------------------------------------
@@ -781,9 +776,9 @@ end
 -- ---------------------------------------------------------------------------
 function HideSwapTiles()
   -- Call original
-  YaxchilanOriginal_HideSwapTiles();
+  CypWorOriginal_HideSwapTiles();
   -- Hide outer ring swap tiles
-  YaxchilanPlotInfoHideOuterRingSwapTiles();
+  CypWorPlotInfoHideOuterRingSwapTiles();
 end
 
 -- ---------------------------------------------------------------------------
@@ -794,17 +789,17 @@ end
 -- ---------------------------------------------------------------------------
 function AggregateLensHexes( tKeys : table )
   -- Call original
-  local tResults : table = YaxchilanOriginal_AggregateLensHexes(tKeys);
+  local tResults : table = CypWorOriginal_AggregateLensHexes(tKeys);
   -- Add outer ring plots to lens hexes
-  for i, iPlot in pairs(m_YaxchilanUiWorkableCityPlotsLensMask) do
+  for i, iPlot in pairs(m_CypWorUiWorkableCityPlotsLensMask) do
     table.insert(tResults, iPlot);
   end
   -- Add unowned outer ring plots to lens hexes
-  for i, iPlot in pairs(m_YaxchilanUiPurchasableCityPlotsLensMask) do
+  for i, iPlot in pairs(m_CypWorUiPurchasableCityPlotsLensMask) do
     table.insert(tResults, iPlot);
   end
   -- Add swappable outer ring plots to lens hexes
-  for i, iPlot in pairs(m_YaxchilanUiSwapTilesCityPlotsLensMask) do
+  for i, iPlot in pairs(m_CypWorUiSwapTilesCityPlotsLensMask) do
     table.insert(tResults, iPlot);
   end
   -- Return new result
@@ -818,21 +813,21 @@ end
 -- ---------------------------------------------------------------------------
 function ClearEverything()
   -- Call original
-  YaxchilanOriginal_ClearEverything();
+  CypWorOriginal_ClearEverything();
   -- Clear outer ring worker instances
-  for key,pInstance in pairs(m_YaxchilanUiCitizens) do
+  for key,pInstance in pairs(m_CypWorUiCitizens) do
 		pInstance.Anchor:SetHide(true);
-		m_YaxchilanPlotIM:ReleaseInstance(pInstance);
-		m_YaxchilanUiCitizens[key] = nil;
+		m_CypWorPlotIM:ReleaseInstance(pInstance);
+		m_CypWorUiCitizens[key] = nil;
 	end
 end
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoRefreshFocus
+-- CypWorPlotInfoRefreshFocus
 -- Force refresh of city focus, that will also trigger city UI data refresh.
 -- Currently unused.
 -- ---------------------------------------------------------------------------
-function YaxchilanPlotInfoRefreshFocus(pCity)
+function CypWorPlotInfoRefreshFocus(pCity)
   local pCitizens = pCity:GetCitizens();
   local yieldType :number = YieldTypes.GOLD;
   local tParameters	:table = {};
@@ -857,9 +852,9 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoOuterRingSpecialistsChanged
+-- CypWorPlotInfoOuterRingSpecialistsChanged
 -- ---------------------------------------------------------------------------
-local function YaxchilanPlotInfoOuterRingSpecialistsChanged( tParameters : table )
+local function CypWorPlotInfoOuterRingSpecialistsChanged( tParameters : table )
   -- Get and validate city
   local pCity :table = UI.GetHeadSelectedCity();
   if pCity == nil then return end
@@ -874,7 +869,7 @@ local function YaxchilanPlotInfoOuterRingSpecialistsChanged( tParameters : table
   RefreshCityYieldsPlotList();
   -- Force refresh
   if tParameters.bForceFocusRefresh == true then
-    YaxchilanPlotInfoRefreshFocus(pCity);
+    CypWorPlotInfoRefreshFocus(pCity);
   end
 end
 
@@ -885,16 +880,16 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanPlotInfoInitialize
+-- CypWorPlotInfoInitialize
 -- ---------------------------------------------------------------------------
-local function YaxchilanPlotInfoInitialize()
+local function CypWorPlotInfoInitialize()
   -- Register custom events
-  LuaEvents.YaxchilanOuterRingSpecialistsChanged.Add( YaxchilanPlotInfoOuterRingSpecialistsChanged );
+  LuaEvents.CypWorOuterRingSpecialistsChanged.Add( CypWorPlotInfoOuterRingSpecialistsChanged );
   -- Log init
-  print("PlotInfo_Yaxchilan.lua initialized!");
+  print("PlotInfo_CypWor.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------
 -- Start
 -- ---------------------------------------------------------------------------
-YaxchilanPlotInfoInitialize();
+CypWorPlotInfoInitialize();

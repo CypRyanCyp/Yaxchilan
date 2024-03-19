@@ -9,9 +9,9 @@
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanCityGetLockedPlots
+-- CypWorCityGetLockedPlots
 -- ---------------------------------------------------------------------------
-function YaxchilanCityGetLockedPlots( iPlayer : number, iCity : number )
+function CypWorCityGetLockedPlots( iPlayer : number, iCity : number )
   -- Validate city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return {} end
@@ -43,17 +43,17 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- YaxchilanExposedMembersInitialize
+-- CypWorExposedMembersInitialize
 -- ---------------------------------------------------------------------------
-local function YaxchilanExposedMembersInitialize()
+local function CypWorExposedMembersInitialize()
   -- ExposedMembers
-  if not ExposedMembers.Yaxchilan then ExposedMembers.Yaxchilan = {} end
-  ExposedMembers.Yaxchilan.CityGetLockedPlots = YaxchilanCityGetLockedPlots;
+  if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
+  ExposedMembers.CypWor.CityGetLockedPlots = CypWorCityGetLockedPlots;
   -- Initialized
-  print("Yaxchilan_ExposedMembers.lua initialized!");
+  print("CypWor_ExposedMembers.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------
 -- Start
 -- ---------------------------------------------------------------------------
-YaxchilanExposedMembersInitialize();
+CypWorExposedMembersInitialize();
