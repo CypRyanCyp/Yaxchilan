@@ -1,0 +1,7 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2902264953	CYP_WOR_YAXCHILAN_STOP			\Default Work Unit\CYP_WOR_YAXCHILAN_STOP	
+	3312623003	CYP_WOR_YAXCHILAN_START			\Default Work Unit\CYP_WOR_YAXCHILAN_START	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	525567229	yaxchilan	C:\Users\visklm\Downloads\Cyp\WWise\CypWorYaxchilan\.cache\Windows\SFX\yaxchilan_9E69E797.wem		\Actor-Mixer Hierarchy\Default Work Unit\yaxchilan		66622
+

@@ -6,6 +6,8 @@
 --------------------------------------------------------------
 -- LocalizedText
 INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
+-- Yaxchilan
+('en_US',       'LOC_CYP_WOR_YAXCHILAN',                                  "Yaxchilan"),
 -- Mod and Creator Name
 ('en_US',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "Yaxchilan"),
 ('de_DE',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "Yaxchilan"),
