@@ -114,6 +114,7 @@
   <!-- Scripts -->
   <AddGameplayScripts id="Scripts">
     <File>Scripts/CypWor_District.lua</File>
+    <File>Scripts/CypWor_Version.lua</File>
   </AddGameplayScripts>
 </InGameActions>]]></InGameActionData>
     <FrontEndActionData><![CDATA[
@@ -151,6 +152,9 @@
     </Content>
     <!-- Scripts -->
     <Content Include="Scripts\CypWor_District.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Scripts\CypWor_Version.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Scripts\CypWor_Utility.lua">
