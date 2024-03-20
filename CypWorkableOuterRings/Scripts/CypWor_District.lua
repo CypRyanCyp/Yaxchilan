@@ -722,8 +722,13 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   -- Get city
 	local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
-  -- Validate city has required building
-  if not CypWorBuildingBExists(pCity) then return end
+  -- Validate city has district
+  if not CypWorDistrictExists(pCity) then return end
+  -- Determine purchase distance
+  local iPurchaseDst = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then 
+    iPurchaseDst = CYP_WOR_DST_MAX;
+  end
   -- Get plot
 	local pPlot = Map.GetPlotByIndex(iPlot);
   if pPlot == nil then return end
@@ -731,7 +736,7 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   if pPlot:GetOwner() ~= -1 then return end
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return end
   -- Set plot owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Update player gold

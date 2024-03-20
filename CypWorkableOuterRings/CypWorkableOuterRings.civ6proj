@@ -38,6 +38,10 @@
 </ActionCriteria>]]></ActionCriteriaData>
     <InGameActionData><![CDATA[
 <InGameActions>
+  <!-- UpdateArt -->
+  <UpdateArt id="UpdateArt">
+    <File>CypWorkableOuterRings.dep</File>
+  </UpdateArt>
   <!-- Audio -->
   <UpdateAudio id="Audio_Yaxchilan">
     <Criteria>CYP_WT_CONFIG_ADVISOR_ON</Criteria>
@@ -152,6 +156,7 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="ArtDefs\" />
     <Folder Include="Gameplay\" />
     <Folder Include="Icons\" />
     <Folder Include="Platforms\" />
@@ -168,6 +173,15 @@
   <ItemGroup>
     <None Include="CypWorkableOuterRings.Art.xml" />
     <!-- Audio -->
+    <Content Include="ArtDefs\Buildings.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ArtDefs\Districts.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ArtDefs\Landmarks.artdef">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.ini">
       <SubType>Content</SubType>
     </Content>

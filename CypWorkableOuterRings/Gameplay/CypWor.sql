@@ -17,46 +17,27 @@ INSERT INTO "District_TradeRouteYields"
 ("DistrictType",      "YieldType",  "YieldChangeAsOrigin",  "YieldChangeAsDomesticDestination", "YieldChangeAsInternationalDestination") VALUES 
 ('DISTRICT_CYP_WOR',  'YIELD_FOOD', '0.0',                  '1.0',                              '0.0'),
 ('DISTRICT_CYP_WOR',  'YIELD_GOLD', '0.0',                  '0.0',                              '1.0');
----- Adjacency_YieldChanges
---INSERT INTO "Adjacency_YieldChanges" 
---("ID",                              "Description",                                  "YieldType",        "YieldChange",  "TilesRequired", "AdjacentDistrict") VALUES 
---('WOR_HOLY_SITE',                   'LOC_WOR_DISTRICT_HOLY_SITE',                   'YIELD_FAITH',      '1',            '1',             'DISTRICT_HOLY_SITE'),
---('WOR_CAMPUS',                      'LOC_WOR_DISTRICT_CAMPUS',                      'YIELD_SCIENCE',    '1',            '1',             'DISTRICT_CAMPUS'),
---('WOR_ENCAMPMENT',                  'LOC_WOR_DISTRICT_ENCAMPMENT',                  'YIELD_PRODUCTION', '1',            '1',             'DISTRICT_ENCAMPMENT'),
---('WOR_HARBOR',                      'LOC_WOR_DISTRICT_HARBOR',                      'YIELD_FOOD',       '1',            '1',             'DISTRICT_HARBOR'),
---('WOR_AERODROME',                   'LOC_WOR_DISTRICT_AERODROME',                   'YIELD_GOLD',       '1',            '1',             'DISTRICT_AERODROME'),
---('WOR_COMMERCIAL_HUB',              'LOC_WOR_DISTRICT_COMMERCIAL_HUB',              'YIELD_GOLD',       '1',            '1',             'DISTRICT_COMMERCIAL_HUB'),
---('WOR_ENTERTAINMENT_COMPLEX',       'LOC_WOR_DISTRICT_ENTERTAINMENT_COMPLEX',       'YIELD_GOLD',       '1',            '1',             'DISTRICT_ENTERTAINMENT_COMPLEX'),
---('WOR_THEATER',                     'LOC_WOR_DISTRICT_THEATER',                     'YIELD_CULTURE',    '1',            '1',             'DISTRICT_THEATER'),
---('WOR_INDUSTRIAL_ZONE',             'LOC_WOR_DISTRICT_INDUSTRIAL_ZONE',             'YIELD_PRODUCTION', '1',            '1',             'DISTRICT_INDUSTRIAL_ZONE'),
---('WOR_WATER_ENTERTAINMENT_COMPLEX', 'LOC_WOR_DISTRICT_WATER_ENTERTAINMENT_COMPLEX', 'YIELD_GOLD',       '1',            '1',             'DISTRICT_WATER_ENTERTAINMENT_COMPLEX'),
---('WOR_PRESERVE',                    'LOC_WOR_DISTRICT_PRESERVE',                    'YIELD_FOOD',       '1',            '1',             'DISTRICT_PRESERVE'),
----- District_Adjacencies
---INSERT INTO "District_Adjacencies" ("DistrictType", "YieldChangeId") VALUES 
---('DISTRICT_CYP_WOR', 'WOR_HOLY_SITE'),
---('DISTRICT_CYP_WOR', 'WOR_CAMPUS'),
---('DISTRICT_CYP_WOR', 'WOR_ENCAMPMENT'),
---('DISTRICT_CYP_WOR', 'WOR_HARBOR'),
---('DISTRICT_CYP_WOR', 'WOR_AERODROME'),
---('DISTRICT_CYP_WOR', 'WOR_COMMERCIAL_HUB'),
---('DISTRICT_CYP_WOR', 'WOR_ENTERTAINMENT_COMPLEX'),
---('DISTRICT_CYP_WOR', 'WOR_THEATER'),
---('DISTRICT_CYP_WOR', 'WOR_INDUSTRIAL_ZONE'),
---('DISTRICT_CYP_WOR', 'WOR_WATER_ENTERTAINMENT_COMPLEX'),
---('DISTRICT_CYP_WOR', 'WOR_PRESERVE');
+-- Modifiers (culture bomb)
+INSERT INTO "Modifiers" ("ModifierId", "ModifierType") VALUES 
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'MODIFIER_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER');
+-- ModifierArguments
+INSERT INTO "ModifierArguments" ("ModifierId", "Name", "Value") VALUES 
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR');
+-- GameModifiers
+INSERT INTO "GameModifiers" ("ModifierId") VALUES 
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB');
+
 
 --------------------------------------------------------------
 -- Workable outer ring buildings
 --------------------------------------------------------------
 -- Types
 INSERT INTO "Types" ("Type", "Kind") VALUES
-('BUILDING_CYP_WOR_CUSTOMS_HOUSE', 'KIND_BUILDING'),
 ('BUILDING_CYP_WOR_LOGISTICS_CENTER', 'KIND_BUILDING');
 -- Buildings
 INSERT INTO "Buildings" 
 ("BuildingType",                      "Name",                                       "Description",                                        "Cost", "PrereqDistrict",   "PrereqCivic")  VALUES
-('BUILDING_CYP_WOR_CUSTOMS_HOUSE',    'LOC_BUILDING_CYP_WOR_CUSTOMS_HOUSE_NAME',    'LOC_BUILDING_CYP_WOR_CUSTOMS_HOUSE_DESCRIPTION',     100,    'DISTRICT_CYP_WOR', "CIVIC_URBANIZATION"),
-('BUILDING_CYP_WOR_LOGISTICS_CENTER', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  100,    'DISTRICT_CYP_WOR', "CIVIC_CAPITALISM");
+('BUILDING_CYP_WOR_LOGISTICS_CENTER', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  100,    'DISTRICT_CYP_WOR', "CIVIC_URBANIZATION");
 
 --------------------------------------------------------------
 -- Temporary list for binary digits

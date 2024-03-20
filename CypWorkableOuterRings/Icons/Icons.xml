@@ -20,7 +20,6 @@
     <!-- District -->
     <Row Name="ICON_DISTRICT_CYP_WOR"                   Atlas="ICON_ATLAS_CYP_WOR_DISTRICT"   Index="0"/>
     <!-- Buildings -->
-    <Row Name="ICON_BUILDING_CYP_WOR_CUSTOMS_HOUSE"     Atlas="ICON_ATLAS_CYP_WOR_BUILDINGS"  Index="0"/>
-    <Row Name="ICON_BUILDING_CYP_WOR_LOGISTICS_CENTER"  Atlas="ICON_ATLAS_CYP_WOR_BUILDINGS"  Index="1"/>
+    <Row Name="ICON_BUILDING_CYP_WOR_LOGISTICS_CENTER"  Atlas="ICON_ATLAS_CYP_WOR_BUILDINGS"  Index="0"/>
   </IconDefinitions>
 </GameData>

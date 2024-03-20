@@ -14,19 +14,12 @@ local CYP_WOR_DISTRICT = GameInfo.Districts[CYP_WOR_DISTRICT_TYPE];
 if CYP_WOR_DISTRICT ~= nil then
   CYP_WOR_DISTRICT_ID = CYP_WOR_DISTRICT.Index;
 end
--- Building A
-CYP_WOR_BUILDING_A_TYPE = 'BUILDING_CYP_WOR_CUSTOMS_HOUSE';
+-- Building
+CYP_WOR_BUILDING_A_TYPE = 'BUILDING_CYP_WOR_LOGISTICS_CENTER';
 CYP_WOR_BUILDING_A_ID = nil;
 local CYP_WOR_BUILDING_A = GameInfo.Buildings[CYP_WOR_BUILDING_A_TYPE];
 if CYP_WOR_BUILDING_A ~= nil then
   CYP_WOR_BUILDING_A_ID = CYP_WOR_BUILDING_A.Index;
-end
--- Building B
-CYP_WOR_BUILDING_B_TYPE = 'BUILDING_CYP_WOR_LOGISTICS_CENTER';
-CYP_WOR_BUILDING_B_ID = nil;
-local CYP_WOR_BUILDING_B = GameInfo.Buildings[CYP_WOR_BUILDING_B_TYPE];
-if CYP_WOR_BUILDING_B ~= nil then
-  CYP_WOR_BUILDING_B_ID = CYP_WOR_BUILDING_B.Index;
 end
 -- Internal building
 CYP_WOR_BUILDING_TYPE = 'BUILDING_CYP_WOR';
@@ -55,7 +48,6 @@ CYP_WOR_DST_MAX = 5;
 -- CypWorDistrictExists
 -- ---------------------------------------------------------------------------
 function CypWorDistrictExists( pCity )
-  print("CypWorDistrictExists", pCity:GetDistricts():HasDistrict(CYP_WOR_DISTRICT_ID));
   if not pCity:GetDistricts():HasDistrict(CYP_WOR_DISTRICT_ID) then return false end
   local pDistrict = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID);
   return pDistrict:IsComplete();
@@ -80,14 +72,6 @@ end
 function CypWorBuildingAExists( pCity )
   if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_A_ID) then return false end
   return not pCity:GetBuildings():IsPillaged(CYP_WOR_BUILDING_A_ID);
-end
-
--- ---------------------------------------------------------------------------
--- CypWorBuildingBExists
--- ---------------------------------------------------------------------------
-function CypWorBuildingBExists( pCity )
-  if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_B_ID) then return false end
-  return not pCity:GetBuildings():IsPillaged(CYP_WOR_BUILDING_B_ID);
 end
 
 -- ---------------------------------------------------------------------------
