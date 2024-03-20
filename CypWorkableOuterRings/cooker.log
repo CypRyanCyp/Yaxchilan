@@ -1,0 +1,16 @@
+Starting AssetCooker...
+Argument '--shaders' has been deprecated and is no longer used.
+Opened output file: C:\Users\visklm\Documents\My Games\Sid Meier's Civilization VI\Mods\CypWorkableOuterRings\ArtDefs/Landmarks.artdef
+Cooking ArtDef: (Eras.artdef).
+Cooking ArtDef: (Cultures.artdef).
+Cooking ArtDef: (CityGenerators.artdef).
+Cooking ArtDef: (Appeal.artdef).
+Cooking ArtDef: (StrategicView.artdef).
+Cooking ArtDef: (Districts.artdef).
+Cooking ArtDef: (Buildings.artdef).
+Cooking ArtDef: (Civilizations.artdef).
+Cooking ArtDef: (Landmarks.artdef).
+Cook finished for ArtDef at Path: 'Landmarks.artdef' with Template: 'Landmarks'
+ArtDef cook completed.
+Opened output file: C:/Users/visklm/Documents/My Games/Sid Meier's Civilization VI/Mods/CypWorkableOuterRings/Yaxchilan.dep    For project Yaxchilan
+Cook completed in 0.170 seconds

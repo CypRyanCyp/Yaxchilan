@@ -233,7 +233,6 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
   -- Determine to be worked outer ring plots
   -- Get n best workable outer ring tiles, while n is the amount of specialists
   local tWorkableOuterPlotData : table = pCity:GetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES);
-  print("tWorkableOuterPlotData", table.count(tWorkableOuterPlotData));
   local iAssignedDistrictWorkerCount = 0;
   local tOuterRingPlotsData = {};
   for _, xOuterRingPlotInfo in ipairs(tWorkableOuterPlotData) do
@@ -438,7 +437,6 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
   
   -- Check WOR pillaged state
   local bCypWorIsPillaged = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID):IsPillaged();
-  print("CypWorRefreshCityWorWorkerSlots", "bCypWorIsPillaged", bCypWorIsPillaged);
   
   -- Remove all specialist slots when pillaged
   if not bCypWorIsPillaged then
@@ -687,7 +685,6 @@ end
 -- CypWorOnDistrictPillaged
 -- ---------------------------------------------------------------------------
 local function CypWorOnDistrictPillaged( iPlayer : number, iDistrict : number, iCity : number, iX : number, iY : number, iDistrictType : number, iPercent : number, bPillaged)
-  print("CypWorOnDistrictPillaged");
   -- Validate WOR
   if iDistrictType ~= CYP_WOR_DISTRICT_ID then return end
   -- Update worker slots
@@ -722,8 +719,13 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   -- Get city
 	local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
-  -- Validate city has required building
-  if not CypWorBuildingBExists(pCity) then return end
+  -- Validate city has district
+  if not CypWorDistrictExists(pCity) then return end
+  -- Determine purchase distance
+  local iPurchaseDst = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then 
+    iPurchaseDst = CYP_WOR_DST_MAX;
+  end
   -- Get plot
 	local pPlot = Map.GetPlotByIndex(iPlot);
   if pPlot == nil then return end
@@ -731,7 +733,7 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   if pPlot:GetOwner() ~= -1 then return end
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return end
   -- Set plot owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Update player gold
@@ -799,6 +801,20 @@ local function CypWorTogglePlotLock( iPlayer : number, tParameters : table )
   CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, bForceRefresh);
 end
 
+-- ---------------------------------------------------------------------------
+-- CypWorPlayerSetProperty
+-- ---------------------------------------------------------------------------
+local function CypWorPlayerSetProperty( iPlayer : number, tParameters : table )
+  -- Get player
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return end
+  -- Get params
+  local sPropertyName = tParameters.sPropertyName;
+  local tPropertyValue = tParameters.tPropertyValue;
+  -- Set property
+  pPlayer:SetProperty(sPropertyName, tPropertyValue);
+end
+
 
 
 -- ===========================================================================
@@ -828,6 +844,7 @@ local function CypWorLateInitialize()
   GameEvents.CypWor_CC_PurchasePlot.Add(                CypWorPurchasePlot);
   GameEvents.CypWor_CC_SwapTile.Add(                    CypWorSwapTile)
   GameEvents.CypWor_CC_TogglePlotLock.Add(              CypWorTogglePlotLock);                   -- plots + score + slots + yields
+  GameEvents.CypWor_CC_PlayerSetProperty.Add(           CypWorPlayerSetProperty);
   -- Log the initialization
   print("CypWor_District.lua initialized!");
 end

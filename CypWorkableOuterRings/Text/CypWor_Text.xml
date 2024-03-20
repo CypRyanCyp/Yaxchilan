@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameData>
+  <LocalizedText>
+    <!-- ja_JP -->
+    <Replace Tag="LOC_CYP_WOR_YAXCHILAN" Language="ja_JP">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="ja_JP">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE" Language="ja_JP">
+      <Text>{LOC_CYP_WOR_MOD_NAME_SIMPLE} compatibility note</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_SUMMARY" Language="ja_JP">
+      <Text>Your game has been started with another version of the mod {LOC_CYP_WOR_MOD_NAME_COLOR}. If this leads to bugs I am very sorry for that! ~{LOC_CYP_WOR_MOD_CREATOR}</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_NAME" Language="ja_JP">
+      <Text>Frontier Town Quarters</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_DESCRIPTION" Language="ja_JP">
+      <Text>Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold. Culture bombs adjacent neutral tiles.</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME" Language="ja_JP">
+      <Text>Logistics Center</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION" Language="ja_JP">
+      <Text>Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_DISTRICTS_PAGE_DISTRICT_CYP_WOR_CHAPTER_HISTORY_PARA_1" Language="ja_JP">
+      <Text>Throughout history, civilizations have always sought to expand their territories, pushing the frontiers of their cities to incorporate more resources and space. The Frontier City Quarters is a testament to this enduring aspect of human civilization. It represents the outskirts of a city, where the wilderness meets the urban, and where the raw potential of unclaimed land is harnessed for the city's growth.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1" Language="ja_JP">
+      <Text>The concept of logistics has been integral to the growth and management of cities since ancient times. The Logistics Center represents the culmination of centuries of knowledge and experience in city planning and resource management. It symbolizes the civilization's ability to not just expand, but to effectively manage and sustain their growth through efficient logistics and planning.</Text>
+    </Replace>
+    <!-- zh_Hant_HK -->
+    <Replace Tag="LOC_CYP_WOR_YAXCHILAN" Language="zh_Hant_HK">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="zh_Hant_HK">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE" Language="zh_Hant_HK">
+      <Text>{LOC_CYP_WOR_MOD_NAME_SIMPLE} compatibility note</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_SUMMARY" Language="zh_Hant_HK">
+      <Text>Your game has been started with another version of the mod {LOC_CYP_WOR_MOD_NAME_COLOR}. If this leads to bugs I am very sorry for that! ~{LOC_CYP_WOR_MOD_CREATOR}</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_NAME" Language="zh_Hant_HK">
+      <Text>Frontier Town Quarters</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_DESCRIPTION" Language="zh_Hant_HK">
+      <Text>Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold. Culture bombs adjacent neutral tiles.</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME" Language="zh_Hant_HK">
+      <Text>Logistics Center</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION" Language="zh_Hant_HK">
+      <Text>Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_DISTRICTS_PAGE_DISTRICT_CYP_WOR_CHAPTER_HISTORY_PARA_1" Language="zh_Hant_HK">
+      <Text>Throughout history, civilizations have always sought to expand their territories, pushing the frontiers of their cities to incorporate more resources and space. The Frontier City Quarters is a testament to this enduring aspect of human civilization. It represents the outskirts of a city, where the wilderness meets the urban, and where the raw potential of unclaimed land is harnessed for the city's growth.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1" Language="zh_Hant_HK">
+      <Text>The concept of logistics has been integral to the growth and management of cities since ancient times. The Logistics Center represents the culmination of centuries of knowledge and experience in city planning and resource management. It symbolizes the civilization's ability to not just expand, but to effectively manage and sustain their growth through efficient logistics and planning.</Text>
+    </Replace>
+    <!-- zh_Hans_CN -->
+    <Replace Tag="LOC_CYP_WOR_YAXCHILAN" Language="zh_Hans_CN">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="zh_Hans_CN">
+      <Text>Yaxchilan</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE" Language="zh_Hans_CN">
+      <Text>{LOC_CYP_WOR_MOD_NAME_SIMPLE} compatibility note</Text>
+    </Replace>
+    <Replace Tag="LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_SUMMARY" Language="zh_Hans_CN">
+      <Text>Your game has been started with another version of the mod {LOC_CYP_WOR_MOD_NAME_COLOR}. If this leads to bugs I am very sorry for that! ~{LOC_CYP_WOR_MOD_CREATOR}</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_NAME" Language="zh_Hans_CN">
+      <Text>Frontier Town Quarters</Text>
+    </Replace>
+    <Replace Tag="LOC_DISTRICT_CYP_WOR_DESCRIPTION" Language="zh_Hans_CN">
+      <Text>Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold. Culture bombs adjacent neutral tiles.</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME" Language="zh_Hans_CN">
+      <Text>Logistics Center</Text>
+    </Replace>
+    <Replace Tag="LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION" Language="zh_Hans_CN">
+      <Text>Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_DISTRICTS_PAGE_DISTRICT_CYP_WOR_CHAPTER_HISTORY_PARA_1" Language="zh_Hans_CN">
+      <Text>Throughout history, civilizations have always sought to expand their territories, pushing the frontiers of their cities to incorporate more resources and space. The Frontier City Quarters is a testament to this enduring aspect of human civilization. It represents the outskirts of a city, where the wilderness meets the urban, and where the raw potential of unclaimed land is harnessed for the city's growth.</Text>
+    </Replace>
+    <Replace Tag="LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1" Language="zh_Hans_CN">
+      <Text>The concept of logistics has been integral to the growth and management of cities since ancient times. The Logistics Center represents the culmination of centuries of knowledge and experience in city planning and resource management. It symbolizes the civilization's ability to not just expand, but to effectively manage and sustain their growth through efficient logistics and planning.</Text>
+    </Replace>
+  </LocalizedText>
+</GameData>

@@ -291,7 +291,13 @@ function CypWorPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : number )
   local iCity = pCity:GetID();
   
   -- Validate city has required building
-  if not CypWorBuildingBExists(pCity) then return false end
+  if not CypWorDistrictExists(pCity) then return false end
+  
+  -- Determine purchase distance
+  local iPurchaseDst = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then 
+    iPurchaseDst = CYP_WOR_DST_MAX;
+  end
   
   -- Get player
   local iPlayer = pCity:GetOwner();
@@ -312,7 +318,7 @@ function CypWorPlotInfoOnClickPurchasePlot( iPlot : number, iGoldCost : number )
   
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
-  if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return false end
+  if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return false end
   
   -- Notify script context to purchase plot
   local tParameters = {};
@@ -503,14 +509,20 @@ function CypWorPlotInfoShowOuterRingPurchases()
   if pPlayer == nil then return end
   
   -- Validate city has required building
-  if not CypWorBuildingBExists(pCity) then return end
+  if not CypWorDistrictExists(pCity) then return end
+  
+  -- Determine purchase distance
+  local iPurchaseDst = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then 
+    iPurchaseDst = CYP_WOR_DST_MAX;
+  end
   
   -- Get player info
 	local iPlayerGold	:number = pPlayer:GetTreasury():GetGoldBalance();
   local iGoldCostPerDistance, tTerrainModifierScalings = CypWorPlotInfoGetGoldCostInfo(pPlayer);
   
   -- Get unowned plots in outer rings
-  local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, 4, 5);
+  local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, CYP_WOR_DST_MIN, iPurchaseDst);
   if tUnownedOuterRingPlots == nil or table.count(tUnownedOuterRingPlots) == 0 then return end
   
   -- Filter unreachable unowned tiles (= tiles that are not adjacent to a tiled already owned by this city)

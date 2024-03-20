@@ -23,21 +23,28 @@
   <Reference type="Dlc" title="Expansion: Rise and Fall" id="1B28771A-C749-434B-9053-D1380C553DE9" />
   <Reference type="Mod" title="CypRyan's Wide and Tall" id="96b6e6ba-8ee9-4ddd-9891-fd5a3996a491" />
   <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
-  <Reference type="Mod" title="CQUI" id="1d44b5e7-753e-405b-af24-5ee634ec8a01" />
   <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
 </Associations>]]></AssociationData>
     <ActionCriteriaData><![CDATA[
 <ActionCriteria>
-  <Criteria id="HAS_MOD_CQUI" any="1">
-    <ModInUse>1d44b5e7-753e-405b-af24-5ee634ec8a01</ModInUse>
-    <ModInUse>20c0bddb-67bf-6e15-8328-60c977b3031e</ModInUse>
-  </Criteria>
   <Criteria id="HAS_MOD_SSUA" any="1">
     <ModInUse>805cc499-c534-4e0a-bdce-32fb3c53ba38</ModInUse>
   </Criteria>
 </ActionCriteria>]]></ActionCriteriaData>
     <InGameActionData><![CDATA[
 <InGameActions>
+  <!-- UpdateArt -->
+  <UpdateArt id="UpdateArt">
+    <File>CypWorkableOuterRings.dep</File>
+  </UpdateArt>
+  <!-- Audio -->
+  <UpdateAudio id="Audio_Yaxchilan">
+    <Criteria>CYP_WT_CONFIG_ADVISOR_ON</Criteria>
+    <File>Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.ini</File>
+    <File>Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.bnk</File>
+    <File>Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.txt</File>
+    <File>Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.xml</File>
+  </UpdateAudio>
   <!-- Gameplay -->
   <UpdateDatabase id="Gameplay">
     <File>Gameplay/CypWor.sql</File>
@@ -48,12 +55,23 @@
   </UpdateIcons>
   <!-- Text -->
   <UpdateText id="Text">
+    <Properties>
+      <LoadOrder>100</LoadOrder>
+    </Properties>
     <File>Text/CypWor_Text.sql</File>
+    <File>Text/CypWor_Text.xml</File>
+  </UpdateText>
+  <UpdateText id="Text_Yaxchilan">
+    <Properties>
+      <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Text/CypWor_Text_Yaxchilan.sql</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
     <File>Scripts/CypWor_District.lua</File>
     <File>Scripts/CypWor_Utility.lua</File>
+    <File>Scripts/CypWor_Version.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI_Replacements">
     <File>UI/Replacements/CitySupport.lua</File>
@@ -66,6 +84,7 @@
     <File>UI/PlotInfo_CypWor.lua</File>
     <File>UI/CypWor_ExposedMembers.lua</File>
     <File>UI/CypWor_ExposedMembers.xml</File>
+    <File>UI/AdvisorPopup_CypWor.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI_SSUA">
     <Criteria>HAS_MOD_SSUA</Criteria>
@@ -77,12 +96,19 @@
     <File>UI/ThirdParty/SSUA/PlotInfo_Citizens.lua</File>
     <File>UI/PlotInfo_Citizens_CypWor.lua</File>
   </ImportFiles>
-  <ImportFiles id="Import_UI_CQUI">
-    <Criteria>HAS_MOD_CQUI</Criteria>
-    <File>UI/ThirdParty/CQUI/productionpanel_CQUI.lua</File>
-  </ImportFiles>
   <ImportFiles id="Import_Icons">
-    <!-- TODO -->
+    <File>Icons/District_256.dds</File>
+    <File>Icons/District_128.dds</File>
+    <File>Icons/District_80.dds</File>
+    <File>Icons/District_50.dds</File>
+    <File>Icons/District_38.dds</File>
+    <File>Icons/District_32.dds</File>
+    <File>Icons/Buildings_256.dds</File>
+    <File>Icons/Buildings_128.dds</File>
+    <File>Icons/Buildings_80.dds</File>
+    <File>Icons/Buildings_50.dds</File>
+    <File>Icons/Buildings_38.dds</File>
+    <File>Icons/Buildings_32.dds</File>
   </ImportFiles>
   <!-- UserInterfaces -->
   <AddUserInterfaces id="UserInterfaces">
@@ -92,6 +118,12 @@
     <File>UI/CypWor_ExposedMembers.xml</File>
   </AddUserInterfaces>
   <!-- ReplaceUIScript -->
+  <ReplaceUIScript id="ReplaceUIScript_AdvisorPopup">
+    <Properties>
+      <LuaContext>AdvisorPopup</LuaContext>
+      <LuaReplace>UI/AdvisorPopup_CypWor.lua</LuaReplace>
+    </Properties>
+  </ReplaceUIScript>
   <ReplaceUIScript id="ReplaceUIScript_PlotToolTip">
     <Properties>
       <LoadOrder>14050</LoadOrder>
@@ -125,19 +157,43 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="ArtDefs\" />
     <Folder Include="Gameplay\" />
     <Folder Include="Icons\" />
-    <Folder Include="Configuration\" />
+    <Folder Include="Platforms\" />
+    <Folder Include="Platforms\Windows\" />
+    <Folder Include="Platforms\Windows\Audio\" />
     <Folder Include="Scripts\" />
     <Folder Include="Text\" />
     <Folder Include="UI\" />
     <Folder Include="UI\Replacements\" />
     <Folder Include="UI\ThirdParty\" />
     <Folder Include="UI\ThirdParty\SSUA\" />
-    <Folder Include="UI\ThirdParty\CQUI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CypWorkableOuterRings.Art.xml" />
+    <!-- Audio -->
+    <Content Include="ArtDefs\Buildings.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ArtDefs\Districts.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ArtDefs\Landmarks.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.bnk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.xml">
+      <SubType>Content</SubType>
+    </Content>
     <!-- Gameplay -->
     <Content Include="Gameplay\CypWor.sql">
       <SubType>Content</SubType>
@@ -146,8 +202,50 @@
     <Content Include="Icons\Icons.xml">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Icons\District_256.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\District_128.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\District_80.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\District_50.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\District_38.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\District_32.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_256.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_128.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_80.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_50.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_38.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\Buildings_32.dds">
+      <SubType>Content</SubType>
+    </Content>
     <!-- Text -->
     <Content Include="Text\CypWor_Text.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text_Yaxchilan.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->
@@ -164,9 +262,6 @@
     <Content Include="UI\Replacements\CitySupport.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\ThirdParty\CQUI\productionpanel_CQUI.lua">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="UI\ThirdParty\SSUA\PlotInfo_Citizens.lua">
       <SubType>Content</SubType>
     </Content>
@@ -180,6 +275,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\CypWor_ExposedMembers.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\AdvisorPopup_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\PlotInfo_CypWor.lua">
