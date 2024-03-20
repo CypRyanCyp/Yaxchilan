@@ -23,15 +23,10 @@
   <Reference type="Dlc" title="Expansion: Rise and Fall" id="1B28771A-C749-434B-9053-D1380C553DE9" />
   <Reference type="Mod" title="CypRyan's Wide and Tall" id="96b6e6ba-8ee9-4ddd-9891-fd5a3996a491" />
   <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
-  <Reference type="Mod" title="CQUI" id="1d44b5e7-753e-405b-af24-5ee634ec8a01" />
   <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
 </Associations>]]></AssociationData>
     <ActionCriteriaData><![CDATA[
 <ActionCriteria>
-  <Criteria id="HAS_MOD_CQUI" any="1">
-    <ModInUse>1d44b5e7-753e-405b-af24-5ee634ec8a01</ModInUse>
-    <ModInUse>20c0bddb-67bf-6e15-8328-60c977b3031e</ModInUse>
-  </Criteria>
   <Criteria id="HAS_MOD_SSUA" any="1">
     <ModInUse>805cc499-c534-4e0a-bdce-32fb3c53ba38</ModInUse>
   </Criteria>
@@ -60,7 +55,17 @@
   </UpdateIcons>
   <!-- Text -->
   <UpdateText id="Text">
+    <Properties>
+      <LoadOrder>100</LoadOrder>
+    </Properties>
     <File>Text/CypWor_Text.sql</File>
+    <File>Text/CypWor_Text.xml</File>
+  </UpdateText>
+  <UpdateText id="Text_Yaxchilan">
+    <Properties>
+      <LoadOrder>101</LoadOrder>
+    </Properties>
+    <File>Text/CypWor_Text_Yaxchilan.sql</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
@@ -90,10 +95,6 @@
     <File>UI/ThirdParty/SSUA/Suk_CityPanelOverview.lua</File>
     <File>UI/ThirdParty/SSUA/PlotInfo_Citizens.lua</File>
     <File>UI/PlotInfo_Citizens_CypWor.lua</File>
-  </ImportFiles>
-  <ImportFiles id="Import_UI_CQUI">
-    <Criteria>HAS_MOD_CQUI</Criteria>
-    <File>UI/ThirdParty/CQUI/productionpanel_CQUI.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_Icons">
     <File>Icons/District_256.dds</File>
@@ -168,7 +169,6 @@
     <Folder Include="UI\Replacements\" />
     <Folder Include="UI\ThirdParty\" />
     <Folder Include="UI\ThirdParty\SSUA\" />
-    <Folder Include="UI\ThirdParty\CQUI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CypWorkableOuterRings.Art.xml" />
@@ -242,6 +242,12 @@
     <Content Include="Text\CypWor_Text.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Text\CypWor_Text.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text_Yaxchilan.sql">
+      <SubType>Content</SubType>
+    </Content>
     <!-- Scripts -->
     <Content Include="Scripts\CypWor_District.lua">
       <SubType>Content</SubType>
@@ -254,9 +260,6 @@
     </Content>
     <!-- UI -->
     <Content Include="UI\Replacements\CitySupport.lua">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="UI\ThirdParty\CQUI\productionpanel_CQUI.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\ThirdParty\SSUA\PlotInfo_Citizens.lua">

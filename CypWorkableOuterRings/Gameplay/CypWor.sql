@@ -244,9 +244,9 @@ SELECT  b.BuildingType    "BuildingType",
 FROM "Buildings" b
 WHERE b.BuildingType LIKE '%BUILDING_CYP_WOR_WORKERS_%';
 -- CivilopediaPageExcludes
-INSERT INTO "CivilopediaPageExcludes" ("SectionId", "PageId") VALUES
+INSERT INTO "CivilopediaPageExcludes" ("SectionId", "PageId")
 SELECT  'BUILDINGS'       "SectionId",
-        b.BuildingType    "PageId",
+        b.BuildingType    "PageId"
 FROM "Buildings" b
 WHERE b.BuildingType LIKE '%BUILDING_CYP_WOR_WORKERS_%';
 

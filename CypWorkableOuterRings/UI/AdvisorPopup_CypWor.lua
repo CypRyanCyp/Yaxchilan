@@ -19,8 +19,7 @@ include "AdvisorPopup";
 -- CONSTANTS
 -- ===========================================================================
 -- Options
-local CYPWOR_USEROPTIONS_YAXCHILAN_CATEGORY = 'Tutorial';
-local CYPWOR_USEROPTIONS_YAXCHILAN_KEY = 'YAXCHILAN_5';
+local CYPWOR_PROPERTY_YAXCHILAN_KEY = 'YAXCHILAN_POPUP';
 -- Audio
 local CYPWOR_AUDIO_YAXCHILAN_PREFIX = 'CYP_WOR_YAXCHILAN_';
 local CYPWOR_AUDIO_YAXCHILAN_START = CYPWOR_AUDIO_YAXCHILAN_PREFIX .. 'START';
@@ -85,14 +84,21 @@ end
 -- CypWtAdvisorPopupCheck
 -- ---------------------------------------------------------------------------
 local function CypWtAdvisorPopupCheck()
-  local iVal = Options.GetUserOption(CYPWOR_USEROPTIONS_YAXCHILAN_CATEGORY, CYPWOR_USEROPTIONS_YAXCHILAN_KEY);
-  print("iVal", iVal);
-  if iVal == 1 then return end
-  -- TODO CYP
-  Options.SetUserOption(CYPWOR_USEROPTIONS_YAXCHILAN_CATEGORY, CYPWOR_USEROPTIONS_YAXCHILAN_KEY, 1);
-  Options.SaveOptions();
-  local iVal = Options.GetUserOption(CYPWOR_USEROPTIONS_YAXCHILAN_CATEGORY, CYPWOR_USEROPTIONS_YAXCHILAN_KEY);
-  print("iVal", iVal);
+  -- Get player
+  local iPlayer = Game.GetLocalPlayer();
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return end
+  -- Get property
+  local iYaxchilanPopup = pPlayer:GetProperty(CYPWOR_PROPERTY_YAXCHILAN_KEY);
+  if iYaxchilanPopup == 1 then return end
+  -- Store to property
+  local tParameters = {};
+  tParameters.iPlayer = iPlayer;
+  tParameters.sPropertyName = CYPWOR_PROPERTY_YAXCHILAN_KEY;
+  tParameters.tPropertyValue = 1;
+  tParameters.OnStart = "CypWor_CC_PlayerSetProperty";
+  UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+  -- Popup
   CypWtAdvisorPopupShow();
 end
 
