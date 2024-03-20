@@ -2,19 +2,20 @@
 <GameData>
   <IconTextureAtlases>
     <!-- District -->
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="256"   IconsPerRow="1" IconsPerColumn="1" Filename="District_256.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="128"   IconsPerRow="1" IconsPerColumn="1" Filename="District_128.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="80"    IconsPerRow="1" IconsPerColumn="1" Filename="District_80.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="50"    IconsPerRow="1" IconsPerColumn="1" Filename="District_50.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="38"    IconsPerRow="1" IconsPerColumn="1" Filename="District_38.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="32"    IconsPerRow="1" IconsPerColumn="1" Filename="District_32.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="256"   IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_256.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="128"   IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_128.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="80"    IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_80.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="50"    IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_50.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="38"    IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_38.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="32"    IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_32.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_DISTRICT"  IconSize="22"    IconsPerRow="1" IconsPerColumn="1" Filename="WOR_District_22.dds"/>
     <!-- Buildings -->
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="256"  IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_256.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="128"  IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_128.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="80"   IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_80.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="50"   IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_50.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="38"   IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_38.dds"/>
-    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="32"   IconsPerRow="2" IconsPerColumn="1" Filename="Buildings_32.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="256"  IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_256.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="128"  IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_128.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="80"   IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_80.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="50"   IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_50.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="38"   IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_38.dds"/>
+    <Row Name="ICON_ATLAS_CYP_WOR_BUILDINGS"  IconSize="32"   IconsPerRow="2" IconsPerColumn="1" Filename="WOR_Building_32.dds"/>
   </IconTextureAtlases>
   <IconDefinitions>
     <!-- District -->

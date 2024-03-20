@@ -77,10 +77,10 @@ function CypWorModifyDataHideInternalBuildings( data : table )
 end
 
 -- ---------------------------------------------------------------------------
--- CypWorModifyDataWorTeSpecialists
+-- CypWorModifyDataWorSpecialists
 -- Show outer ring worker yields as specialist yields.
 -- ---------------------------------------------------------------------------
-function CypWorModifyDataWorTeSpecialists(data)
+function CypWorModifyDataWorSpecialists(data)
   -- Check if is district
   if data.DistrictID == -1 or data.DistrictType == nil then return end
   -- Yields are not shown to other players -> nothing to modify
@@ -88,24 +88,11 @@ function CypWorModifyDataWorTeSpecialists(data)
   -- Only if has workers
   if data.Workers == nil or data.Workers == 0 then return end
   -- Only if this is wor district
-  if data.DistrictID ~= CYP_WOR_DISTRICT_ID then return end
-  -- Set specialist yields and remove specialist yields from district yields (including building yields)
-  local tYields = {}
-  local tDistrictYields = {};
-  -- Get property stored yields
-  local tYieldValues = data.OwnerCity:GetProperty(CYP_WOR_PROPERTY_YIELD_VALUES);
-  if tYieldValues == nil then return end
-  -- Modify district and plot/specialist yields
-  for dYield in GameInfo.Yields() do
-    local sYieldType = dYield.YieldType;
-    local iYieldValue = tYieldValues[sYieldType];
-    -- Set specialist yields
-    if iYieldValue ~= nil and iYieldValue > 0 then
-      tYields[sYieldType] = iYieldValue;
-    end
-  end
-  data.Yields = tYields;
-  data.DistrictYields = tDistrictYields;
+  if data.DistrictType ~= CYP_WOR_DISTRICT_TYPE then return end
+  -- Clear yields
+  data.Yields = {};
+  data.DistrictYields = {};
+  data.Workers = 0;
 end
 
 -- ---------------------------------------------------------------------------
@@ -170,7 +157,7 @@ end
 function GetDetails( data )
   CypWorModifyDataWorkedOuterRingPlots(data);
   CypWorModifyDataCityCenterYields(data);
-  CypWorModifyDataWorTeSpecialists(data);
+  CypWorModifyDataWorSpecialists(data);
   CypWorModifyDataHideInternalBuildings(data);
   return CypWorOriginal_GetDetails(data);
 end

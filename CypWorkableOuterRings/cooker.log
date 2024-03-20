@@ -1,16 +1,57 @@
 Starting AssetCooker...
 Argument '--shaders' has been deprecated and is no longer used.
-Opened output file: C:\Users\visklm\Documents\My Games\Sid Meier's Civilization VI\Mods\CypWorkableOuterRings\ArtDefs/Landmarks.artdef
+Opened output file: C:\Users\visklm\Documents\My Games\Sid Meier's Civilization VI\Mods\CypWorkableOuterRings\ArtDefs/StrategicView.artdef
 Cooking ArtDef: (Eras.artdef).
 Cooking ArtDef: (Cultures.artdef).
 Cooking ArtDef: (CityGenerators.artdef).
 Cooking ArtDef: (Appeal.artdef).
-Cooking ArtDef: (StrategicView.artdef).
+Cooking ArtDef: (Landmarks.artdef).
 Cooking ArtDef: (Districts.artdef).
 Cooking ArtDef: (Buildings.artdef).
-Cooking ArtDef: (Civilizations.artdef).
-Cooking ArtDef: (Landmarks.artdef).
-Cook finished for ArtDef at Path: 'Landmarks.artdef' with Template: 'Landmarks'
+Cooking ArtDef: (StrategicView.artdef).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor >> Visible_XLPEntry references an XLP entry (Districts_CypWor_Visible) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor >> Visible_XLPEntry has had its value replaced with its default value.
+
+ >> StrategicView.artdef >> DistrictEntries >> CypWor >> Revealed_XLPEntry references an XLP entry (Districts_CypWor_Revealed) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor >> Revealed_XLPEntry has had its value replaced with its default value.
+
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_Pillaged >> Visible_XLPEntry references an XLP entry (Districts_CypWor_Pillaged_Visible) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_Pillaged >> Visible_XLPEntry has had its value replaced with its default value.
+
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_Pillaged >> Revealed_XLPEntry references an XLP entry (Districts_CypWor_Pillaged_Revealed) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_Pillaged >> Revealed_XLPEntry has had its value replaced with its default value.
+
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_UnderConstruction >> Visible_XLPEntry references an XLP entry (Districts_CypWor_UnderConstruction_Visible) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_UnderConstruction >> Visible_XLPEntry has had its value replaced with its default value.
+
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_UnderConstruction >> Revealed_XLPEntry references an XLP entry (Districts_CypWor_UnderConstruction_Revealed) that does not exist in the XLP (StrategicView_Districts.xlp).
+ >> StrategicView.artdef >> DistrictEntries >> CypWor_UnderConstruction >> Revealed_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Visible_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Visible_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Visible_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Revealed_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Revealed_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter >> Revealed_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Visible_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Visible_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Visible_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Revealed_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Revealed_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_Pillaged >> Revealed_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Visible_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Visible_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Visible_XLPEntry has had its value replaced with its default value.
+
+Detected BLP Entry library name mismatch between the Value and Parameter of  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Revealed_XLPEntry. Changing BLP Entry library name from () to (StrategicView_Sprite).
+Unable to find the XLP () referenced by  >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Revealed_XLPEntry.
+ >> StrategicView.artdef >> BuildingEntries >> LogisticCenter_UnderConstruction >> Revealed_XLPEntry has had its value replaced with its default value.
+
+Cook finished for ArtDef at Path: 'StrategicView.artdef' with Template: 'StrategicView'
 ArtDef cook completed.
-Opened output file: C:/Users/visklm/Documents/My Games/Sid Meier's Civilization VI/Mods/CypWorkableOuterRings/Yaxchilan.dep    For project Yaxchilan
-Cook completed in 0.170 seconds
+Opened output file: C:/Users/visklm/Documents/My Games/Sid Meier's Civilization VI/Mods/CypWorkableOuterRings/CypWorkableOuterRings.dep    For project CypWorkableOuterRings
+Cook completed in 0.160 seconds

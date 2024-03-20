@@ -90,12 +90,12 @@ local function CypWtAdvisorPopupCheck()
   if pPlayer == nil then return end
   -- Get property
   local iYaxchilanPopup = pPlayer:GetProperty(CYPWOR_PROPERTY_YAXCHILAN_KEY);
-  if iYaxchilanPopup == 1 then return end
+  if iYaxchilanPopup ~= nil then return end
   -- Store to property
   local tParameters = {};
   tParameters.iPlayer = iPlayer;
   tParameters.sPropertyName = CYPWOR_PROPERTY_YAXCHILAN_KEY;
-  tParameters.tPropertyValue = 1;
+  tParameters.tPropertyValue = true;
   tParameters.OnStart = "CypWor_CC_PlayerSetProperty";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
   -- Popup

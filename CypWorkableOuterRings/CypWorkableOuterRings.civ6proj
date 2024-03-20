@@ -97,18 +97,19 @@
     <File>UI/PlotInfo_Citizens_CypWor.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_Icons">
-    <File>Icons/District_256.dds</File>
-    <File>Icons/District_128.dds</File>
-    <File>Icons/District_80.dds</File>
-    <File>Icons/District_50.dds</File>
-    <File>Icons/District_38.dds</File>
-    <File>Icons/District_32.dds</File>
-    <File>Icons/Buildings_256.dds</File>
-    <File>Icons/Buildings_128.dds</File>
-    <File>Icons/Buildings_80.dds</File>
-    <File>Icons/Buildings_50.dds</File>
-    <File>Icons/Buildings_38.dds</File>
-    <File>Icons/Buildings_32.dds</File>
+    <File>Icons/WOR_District_256.dds</File>
+    <File>Icons/WOR_District_128.dds</File>
+    <File>Icons/WOR_District_80.dds</File>
+    <File>Icons/WOR_District_50.dds</File>
+    <File>Icons/WOR_District_38.dds</File>
+    <File>Icons/WOR_District_32.dds</File>
+    <File>Icons/WOR_District_22.dds</File>
+    <File>Icons/WOR_Building_256.dds</File>
+    <File>Icons/WOR_Building_128.dds</File>
+    <File>Icons/WOR_Building_80.dds</File>
+    <File>Icons/WOR_Building_50.dds</File>
+    <File>Icons/WOR_Building_38.dds</File>
+    <File>Icons/WOR_Building_32.dds</File>
   </ImportFiles>
   <!-- UserInterfaces -->
   <AddUserInterfaces id="UserInterfaces">
@@ -182,6 +183,9 @@
     <Content Include="ArtDefs\Landmarks.artdef">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="ArtDefs\StrategicView.artdef">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Platforms/Windows/Audio/CYP_WOR_YAXCHILAN.ini">
       <SubType>Content</SubType>
     </Content>
@@ -202,40 +206,43 @@
     <Content Include="Icons\Icons.xml">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_256.dds">
+    <Content Include="Icons\WOR_District_256.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_128.dds">
+    <Content Include="Icons\WOR_District_128.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_80.dds">
+    <Content Include="Icons\WOR_District_80.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_50.dds">
+    <Content Include="Icons\WOR_District_50.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_38.dds">
+    <Content Include="Icons\WOR_District_38.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\District_32.dds">
+    <Content Include="Icons\WOR_District_32.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_256.dds">
+    <Content Include="Icons\WOR_District_22.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_128.dds">
+    <Content Include="Icons\WOR_Building_256.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_80.dds">
+    <Content Include="Icons\WOR_Building_128.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_50.dds">
+    <Content Include="Icons\WOR_Building_80.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_38.dds">
+    <Content Include="Icons\WOR_Building_50.dds">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Icons\Buildings_32.dds">
+    <Content Include="Icons\WOR_Building_38.dds">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Icons\WOR_Building_32.dds">
       <SubType>Content</SubType>
     </Content>
     <!-- Text -->
