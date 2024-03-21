@@ -58,19 +58,26 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('es_ES',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Los ciudadanos pueden trabajar en las casillas del cuarto anillo de esta ciudad. Las casillas del cuarto anillo de esta ciudad se pueden comprar con Oro [ICON_GOLD]. Bombardea culturalmente las casillas neutrales adyacentes"),
 ('it_IT',       'LOC_DISTRICT_CYP_WOR_NAME',          "Quartieri della città di Frontiera"),
 ('it_IT',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "I cittadini possono lavorare le tessere nel quarto anello di questa città. Le tessere del quarto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Bombardea culturalmente las casillas neutrales adyacentes"),
+-- District adjacency
+('en_US',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] Gold from the adjacent {LOC_DISTRICT_CYP_WOR_NAME} district.'),
+('de_DE',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] Gold durch den angrenzenden {LOC_DISTRICT_CYP_WOR_NAME} Bezirk.'),
+('fr_FR',       'LOC_DISTRICT_CYP_WOR_GOLD', '{LOC_DISTRICT_CYP_WOR_NAME} adjacent : [ICON_Gold] or +{1_num}.'),
+('pt_BR',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} de [ICON_Gold] ouro do distrito de {LOC_DISTRICT_CYP_WOR_NAME} adjacente.'),
+('es_ES',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} de Oro [ICON_Gold] por el distrito de {LOC_DISTRICT_CYP_WOR_NAME} adyacente.'),
+('it_IT',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] Oro dal distretto {LOC_DISTRICT_CYP_WOR_NAME} adiacente.'),
 -- Building - Customs House
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistics Center"),
-('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold."),
+('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold. Railroad bombs adjacent owned tiles if the technology {LOC_TECH_STEAM_POWER_NAME} is researched at the time of completion."),
 ('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistik Zentrum"),
-('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Bürger können Geländerfelder im fünften Ring dieser Stadt zu bearbeiten. Geländefelder im fünften Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden."),
+('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Bürger können Geländerfelder im fünften Ring dieser Stadt zu bearbeiten. Geländefelder im fünften Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden. Verbessert umliegende Geländefelder mit Bahnschienen, wenn die Technologie {LOC_TECH_STEAM_POWER_NAME} zum Zeitpunkt der Fertigstellung erforscht ist."),
 ('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centre Logistique"),
-('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Les citoyens peuvent travailler les cases dans le cinquième anneau de cette ville. Les tuiles du cinquième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD]."),
+('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Les citoyens peuvent travailler les cases dans le cinquième anneau de cette ville. Les tuiles du cinquième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD]. Améliore les cases de terrain environnantes avec des rails de chemin de fer si la technologie {LOC_TECH_STEAM_POWER_NAME} est recherchée au moment de l'achèvement."),
 ('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logístico"),
-('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Os cidadãos podem trabalhar nos painéis do quinto anel desta cidade. Os painéis do quinto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro."),
+('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Os cidadãos podem trabalhar nos painéis do quinto anel desta cidade. Os painéis do quinto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro. Melhora os campos do terreno circundante com trilhos de trem se a tecnologia {LOC_TECH_STEAM_POWER_NAME} for pesquisada no momento da conclusão."),
 ('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logístico"),
-('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Los ciudadanos pueden trabajar en las casillas del quinto anillo de esta ciudad. Las casillas del quinto anillo de esta ciudad se pueden comprar con oro [ICON_GOLD]."),
+('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Los ciudadanos pueden trabajar en las casillas del quinto anillo de esta ciudad. Las casillas del quinto anillo de esta ciudad se pueden comprar con oro [ICON_GOLD]. Mejora los campos de terreno circundantes con vías férreas si la tecnología {LOC_TECH_STEAM_POWER_NAME} está investigada en el momento de la finalización."),
 ('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logistico"),
-('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città. Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro.");
+('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città. Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Migliora i campi di terreno circostanti con binari ferroviari se la tecnologia {LOC_TECH_STEAM_POWER_NAME} è ricercata al momento del completamento.");
 
 --------------------------------------------------------------
 -- Civilopedia

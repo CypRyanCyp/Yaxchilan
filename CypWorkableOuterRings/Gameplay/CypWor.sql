@@ -10,8 +10,8 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 ('DISTRICT_CYP_WOR', 'KIND_DISTRICT');
 -- Districts
 INSERT INTO "Districts"
-("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPlacement",  "NoAdjacentCity", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
-('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     1,                    1,                0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
+("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPlacement",  "NoAdjacentCity", "Appeal", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
+('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     1,                    1,                -1,       0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
 -- District_TradeRouteYields
 INSERT INTO "District_TradeRouteYields" 
 ("DistrictType",      "YieldType",  "YieldChangeAsOrigin",  "YieldChangeAsDomesticDestination", "YieldChangeAsInternationalDestination") VALUES 
@@ -26,7 +26,17 @@ INSERT INTO "ModifierArguments" ("ModifierId", "Name", "Value") VALUES
 -- GameModifiers
 INSERT INTO "GameModifiers" ("ModifierId") VALUES 
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB');
-
+-- Adjacency_YieldChanges
+INSERT INTO "Adjacency_YieldChanges" 
+("ID",            "Description",                "YieldType",  "YieldChange",  "TilesRequired",  "AdjacentDistrict") VALUES 
+('CypWor_Gold',   'LOC_DISTRICT_CYP_WOR_GOLD',  'YIELD_GOLD', '1',            '1',              'DISTRICT_CYP_WOR');
+-- 
+INSERT INTO "District_Adjacencies" ("DistrictType", "YieldChangeId") 
+SELECT  d.DistrictType  "DistrictType", 
+        'CypWor_Gold'   "YieldChangeId"
+FROM "Districts" d
+WHERE d.DistrictType IN
+('DISTRICT_COMMERCIAL_HUB', 'DISTRICT_HARBOR');
 
 --------------------------------------------------------------
 -- Workable outer ring buildings

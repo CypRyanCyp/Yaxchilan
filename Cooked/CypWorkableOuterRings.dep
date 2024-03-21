@@ -533,7 +533,9 @@
 		</Element>
 		<Element>
 			<LibraryName text="StrategicView_Sprite"/>
-			<PackageDependencies/>
+			<PackageDependencies>
+				<Element text="CypWorkableOuterRings.blp"/>
+			</PackageDependencies>
 		</Element>
 		<Element>
 			<LibraryName text="StrategicView_TerrainBlend"/>

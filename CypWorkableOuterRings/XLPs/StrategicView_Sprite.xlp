@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="StrategicView_Sprite"/>
+	<m_PackageName text="StrategicView_Sprite"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Revealed"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Visible"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Visible"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_Revealed"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Revealed"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Visible"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Visible"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Buildings_CypWorDistrict_LogisticsCenter_Visible"/>
+			<m_ObjectName text="Buildings_CypWorDistrict_LogisticsCenter_Visible"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_Pillaged_Revealed"/>
+			<m_ObjectName text="Districts_CypWor_Pillaged_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_Pillaged_Visible"/>
+			<m_ObjectName text="Districts_CypWor_Pillaged_Visible"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_Revealed"/>
+			<m_ObjectName text="Districts_CypWor_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_UnderConstruction_Revealed"/>
+			<m_ObjectName text="Districts_CypWor_UnderConstruction_Revealed"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_Visible"/>
+			<m_ObjectName text="Districts_CypWor_Visible"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Districts_CypWor_UnderConstruction_Visible"/>
+			<m_ObjectName text="Districts_CypWor_UnderConstruction_Visible"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

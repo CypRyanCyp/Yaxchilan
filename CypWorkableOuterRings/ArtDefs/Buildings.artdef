@@ -11,14 +11,6 @@
 		<Element>
 			<m_CollectionName text="Building"/>
 			<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
-			
-			
-			
-			
-			
-			
-			
-			
 			<Element>
 				<m_Fields>
 					<m_Values>
@@ -64,7 +56,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Market"/>
+										<m_ElementName text="LogisticCenter"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -89,7 +81,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Market_Pillaged"/>
+										<m_ElementName text="LogisticCenter_Pillaged"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -114,7 +106,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Market_UnderConstruction"/>
+										<m_ElementName text="LogisticCenter_UnderConstruction"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
