@@ -626,16 +626,28 @@ function CypWorPlotInfoShowOuterRingSwapTiles()
       bPlotIsInInner2RingsOfOwnedCity = iDistance <= 2;
     end
     if not bPlotIsInInner2RingsOfOwnedCity then
-      -- Add to lens hexes
-      table.insert(m_CypWorUiSwapTilesCityPlotsLensMask, iPlot);
-      -- Add icon
-      local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
-      if pInstance ~= nil then
-          pInstance.SwapTileOwnerButton:SetVoid1(iPlot);
-          pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() CypWorPlotInfoOnClickSwapTile( iPlot ); end );
-          pInstance.SwapTileOwnerButton:SetHide(false);
-          pInstance.SwapTileOwnerButton:SetSizeX(pInstance.SwapLabel:GetSizeX() + PADDING_SWAP_BUTTON);
-          table.insert( m_CypWorUiSwapTiles, pInstance );
+      -- Validate is next to at least one owned tile
+      local bIsNextToOwnedTile = false;
+      local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
+      for _, pNeighborPlot in ipairs(tNeighborPlots) do
+        local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
+        if pWorkingCity ~= nil and iCity == pWorkingCity:GetID() then 
+          bIsNextToOwnedTile = true;
+          break;
+        end
+      end
+      if bIsNextToOwnedTile then
+        -- Add to lens hexes
+        table.insert(m_CypWorUiSwapTilesCityPlotsLensMask, iPlot);
+        -- Add icon
+        local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
+        if pInstance ~= nil then
+            pInstance.SwapTileOwnerButton:SetVoid1(iPlot);
+            pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() CypWorPlotInfoOnClickSwapTile( iPlot ); end );
+            pInstance.SwapTileOwnerButton:SetHide(false);
+            pInstance.SwapTileOwnerButton:SetSizeX(pInstance.SwapLabel:GetSizeX() + PADDING_SWAP_BUTTON);
+            table.insert( m_CypWorUiSwapTiles, pInstance );
+        end
       end
     end
   end
