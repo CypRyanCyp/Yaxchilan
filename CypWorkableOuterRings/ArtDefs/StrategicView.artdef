@@ -17,8 +17,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -35,8 +35,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -62,8 +62,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_Pillaged_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -80,8 +80,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_Pillaged_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -107,8 +107,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_UnderConstruction_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -125,8 +125,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Districts_CypWor_UnderConstruction_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="StrategicView_Districts.xlp"/>
-							<m_BLPPackage text="strategicview/strategicview_districts"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -347,10 +347,10 @@
 				<m_Fields>
 					<m_Values>
 						<Element class="AssetObjects..BLPEntryValue">
-							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Revealed"/>
+							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -365,10 +365,10 @@
 							<m_ParamName text="Visible_BottomRight"/>
 						</Element>
 						<Element class="AssetObjects..BLPEntryValue">
-							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Visible"/>
+							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -392,7 +392,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter"/>
+										<m_ElementName text="LogisticsCenter"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -407,7 +407,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter"/>
+				<m_Name text="LogisticsCenter"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -416,8 +416,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -434,8 +434,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_Pillaged_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -459,7 +459,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter_Pillaged"/>
+										<m_ElementName text="LogisticsCenter_Pillaged"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -474,7 +474,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter_Pillaged"/>
+				<m_Name text="LogisticsCenter_Pillaged"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -483,8 +483,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Visible"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Visible_XLPEntry"/>
 						</Element>
@@ -501,8 +501,8 @@
 						<Element class="AssetObjects..BLPEntryValue">
 							<m_EntryName text="Buildings_CypWorDistrict_LogisticsCenter_UnderConstruction_Revealed"/>
 							<m_XLPClass text="StrategicView_Sprite"/>
-							<m_XLPPath text="cypworkableouterrings.xlp"/>
-							<m_BLPPackage text="CypWorkableOuterRings"/>
+							<m_XLPPath text="StrategicView_Sprite.xlp"/>
+							<m_BLPPackage text="StrategicView_Sprite"/>
 							<m_LibraryName text="StrategicView_Sprite"/>
 							<m_ParamName text="Revealed_XLPEntry"/>
 						</Element>
@@ -526,7 +526,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter_UnderConstruction"/>
+										<m_ElementName text="LogisticsCenter_UnderConstruction"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -541,7 +541,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter_UnderConstruction"/>
+				<m_Name text="LogisticsCenter_UnderConstruction"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
@@ -593,7 +593,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter"/>
+										<m_ElementName text="LogisticsCenter"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -608,7 +608,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter"/>
+				<m_Name text="LogisticsCenter"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -656,7 +656,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter_Pillaged"/>
+										<m_ElementName text="LogisticsCenter_Pillaged"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -671,7 +671,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter_Pillaged"/>
+				<m_Name text="LogisticsCenter_Pillaged"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 			<Element>
@@ -719,7 +719,7 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="LogisticCenter_UnderConstruction"/>
+										<m_ElementName text="LogisticsCenter_UnderConstruction"/>
 										<m_RootCollectionName text="BuildingEntries"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
 										<m_CollectionIsLocked>false</m_CollectionIsLocked>
@@ -734,7 +734,7 @@
 						</Element>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="LogisticCenter_UnderConstruction"/>
+				<m_Name text="LogisticsCenter_UnderConstruction"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
