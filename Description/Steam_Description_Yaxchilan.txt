@@ -1,0 +1,71 @@
+Adds the [b]Yaxchilan[/b] district that allows working tiles in the fourth and fifth city ring.
+新增允许在第四和第五城市圈使用工作牌的[b]亚斯奇兰[/b]地区。
+
+[img]https://i.imgur.com/VogbSSm.gif[/img]
+
+
+[h1]Inspiration | 灵感[/h1]
+This mod was inspired by [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
+本修改器的灵感来自 [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][img]https://i.ibb.co/5c0q2FD/Fuzzles-Yaxchilan.png[/img][/url]
+
+
+[h1]Details | 详细信息[/h1]
+This is no specialty district and therefore does not require population. The outer ring tiles can be worked just as tiles in the inner 3 rings. However, you can't place wonders and districts there. Tiles in the outer rings can now be swapped.
+这不是一个专业区，因此不需要人口。外环地砖可以像内三环地砖一样使用。但是，不能在这里放置奇迹和地区。现在可以交换外圈的瓷砖。
+
+[quote][h2][img]https://i.ibb.co/VQzbCQW/District-Yaxchilan-Text.png[/img][/h2]
+[i]District (Medieval Era - Feudalism) | 区域 (中世纪 - 封建主义)[/i]
+
+Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by Gold. Culture bombs adjacent neutral tiles.
+
+城市人口可以在此城市四环内工作。此城市可使用金币购买四环单元格。建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。
+
++1 Housing | +1 住房
+
+[i]Cannot be adjacent to a City Center. | 不能靠近市中心。[/i][/quote]
+
+[quote][h2][img]https://i.ibb.co/tpf1jKf/Building-LS-Text.png[/img][/h2]
+[i]Building (Industrial Era - Urbanization) | 区域 (工业时代 - 城市化)[/i]
+
+Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by Gold. Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+
+城市人口可以在此城市五环内工作。此城市可使用金币购买五环单元格。若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。
+
+[i]Requires: Frontier Town Quarter | 需求：拓荒驻地[/i][/quote]
+
+
+[h1]Good Fit Mods | 配合默契的模块[/h1]
+This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+
+[h1]Languages | 语言[/h1]
+[list][*][b]Yaxchilan | 亚斯奇兰[/b]
+[*][b]English[/b]
+[*][b]German | Deutsch[/b] (CypRyan)
+[*][b]French | Français[/b] (DeepL)
+[*][b]Spanish | Español[/b] (TheColdHands)
+[*][b]Portuguese | Português[/b] (TheColdHands)
+[*][b]Polish | Polski[/b] (MC)
+[*][b]Italian | Italiano[/b] (DeepL)
+[*][b]Japanese | 日本語[/b] (Phantagonist)
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
+
+
+[h1]Special Thanks | 特别感谢[/h1]
+[list][*][b]Fuzzle[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
+[url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
+
+
+[h1]Buy be a coffee | 请我喝咖啡[/h1]
+[url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]
