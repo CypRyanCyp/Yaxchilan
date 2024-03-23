@@ -2,14 +2,14 @@
 <Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
-    <Name>Yaxchilan 亚斯奇兰</Name>
+    <Name>CypRyan's Yaxchilan - Workable Outer Rings</Name>
     <Guid>3b857081-842a-484a-86d8-10acf5e62b61</Guid>
     <ProjectGuid>5d160bf3-6062-4b6a-b301-da3b294956ea</ProjectGuid>
     <ModVersion>1</ModVersion>
-    <Teaser>Adds the Yaxchilan district that allows working tiles in the fourth and fifth city ring. 新增允许在第四和第五城市圈使用工作牌的亚斯奇兰地区。</Teaser>
-    <Description>Adds the Yaxchilan district that allows working tiles in the fourth and fifth city ring.[NEWLINE]新增允许在第四和第五城市圈使用工作牌的亚斯奇兰地区。</Description>
+    <Teaser>Adds the [COLOR_GREEN]Yaxchilan[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Teaser>
+    <Description>Adds the [COLOR_GREEN]Yaxchilan[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Description>
     <Authors>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan</Authors>
-    <SpecialThanks>Civ VI Modding Helpline</SpecialThanks>
+    <SpecialThanks>Civ VI Modding Helpline, Phantagonist, TheColdHands, MC</SpecialThanks>
     <AffectsSavedGames>true</AffectsSavedGames>
     <SupportsSinglePlayer>true</SupportsSinglePlayer>
     <SupportsMultiplayer>true</SupportsMultiplayer>
