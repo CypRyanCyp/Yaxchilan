@@ -2,9 +2,6 @@
 <GameData>
   <LocalizedText>
     <!-- ja_JP -->
-    <Row Tag="LOC_CYP_WOR_YAXCHILAN" Language="ja_JP">
-			<Text>ヤシュチラン</Text>
-		</Row>
 		<Row Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="ja_JP">
 			<Text>ヤシュチラン</Text>
 		</Row>
@@ -36,9 +33,6 @@
 			<Text>物流という概念は、古来より都市の成長と管理に不可欠なものであった。物流センターは、都市計画と資源管理における何世紀にもわたる知識と経験の集大成である。それは、単に拡大するだけでなく、効率的な物流と計画によって成長を効果的に管理しながら維持する文明の能力を象徴している。</Text>
 		</Row>
     <!-- zh_Hant_HK -->
-    <Row Tag="LOC_CYP_WOR_YAXCHILAN" Language="zh_Hant_HK">
-			<Text>亞斯奇蘭</Text>
-		</Row>
 		<Row Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="zh_Hant_HK">
 			<Text>亞斯奇蘭</Text>
 		</Row>
@@ -70,9 +64,6 @@
 			<Text>自古以來，物流的概念就與城市的發展和管理密不可分。物流中心是數世紀以來城市規劃和資源管理知識與經驗的結晶。它不僅象徵文明的擴張能力，還象徵通過高效的物流和規劃來有效管理和維持發展勢頭。</Text>
 		</Row>
     <!-- zh_Hans_CN -->
-    <Row Tag="LOC_CYP_WOR_YAXCHILAN" Language="zh_Hans_CN">
-			<Text>亚斯奇兰</Text>
-		</Row>
 		<Row Tag="LOC_CYP_WOR_MOD_NAME_SIMPLE" Language="zh_Hans_CN">
 			<Text>亚斯奇兰</Text>
 		</Row>
