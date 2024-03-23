@@ -11,8 +11,14 @@ This mod was inspired by [url=steamcommunity.com/sharedfiles/filedetails/?id=295
 
 
 [h1]Details | 详细信息[/h1]
-This is no specialty district and therefore does not require population. The outer ring tiles can be worked just as tiles in the inner 3 rings. However, you can't place wonders and districts there. Tiles in the outer rings can now be swapped.
-这不是一个专业区，因此不需要人口。外环地砖可以像内三环地砖一样使用。但是，不能在这里放置奇迹和地区。现在可以交换外圈的瓷砖。
+[list][*]This isn’t a specialty district, so it doesn’t require population.
+[*]Tiles in the outer ring can be worked just like those in the inner three rings.
+[*]Wonders or districts cannot be placed in the outer rings.
+[*]Tiles in the outer rings can now be swapped.
+[*]这不是一个特殊区域，所以不需要人口。
+[*]外环的瓷砖可以像内三环的瓷砖一样工作。
+[*]奇迹或区域不能放在外环。
+[*]外环的瓷砖现在有了交换的能力。[/list]
 
 [quote][h2][img]https://i.ibb.co/VQzbCQW/District-Yaxchilan-Text.png[/img][/h2]
 [i]District (Medieval Era - Feudalism) | 区域 (中世纪 - 封建主义)[/i]
@@ -67,5 +73,5 @@ This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=301
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 
 
-[h1]Buy be a coffee | 请我喝咖啡[/h1]
+[h1]Buy me a coffee | 请我喝咖啡[/h1]
 [url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]
