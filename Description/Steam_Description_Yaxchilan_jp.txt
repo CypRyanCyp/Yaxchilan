@@ -1,0 +1,66 @@
+Adds the [b]Yaxchilan[/b] district that allows working tiles in the fourth and fifth city ring.
+
+[img]https://i.imgur.com/VogbSSm.gif[/img]
+
+
+[h1]Inspiration[/h1]
+This mod was inspired by [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][img]https://i.ibb.co/5c0q2FD/Fuzzles-Yaxchilan.png[/img][/url]
+
+
+[h1]Details[/h1]
+[list][*]This isn’t a specialty district, so it doesn’t require population.
+[*]Tiles in the outer ring can be worked just like those in the inner three rings.
+[*]Wonders or districts cannot be placed in the outer rings.
+[*]Tiles in the outer rings can now be swapped.[/list]
+
+[quote][h2][img]https://i.ibb.co/mCY77cX/District-Yaxchilan-Text-jp.png[/img][/h2]
+[i]District (Medieval Era - Feudalism)[/i]
+
+Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by Gold. Culture bombs adjacent neutral tiles.
+
++1 Housing
+[i]Cannot be adjacent to a City Center.[/i][/quote]
+
+[quote][h2][img]https://i.ibb.co/5GXHJjm/Building-LS-Text-jp.png[/img][/h2]
+[i]Building (Industrial Era - Urbanization)[/i]
+
+Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by Gold. Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+
+[i]Requires: Frontier Town Quarter[/i][/quote]
+
+
+[h1]Good Fit Mods[/h1]
+This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+
+[h1]Languages[/h1]
+[list][*][b]Yaxchilan[/b]
+[*][b]English[/b]
+[*][b]German | Deutsch[/b] (CypRyan)
+[*][b]French | Français[/b] (DeepL)
+[*][b]Spanish | Español[/b] (TheColdHands)
+[*][b]Portuguese | Português[/b] (TheColdHands)
+[*][b]Polish | Polski[/b] (MC)
+[*][b]Italian | Italiano[/b] (DeepL)
+[*][b]Japanese | 日本語[/b] (Phantagonist)
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
+
+
+[h1]Special Thanks[/h1]
+[list][*][b]Fuzzle[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
+[url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
+
+
+[h1]Buy me a coffee[/h1]
+[url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]

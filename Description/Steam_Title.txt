@@ -1,2 +1,16 @@
-CypRyan's Working Outer Rings | 拓荒驻地 - 开发外环
-CypRyan's Yaxchilan - Working Outer Rings | 亚斯奇兰 - 开发外环
+
+--- Frontier Town Quarters ---
+-- EN
+CypRyan's Working Outer Rings
+-- ZH
+拓荒驻地 - 开发外环
+-- JP
+TODO
+
+--- Yaxchilan ---
+-- EN
+CypRyan's Yaxchilan - Working Outer Rings
+-- ZH
+亚斯奇兰 - 开发外环
+-- JP
+TODO
