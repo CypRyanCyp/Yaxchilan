@@ -24,7 +24,6 @@ Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring 
 
 [i]Requires: Frontier Town Quarter[/i][/quote]
 
-
 [h1]Related Mods[/h1]
 This mod is based on the [b]Neighborhood Tall Extension[/b] from [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url].
 If you combine these mods the [b]Neighborhood Tall Extension[/b] will be removed and the [b]Frontier Town Quarter[/b] district remains.
@@ -32,6 +31,11 @@ In case you feel like the ability to work the outer rings should be harder to un
 [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][img]https://i.ibb.co/D8ZTTJM/Workshop-Link.png[/img][/url]
 Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url].
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+
+[h1]Known Issues & How To Contribute?[/h1]
+[list][*]Worked tiles in the outer rings do not show animations like spinning windmills. Contact us if you are familiar with improvement 3D modding and feel like contributing.
+[*]Currently game assets are reused for the district and building. Unique 3D models would be a great improvement.[/list]
 
 
 [h1]Languages[/h1]
