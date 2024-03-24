@@ -34,10 +34,10 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 -- Mod Creator
 ('en_US',       'LOC_CYP_WOR_MOD_CREATOR',                                "[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan"),
 -- Mod Teaser & Description
-('en_US',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "Adds the [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring."),
+('en_US',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "Adds the [ICON_DISTRICT_CYP_WOR] [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring."),
 ('ja_JP',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "???"), -- TODO
 ('zh_Hant_HK',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "???"), -- TODO
-('zh_Hans_CN',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "新增允许在第四和第五城市圈使用工作牌的[COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]地区。"),
+('zh_Hans_CN',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "新增允许在第四和第五城市圈使用工作牌的 [ICON_DISTRICT_CYP_WOR] [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]地区。"),
 -- Compatibility Note Message
 ('en_US',       'LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE', '{LOC_CYP_WOR_MOD_NAME_SIMPLE} compatibility note'),
 ('de_DE',       'LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE', '{LOC_CYP_WOR_MOD_NAME_SIMPLE} Kompatibilität Hinweis'),
