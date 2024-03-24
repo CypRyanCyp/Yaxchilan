@@ -2,13 +2,13 @@
 <Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
-    <Name>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan's Workable Outer Rings</Name>
+    <Name>{LOC_CYP_WOR_MOD_NAME_COLOR}</Name>
     <Guid>3b857081-842a-484a-86d8-10acf5e62b61</Guid>
     <ProjectGuid>5d160bf3-6062-4b6a-b301-da3b294956ea</ProjectGuid>
     <ModVersion>2</ModVersion>
-    <Teaser>Adds the [COLOR_GREEN]Frontier Town Quarter[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Teaser>
-    <Description>Adds the [COLOR_GREEN]Frontier Town Quarter[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Description>
-    <Authors>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan</Authors>
+    <Teaser>{LOC_CYP_WOR_MOD_DESCRIPTION}</Teaser>
+    <Description>{LOC_CYP_WOR_MOD_DESCRIPTION}</Description>
+    <Authors>{LOC_CYP_WOR_MOD_CREATOR}</Authors>
     <SpecialThanks>Civ VI Modding Helpline, Phantagonist, TheColdHands, MC</SpecialThanks>
     <AffectsSavedGames>true</AffectsSavedGames>
     <SupportsSinglePlayer>true</SupportsSinglePlayer>
@@ -51,7 +51,6 @@
       <LoadOrder>100</LoadOrder>
     </Properties>
     <File>Text/CypWor_Text.sql</File>
-    <File>Text/CypWor_Text.xml</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
@@ -131,6 +130,13 @@
 </InGameActions>]]></InGameActionData>
     <FrontEndActionData><![CDATA[
 <FrontEndActions>
+  <!-- Text -->
+  <UpdateText id="Text">
+    <Properties>
+      <LoadOrder>100</LoadOrder>
+    </Properties>
+    <File>Text/CypWor_Text.sql</File>
+  </UpdateText>
 </FrontEndActions>]]></FrontEndActionData>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
@@ -211,9 +217,6 @@
     </Content>
     <!-- Text -->
     <Content Include="Text\CypWor_Text.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Text\CypWor_Text.xml">
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->
