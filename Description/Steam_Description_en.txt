@@ -24,6 +24,7 @@ Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring 
 
 [i]Requires: Frontier Town Quarter[/i][/quote]
 
+
 [h1]Related Mods[/h1]
 This mod is based on the [b]Neighborhood Tall Extension[/b] from [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url].
 If you combine these mods the [b]Neighborhood Tall Extension[/b] will be removed and the [b]Frontier Town Quarter[/b] district remains.
@@ -55,7 +56,7 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 [*][b]Phantagonist[/b]
 [*][b]TheColdHands[/b]
 [*][b]MC[/b]
-[*][b]Zolar[/b]
+[*][b]Zolaar[/b]
 [*]Zegangani
 [*]SailorCat
 [*]ZeAmadhe

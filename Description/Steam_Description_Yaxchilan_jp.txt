@@ -1,50 +1,45 @@
-Adds the [b]Yaxchilan[/b] district that allows working tiles in the fourth and fifth city ring.
+[b]ヤシュチラン[/b]区域を追加し、都市から5タイル以内のタイルを利用できるようにする。
 
 [img]https://i.imgur.com/VogbSSm.gif[/img]
 
+[h1]ひらめき[/h1]
+このMODは[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]FuzzleのYaxchilan[/b][/url]から着想を得ている。
 
-[h1]Inspiration[/h1]
-This mod was inspired by [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
-[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][img]https://i.ibb.co/5c0q2FD/Fuzzles-Yaxchilan.png[/img][/url]
+[h1]詳細[/h1]
+[list][*]この区域は専門区域ではないため、人口を必要としない。
+[*]外側のタイルは3タイル以內のタイルと同じように働くことができる。
+[*]外側のタイルは遺產や区域を建てない。
+[*]外側のタイルを交換することができる。
 
+[引用][h2][img]https://i.ibb.co/Ldft3bk/District-WOR-Text-jp.png[/img][/h2]
+[i]地区（中世紀-封建制度）[/i］
 
-[h1]Details[/h1]
-[list][*]This isn’t a specialty district, so it doesn’t require population.
-[*]Tiles in the outer ring can be worked just like those in the inner three rings.
-[*]Wonders or districts cannot be placed in the outer rings.
-[*]Tiles in the outer rings can now be swapped.[/list]
+市民は都市から4タイル以内のタイルを利用できる。この都市がゴールドで4タイル以内のタイルを購入できるようになる。所有者のいない隣接タイルに対して文化爆弾を発動させる。
 
-[quote][h2][img]https://i.ibb.co/mCY77cX/District-Yaxchilan-Text-jp.png[/img][/h2]
-[i]District (Medieval Era - Feudalism)[/i]
-
-Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by Gold. Culture bombs adjacent neutral tiles.
-
-+1 Housing
-[i]Cannot be adjacent to a City Center.[/i][/quote]
++1住宅
+[i]都心に隣接することはできない[/i][/quote]。
 
 [quote][h2][img]https://i.ibb.co/5GXHJjm/Building-LS-Text-jp.png[/img][/h2]
-[i]Building (Industrial Era - Urbanization)[/i]
+[i]建築（産業時代-都市化）[/i］
 
-Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by Gold. Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+市民は都市から5タイル以内のタイルを利用できる。この都市がゴールドで5タイル以内のタイルを購入できるようになる。完成時に「蒸気機関」技術が研究した後なら、1タイル以内のタイルに鉄道を作る。
 
-[i]Requires: Frontier Town Quarter[/i][/quote]
+[i]必要：開拓地の町[/i][/quote][/quote]。
 
-
-[h1]Good Fit Mods[/h1]
-This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url].
+[h1]相性の良いMOD[/h1]
+このMODは[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url]と相性が良い。
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
-
-[h1]Languages[/h1]
-[list][*][b]Yaxchilan[/b]
+[h1]言語[/h1]
+[list][*][b]ヤシュチラン[/b]
 [*][b]English[/b]
+[*][b]Japanese | 日本語[/b] (Phantagonist)
 [*][b]German | Deutsch[/b] (CypRyan)
 [*][b]French | Français[/b] (DeepL)
 [*][b]Spanish | Español[/b] (TheColdHands)
 [*][b]Portuguese | Português[/b] (TheColdHands)
 [*][b]Polish | Polski[/b] (MC)
 [*][b]Italian | Italiano[/b] (DeepL)
-[*][b]Japanese | 日本語[/b] (Phantagonist)
 [*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
 
 
@@ -61,6 +56,5 @@ This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=301
 [*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 
-
-[h1]Buy me a coffee[/h1]
+[h1]コーヒーを奢って[/h1]
 [url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]

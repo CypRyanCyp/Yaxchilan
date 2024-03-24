@@ -1,18 +1,17 @@
-新增允许在第四和第五城市圈使用工作牌的[b]亚斯奇兰[/b]地区。
+新增[b]亚斯奇兰[/b]区域，允许公民在第四和第五环工作。
 
 [img]https://i.imgur.com/VogbSSm.gif[/img]
 
 
 [h1]灵感[/h1]
-本修改器的灵感来自 [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
+这个MOD的灵感来自 [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
 [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][img]https://i.ibb.co/5c0q2FD/Fuzzles-Yaxchilan.png[/img][/url]
 
-
 [h1]详细信息[/h1]
-[list][*]这不是一个特殊区域，所以不需要人口。
-[*]外环的瓷砖可以像内三环的瓷砖一样工作。
-[*]奇迹或区域不能放在外环。
-[*]外环的瓷砖现在有了交换的能力。[/list]
+[list][*]这并非专业化区域，所以不受人口限制。
+[*]公民可以像三环的单元格一样在外环的单元格工作。
+[*]奇观或区域不能放在外环。
+[*]外环的单元格可以交换。[/list]
 
 [quote][h2][img]https://i.ibb.co/WK7dr7c/District-Yaxchilan-Text-zh.png[/img][/h2]
 [i]区域 (中世纪 - 封建主义)[/i]
@@ -30,14 +29,15 @@
 [i]需求：拓荒驻地[/i][/quote]
 
 
-[h1]Good Fit Mods | 配合默契的模块[/h1]
-このMODは [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url] と相性が良い。
+[h1]建议搭配[/h1]
+这个MOD建议搭配[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist：亚斯奇兰的舒克夫人[/b][/url]启用。
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
 
 [h1]语言[/h1]
 [list][*][b]亚斯奇兰[/b]
 [*][b]English[/b]
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)
 [*][b]German | Deutsch[/b] (CypRyan)
 [*][b]French | Français[/b] (DeepL)
 [*][b]Spanish | Español[/b] (TheColdHands)
@@ -45,7 +45,7 @@
 [*][b]Polish | Polski[/b] (MC)
 [*][b]Italian | Italiano[/b] (DeepL)
 [*][b]Japanese | 日本語[/b] (Phantagonist)
-[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
+[/list]
 
 
 [h1]特别感谢[/h1]
@@ -62,5 +62,5 @@
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 
 
-[h1]请我喝咖啡[/h1]
+[h1]请作者喝咖啡[/h1]
 [url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]

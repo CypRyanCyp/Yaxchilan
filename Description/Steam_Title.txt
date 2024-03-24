@@ -3,14 +3,14 @@
 -- EN
 CypRyan's Working Outer Rings
 -- ZH
-拓荒驻地 - 开发外环
+拓荒驻地 - 开发城市外环
 -- JP
-TODO
+ヤシュチラン - 4/5タイル開発
 
 --- Yaxchilan ---
 -- EN
 CypRyan's Yaxchilan - Working Outer Rings
 -- ZH
-亚斯奇兰 - 开发外环
+亚斯奇兰 - 开发城市外环
 -- JP
-TODO
+開拓地の町 - 4/5タイル開発
