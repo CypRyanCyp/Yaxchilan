@@ -105,7 +105,7 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logístico"),
 ('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Los ciudadanos pueden trabajar en las casillas del quinto anillo de esta ciudad. Las casillas del quinto anillo de esta ciudad se pueden comprar con oro [ICON_GOLD]. Mejora los campos de terreno circundantes con vías férreas si la tecnología {LOC_TECH_STEAM_POWER_NAME} está investigada en el momento de la finalización."),
 ('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logistico"),
-('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città. Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Migliora i campi di terreno circostanti con binari ferroviari se la tecnologia {LOC_TECH_STEAM_POWER_NAME} è ricercata al momento del completamento.");
+('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città. Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Migliora i campi di terreno circostanti con binari ferroviari se la tecnologia {LOC_TECH_STEAM_POWER_NAME} è ricercata al momento del completamento."),
 ('ja_JP',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "物流センター"),
 ('ja_JP',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "市民は都市から5タイル以内のタイルを利用できる。この都市が [ICON_Gold] ゴールドで5タイル以内のタイルを購入できるようになる。完成時に「蒸気機関」技術が研究した後なら、1タイル以内のタイルに鉄道を作る。"),
 ('zh_Hant_HK',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "物流中心"),

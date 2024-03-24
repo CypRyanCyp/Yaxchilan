@@ -37,6 +37,13 @@ SELECT  d.DistrictType  "DistrictType",
 FROM "Districts" d
 WHERE d.DistrictType IN
 ('DISTRICT_COMMERCIAL_HUB', 'DISTRICT_HARBOR');
+-- District_GreatPersonPoints
+INSERT INTO "District_GreatPersonPoints" ("DistrictType", "GreatPersonClassType", "PointsPerTurn")
+SELECT    'DISTRICT_CYP_WOR'        "DistrictType", 
+          gpc.GreatPersonClassType  "GreatPersonClassType", 
+          1                         "PointsPerTurn"
+FROM "GreatPersonClasses" gpc
+WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
 -- Workable outer ring buildings
@@ -48,6 +55,13 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 INSERT INTO "Buildings" 
 ("BuildingType",                      "Name",                                       "Description",                                        "Cost", "PrereqDistrict",   "PrereqCivic")  VALUES
 ('BUILDING_CYP_WOR_LOGISTICS_CENTER', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  100,    'DISTRICT_CYP_WOR', "CIVIC_URBANIZATION");
+-- Building_GreatPersonPoints
+INSERT INTO "Building_GreatPersonPoints" ("BuildingType", "GreatPersonClassType", "PointsPerTurn")
+SELECT  'BUILDING_CYP_WOR_LOGISTICS_CENTER'   "BuildingType", 
+        gpc.GreatPersonClassType              "GreatPersonClassType", 
+        1                                     "PointsPerTurn"
+FROM "GreatPersonClasses" gpc
+WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
 -- Temporary list for binary digits
