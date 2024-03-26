@@ -68,7 +68,8 @@
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
-    <File>Scripts/CypWor_District.lua</File>
+    <File>Scripts/CypWor_WorkableOuterRings.lua</File>
+    <File>Scripts/CypWor_CultureBombs.lua</File>
     <File>Scripts/CypWor_Utility.lua</File>
     <File>Scripts/CypWor_Version.lua</File>
   </ImportFiles>
@@ -145,7 +146,9 @@
   </ReplaceUIScript>
   <!-- Scripts -->
   <AddGameplayScripts id="Scripts">
-    <File>Scripts/CypWor_District.lua</File>
+    <File>Scripts/CypWor_WorkableOuterRings.lua</File>
+    <File>Scripts/CypWor_CultureBombs.lua</File>
+    <File>Scripts/CypWor_Utility.lua</File>
     <File>Scripts/CypWor_Version.lua</File>
   </AddGameplayScripts>
 </InGameActions>]]></InGameActionData>
@@ -285,7 +288,10 @@
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->
-    <Content Include="Scripts\CypWor_District.lua">
+    <Content Include="Scripts\CypWor_WorkableOuterRings.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Scripts\CypWor_CultureBombs.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Scripts\CypWor_Version.lua">

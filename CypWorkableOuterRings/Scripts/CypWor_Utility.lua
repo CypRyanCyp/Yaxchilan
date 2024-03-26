@@ -21,13 +21,14 @@ local CYP_WOR_BUILDING_A = GameInfo.Buildings[CYP_WOR_BUILDING_A_TYPE];
 if CYP_WOR_BUILDING_A ~= nil then
   CYP_WOR_BUILDING_A_ID = CYP_WOR_BUILDING_A.Index;
 end
--- Internal building
-CYP_WOR_BUILDING_TYPE = 'BUILDING_CYP_WOR';
+-- Internal buildings
+CYP_WOR_BUILDING_TYPE = 'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS';
 CYP_WOR_BUILDING_ID = nil;
 local CYP_WOR_BUILDING = GameInfo.Buildings[CYP_WOR_BUILDING_TYPE];
 if CYP_WOR_BUILDING ~= nil then
   CYP_WOR_BUILDING_ID = CYP_WOR_BUILDING.Index;
 end
+CYP_WOR_BUILDING_INTERNAL_TYPE_PREFIX = "BUILDING_CYP_WOR_INTERNAL_"
 -- Railroad bomb tech
 RAILROAD_BOMB_TECH_TYPE = 'TECH_STEAM_POWER';
 RAILROAD_BOMB_TECH_ID = nil;
@@ -50,6 +51,34 @@ CYP_WOR_DST_MAX = 5;
 -- ===========================================================================
 -- FUNCTIONS (UTILITY)
 -- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- CypWorIsModifierActive
+-- ---------------------------------------------------------------------------
+function CypWorIsModifierActive( iModifier : number, iPlayer : number )
+  -- Validate
+  if iModifier == nil or iModifier == 0 then return false end
+  -- Check if active
+  if not GameEffects.GetModifierActive(iModifier) then return false end
+  -- Check if requirements met
+  local iOwnerRequirementSet = GameEffects.GetModifierOwnerRequirementSet(iModifier)
+  if iOwnerRequirementSet and GameEffects.GetRequirementSetState(iOwnerRequirementSet) ~= 'Met' then return false end
+  -- Collect data
+  local iOwner = GameEffects.GetModifierOwner(iModifier);
+  local iModifierPlayer = GameEffects.GetObjectsPlayerId(iOwner);
+  -- Global
+  if iModifierPlayer == 0 or iModifierPlayer == nil then return true end
+  -- Player
+  return iModifierPlayer == iPlayer;
+  -- Note: No need to check for owner type GameEffects.GetObjectType(iOwner) since we only support player modifiers
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorDistrictExists
+-- ---------------------------------------------------------------------------
+function CypStringStartsWith(a, b)
+    return string.sub(a, 1, string.len(b)) == b;
+end
 
 -- ---------------------------------------------------------------------------
 -- CypWorDistrictExists

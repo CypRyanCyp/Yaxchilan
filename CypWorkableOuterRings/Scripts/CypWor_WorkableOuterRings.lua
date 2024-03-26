@@ -1,5 +1,5 @@
 -- ===========================================================================
--- Workable outer ring district.
+-- Workable Outer Rings
 -- ===========================================================================
 
 
@@ -7,7 +7,7 @@
 -- ===========================================================================
 -- INCLUDES
 -- ===========================================================================
-include("SupportFunctions");
+include "SupportFunctions.lua";
 include "CypWor_Utility.lua"
 
 
@@ -16,7 +16,7 @@ include "CypWor_Utility.lua"
 -- CONSTANTS
 -- ===========================================================================
 -- Buildings
-local CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE = "BUILDING_CYP_WOR_WORKERS_" -- example: BUILDING_CYP_WOR_WORKERS_2
+local CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE_PREFIX = "BUILDING_CYP_WOR_INTERNAL_WORKERS_" -- example: BUILDING_CYP_WOR_INTERNAL_WORKERS_2
 -- Plot yield score
 local CYP_WOR_YIELD_SCORE_DEFAULT = 1;
 local CYP_WOR_YIELD_SCORE_FAVORED = 4;
@@ -204,37 +204,6 @@ end
 -- ===========================================================================
 -- FUNCTIONS (LOGIC)
 -- ===========================================================================
-
--- ---------------------------------------------------------------------------
--- CypWorCheckRailroadBomb
--- ---------------------------------------------------------------------------
-function CypWorCheckRailroadBomb( iPlayer : number, iCity : number, iCypWorPlot : number )
-  -- Get player
-  local pPlayer = Players[iPlayer];
-  if pPlayer == nil then return end
-  -- Check player has required tech
-  if RAILROAD_BOMB_TECH_ID == nil then return end
-  if not pPlayer:GetTechs():HasTech(RAILROAD_BOMB_TECH_ID) then return end
-  -- Get city
-  local pCity = CityManager.GetCity(iPlayer, iCity);
-  if pCity == nil then return end
-  -- Get plot
-  local iCypWorPlot = CypWorDistrictPlotId(pCity);
-  local pCypWorPlot = Map.GetPlotByIndex(iCypWorPlot);
-  if pCypWorPlot == nil then return end
-  local iX = pCypWorPlot:GetX();
-  local iY = pCypWorPlot:GetY();
-  -- Get railroad index
-  local kRailroad = GameInfo.Routes['ROUTE_RAILROAD'];
-  if kRailroad == nil then return end
-  -- Get surrounding tiles
-  local tRangePlots = Map.GetNeighborPlots(iX, iY, 1);
-  for _, pPlot in ipairs(tRangePlots) do
-    if iPlayer == pPlot:GetOwner() then
-      RouteBuilder.SetRouteType(pPlot, kRailroad.Index);
-    end
-  end
-end
 
 -- ---------------------------------------------------------------------------
 -- CypWorRefreshWorkerYields
@@ -522,7 +491,7 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
     CypWorCreateDummyBuildingWithBinaryConvertedValue(
         iOuterRingTileSpecialistSlots, 
         CYP_WOR_WORKERS_BINARY_DIGITS, 
-        CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE,
+        CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE_PREFIX,
         pCity,
         iCypWorPlot);
     m_CypWorCityIsUpdatingSpecialists[iCity] = false;
@@ -618,7 +587,7 @@ local function CypWorOnCityFocusChanged(iPlayer : number, iCity : number)
 end
 
 -- ---------------------------------------------------------------------------
--- CypWorOnBuildingConstructed
+-- CypWorOnDistrictBuildProgressChanged
 -- ---------------------------------------------------------------------------
 local function CypWorOnDistrictBuildProgressChanged(
                 iPlayer : number, 
@@ -671,8 +640,6 @@ local function CypWorOnBuildingConstructed( iPlayer : number, iCity : number, iB
   if iBuilding ~= CYP_WOR_BUILDING_A_ID then return end
   -- Update worker slots
   CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, true);
-  -- Railroad bomb
-  CypWorCheckRailroadBomb(iPlayer, iCity);
 end
 
 -- ---------------------------------------------------------------------------
@@ -866,7 +833,7 @@ local function CypWorLateInitialize()
   GameEvents.CypWor_CC_SwapTile.Add(                    CypWorSwapTile)
   GameEvents.CypWor_CC_TogglePlotLock.Add(              CypWorTogglePlotLock);                   -- plots + score + slots + yields
   -- Log the initialization
-  print("CypWor_District.lua initialized!");
+  print("CypWor_WorkableOuterRings.lua initialized!");
 end
 
 -- ---------------------------------------------------------------------------

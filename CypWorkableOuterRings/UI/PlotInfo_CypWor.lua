@@ -58,6 +58,47 @@ local m_CypWorUiSwapTilesCityPlotsLensMask	  :table = {};
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
+-- CypWorPlotInfoPlotIsInInner2RingsOfOwnedCity
+-- ---------------------------------------------------------------------------
+function CypWorPlotInfoPlotIsInInner2RingsOfOwnedCity( pPlot )
+  if pPlot == nil then return false end
+  local iPlot = pPlot:GetIndex();
+  local bPlotIsInInner2RingsOfOwnedCity = false;
+  local pWorkingCity = Cities.GetPlotPurchaseCity(iPlot);
+  if pWorkingCity ~= nil then
+    local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pWorkingCity:GetX(), pWorkingCity:GetY());
+    bPlotIsInInner2RingsOfOwnedCity = iDistance <= 2;
+  end
+  return bPlotIsInInner2RingsOfOwnedCity;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorPlotInfoPlotIsNextToOwnedPlot
+-- ---------------------------------------------------------------------------
+function CypWorPlotInfoPlotIsNextToOwnedPlot( pPlot, iCity : number )
+  local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
+  for _, pNeighborPlot in ipairs(tNeighborPlots) do
+    local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
+    if pWorkingCity ~= nil and iCity == pWorkingCity:GetID() then 
+      return true;
+    end
+  end
+  return false;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorPlotInfoPlotHasOnePerCityImprovement
+-- ---------------------------------------------------------------------------
+function CypWorPlotInfoPlotHasOnePerCityImprovement( pPlot )
+  if pPlot == nil then return false end
+  local iImprovement = pPlot:GetImprovementType();
+  if iImprovement == -1 then return false end
+  local kImprovement = GameInfo.Improvements[iImprovement];
+  if kImprovement == nil then return false end
+  return kImprovement.OnePerCity;
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorCanToggleCitizenPlot
 -- Note: Must be defined before CypWorOnClickOuterRingCitizen.
 -- ---------------------------------------------------------------------------
@@ -376,6 +417,15 @@ function CypWorPlotInfoOnClickSwapTile( iPlot : number )
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return false end
   
+  -- Validate not in inner 2 rings of owned city
+  if CypWorPlotInfoPlotIsInInner2RingsOfOwnedCity(pPlot) then return false end
+  
+  -- Validate is next to owned plot
+  if not CypWorPlotInfoPlotIsNextToOwnedPlot(pPlot, iCity) then return false end
+  
+  -- Validate is no one per city improvement
+  if CypWorPlotInfoPlotHasOnePerCityImprovement(pPlot) then return false end
+  
   -- Notify script context to purchase plot
   local tParameters = {};
   tParameters.iPlayer = iPlayer;
@@ -433,28 +483,29 @@ function CypWorPlotInfoGetGoldCostInfo(pPlayer)
     local iOwner = GameEffects.GetModifierOwner(iModifier);
     local iModifierPlayer = GameEffects.GetObjectsPlayerId(iOwner);
     if pPlayer:GetID() == iModifierPlayer then
-      local pModifier = GameEffects.GetModifierDefinition(iModifier);
+      local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
+      local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
       if pModifier ~= nil then
         -- Plot purchase
         if pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST' then
-          for kArgs in GameInfo.ModifierArguments() do
-            if kArgs.ModifierId == pModifier.ModifierId and kArgs.Name == 'Amount' then
-              local iModScaling = (100 + kArgs.Value) / 100;
+          -- Check arguments
+          for sKey, xValue in pairs(tModifierDefinition.Arguments) do
+            if sKey == 'Amount' then
+              local iModScaling = (100 + xValue) / 100;
               iModifierScaling = iModifierScaling * iModScaling;
             end
           end
         -- Plot terrain purchase
         elseif pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST_TERRAIN' then
           tTerrainModifierScalings[pModifier.ModifierId] = {};
-          for kArgs in GameInfo.ModifierArguments() do
-            if kArgs.ModifierId == pModifier.ModifierId then
-              if kArgs.Name == 'Amount' then
-                tTerrainModifierScalings[pModifier.ModifierId]['Multiplier'] = (100 + kArgs.Value) / 100;
-              elseif kArgs.Name == 'TerrainType' then
-                local tTerrain = GameInfo.Terrains[kArgs.Value];
-                if tTerrain ~= nil then
-                  tTerrainModifierScalings[pModifier.ModifierId]['TerrainTypeId'] = tTerrain.Index;
-                end
+          -- Check arguments
+          for sKey, xValue in pairs(tModifierDefinition.Arguments) do
+            if sKey == 'Amount' then
+              tTerrainModifierScalings[pModifier.ModifierId]['Multiplier'] = (100 + xValue) / 100;
+            elseif sKey == 'TerrainType' then
+              local tTerrain = GameInfo.Terrains[xValue];
+              if tTerrain ~= nil then
+                tTerrainModifierScalings[pModifier.ModifierId]['TerrainTypeId'] = tTerrain.Index;
               end
             end
           end
@@ -618,36 +669,21 @@ function CypWorPlotInfoShowOuterRingSwapTiles()
   -- Show swap icons
   for _,pPlot in pairs(tSwappableOuterRingPlots) do
     local iPlot = pPlot:GetIndex();
-    -- Validate not in inner 2 rings of owned city
-    local bPlotIsInInner2RingsOfOwnedCity = true;
-    local pWorkingCity = Cities.GetPlotPurchaseCity(iPlot);
-    if pWorkingCity ~= nil then
-      local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pWorkingCity:GetX(), pWorkingCity:GetY());
-      bPlotIsInInner2RingsOfOwnedCity = iDistance <= 2;
-    end
-    if not bPlotIsInInner2RingsOfOwnedCity then
-      -- Validate is next to at least one owned tile
-      local bIsNextToOwnedTile = false;
-      local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
-      for _, pNeighborPlot in ipairs(tNeighborPlots) do
-        local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
-        if pWorkingCity ~= nil and iCity == pWorkingCity:GetID() then 
-          bIsNextToOwnedTile = true;
-          break;
-        end
-      end
-      if bIsNextToOwnedTile then
-        -- Add to lens hexes
-        table.insert(m_CypWorUiSwapTilesCityPlotsLensMask, iPlot);
-        -- Add icon
-        local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
-        if pInstance ~= nil then
-            pInstance.SwapTileOwnerButton:SetVoid1(iPlot);
-            pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() CypWorPlotInfoOnClickSwapTile( iPlot ); end );
-            pInstance.SwapTileOwnerButton:SetHide(false);
-            pInstance.SwapTileOwnerButton:SetSizeX(pInstance.SwapLabel:GetSizeX() + PADDING_SWAP_BUTTON);
-            table.insert( m_CypWorUiSwapTiles, pInstance );
-        end
+    -- Validate
+    if not CypWorPlotInfoPlotIsInInner2RingsOfOwnedCity(pPlot) 
+    and CypWorPlotInfoPlotIsNextToOwnedPlot(pPlot, iCity) 
+    and not CypWorPlotInfoPlotHasOnePerCityImprovement(pPlot) 
+    then
+      -- Add to lens hexes
+      table.insert(m_CypWorUiSwapTilesCityPlotsLensMask, iPlot);
+      -- Add icon
+      local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
+      if pInstance ~= nil then
+          pInstance.SwapTileOwnerButton:SetVoid1(iPlot);
+          pInstance.SwapTileOwnerButton:RegisterCallback(Mouse.eLClick, function() CypWorPlotInfoOnClickSwapTile( iPlot ); end );
+          pInstance.SwapTileOwnerButton:SetHide(false);
+          pInstance.SwapTileOwnerButton:SetSizeX(pInstance.SwapLabel:GetSizeX() + PADDING_SWAP_BUTTON);
+          table.insert( m_CypWorUiSwapTiles, pInstance );
       end
     end
   end
