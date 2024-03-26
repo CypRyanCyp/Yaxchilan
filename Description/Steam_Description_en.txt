@@ -12,7 +12,10 @@ Adds the [b]Frontier Town Quarter[/b] district that allows working tiles in the 
 [quote][h2][img]https://i.ibb.co/Y799qWs/District-Wor-Text-en.png[/img][/h2]
 [i]District (Medieval Era - Feudalism)[/i]
 
-Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by Gold. Culture bombs adjacent neutral tiles.
+Citizens can work tiles in the fourth ring of this city.
+Tiles in the fourth ring of this city can be purchased by Gold. 
+Culture bombs adjacent neutral tiles.
+Culture bombs can annex tiles in the fourth ring of this city.
 
 +1 Housing
 [i]Cannot be adjacent to a City Center.[/i][/quote]
@@ -20,7 +23,10 @@ Citizens can work tiles in the fourth ring of this city. Tiles in the fourth rin
 [quote][h2][img]https://i.ibb.co/k1Mpk8x/Building-LS-Text-en.png[/img][/h2]
 [i]Building (Industrial Era - Urbanization)[/i]
 
-Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by Gold. Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+Citizens can work tiles in the fifth ring of this city.
+Tiles in the fifth ring of this city can be purchased by Gold.
+Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+Culture bombs can annex tiles in the fifth ring of this city.
 
 [i]Requires: Frontier Town Quarter[/i][/quote]
 

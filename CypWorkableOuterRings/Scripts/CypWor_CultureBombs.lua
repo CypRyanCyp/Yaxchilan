@@ -15,8 +15,9 @@ include "CypWor_Utility.lua"
 -- MEMBERS
 -- ===========================================================================
 -- CultureBomb modifier types
-  local m_CypWorCultureBombModifierTypes = {};
-  local m_CypWorWildcardCultureBombModifierTypes = {};
+local m_CypWorCultureBombModifierTypes = {};
+local m_CypWorWildcardCultureBombModifierTypes = {};
+local m_CypWorCultureBombConvertsModifierTypes = {}
 
 
 
@@ -58,7 +59,7 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorCbCultureBombOuterRing
 -- ---------------------------------------------------------------------------
-function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : number, iCity : number, iMaxCultureBombRange : number, bCaptureOwnedTerritory )
+function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : number, iCity : number, iMaxCultureBombRange : number, bCaptureOwnedTerritory, bConvertReligion )
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
@@ -70,30 +71,30 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
     local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
     if iDistance > 3  and iDistance <= iMaxCultureBombRange then
       local iOwnerPlayer = pPlot:GetOwner();
-      local iDistrict = pPlot:GetDistrictType();
-      local iWonder = pPlot:GetWonderType();
-      local bHasDistrict = iDistrict ~= -1;
-      local bHasWonder = iWonder ~= -1;
       -- Only if unowned or owned territory is to be captured
-      if iOwnerPlayer == -1 or bCaptureOwnedTerritory then
-        local pCity = Cities.GetPlotPurchaseCity(iPlot);
+      if iOwnerPlayer ~= iPlayer and (iOwnerPlayer == -1 or bCaptureOwnedTerritory) then
+        local iDistrict = pPlot:GetDistrictType();
+        local iWonder = pPlot:GetWonderType();
+        local bHasDistrict = iDistrict ~= -1;
+        local bHasWonder = iWonder ~= -1;
+        local pPlotCity = Cities.GetPlotPurchaseCity(iPlot);
         -- If plot has no completed wonder or district
         local bHasCompletedWonderOrDistrict = false;
-        if pCity ~= nil then
-          if bHasDistrict and pCity:GetDistricts():GetDistrict(iDistrict):IsComplete() then
+        if pPlotCity ~= nil then
+          if bHasDistrict and pPlotCity:GetDistricts():GetDistrict(iDistrict):IsComplete() then
             bHasCompletedWonderOrDistrict = true;
-          elseif bHasWonder and pCity:GetBuildings():HasBuilding(iWonder) then
+          elseif bHasWonder and pPlotCity:GetBuildings():HasBuilding(iWonder) then
             bHasCompletedWonderOrDistrict = true;
           end
         end
         if not bHasCompletedWonderOrDistrict then
           -- Remove unfinished wonder
           if bHasWonder then
-            pCity:GetBuildings():RemoveBuilding(iWonder);
+            pPlotCity:GetBuildings():RemoveBuilding(iWonder);
           end
           -- Remove unfinished district
           if bHasDistrict then
-            pCity:GetDistricts():RemoveDistrict(iDistrict);
+            pPlotCity:GetDistricts():RemoveDistrict(iDistrict);
           end
           -- Remove unique and one-per-city improvements
           local iImprovement = pPlot:GetImprovementType();
@@ -101,6 +102,24 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
             local kImprovement = GameInfo.Improvements[iImprovement];
             if kImprovement ~= nil and (kImprovement.OnePerCity or kImprovement.TraitType) then
               ImprovementBuilder.SetImprovementType(pPlot, -1, NO_PLAYER);   
+            end
+          end
+          -- Check if religion has to be converted
+          if bConvertReligion and iOwnerPlayer ~= -1 and pPlotCity ~= nil then
+            -- Determine player religion
+            local iPlayerReligion = nil;
+            for _, pReligionInfo in ipairs(m_pGameReligion:GetReligions()) do
+              if pReligionInfo.Founder == iPlayer then
+                iPlayerReligion = religionInfo.Religion;
+                break;
+              end
+            end
+            -- Only if player has founded a religion
+            if iPlayerReligion ~= nil then
+              local iPlotCityDominantReligion = pPlotCity:GetReligion():GetMajorityReligion();
+              if iPlayerReligion ~= iPlotCityDominantReligion then
+                pPlotCity:GetReligion():SetAllCityToReligion(iPlayerReligion);
+              end
             end
           end
           -- Change owner
@@ -122,7 +141,26 @@ function CypWorCbDetermineCultureBombModifierTypes()
     if kDynamicModifier.EffectType == "EFFECT_ADJUST_ALL_DISTRICTS_CULTURE_BOMB" then
       m_CypWorWildcardCultureBombModifierTypes[kDynamicModifier.ModifierType] = true;
     end
+    if kDynamicModifier.EffectType == "EFFECT_ADJUST_CULTURE_BOMB_CONVERTS_CITY" then
+      m_CypWorCultureBombConvertsModifierTypes[kDynamicModifier.ModifierType] = true;
+    end
+    
   end
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorCbHasActiveCultureBombConvertModifier
+-- ---------------------------------------------------------------------------
+function CypWorCbHasActiveCultureBombConvertModifier( iPlayer : number )
+  for i, iModifier in ipairs(GameEffects.GetModifiers()) do
+    if CypWorIsModifierActive(iModifier, iPlayer) then
+      local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
+      local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
+      local sModifierType = pModifier.ModifierType;
+      if m_CypWorCultureBombConvertsModifierTypes[sModifierType] then return true end
+    end
+  end
+  return false;
 end
 
 -- ---------------------------------------------------------------------------
@@ -133,7 +171,6 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
     if CypWorIsModifierActive(iModifier, iPlayer) then
       local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
       local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
-      local sModifierId = pModifier.ModifierId;
       local sModifierType = pModifier.ModifierType;
       -- Check modifier type
       local bIsWildcard = bIncludeWildcardModifierTypes and m_CypWorWildcardCultureBombModifierTypes[sModifierType];
@@ -187,11 +224,12 @@ local function CypWorCbOnImprovementAddedToMap( iX : number, iY : number, iImpro
   if iCultureBombType == 0 then return end
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
+  local bConvertReligion = bCaptureOwnedTerritory and CypWorCbHasActiveCultureBombConvertModifier(iPlayer);
   local iMaxCultureBombRange = 4;
   if CypWorBuildingAExists(pCity) then
     iMaxCultureBombRange = 5;
   end
-  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory);
+  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory, bConvertReligion);
 end
 
 -- ---------------------------------------------------------------------------
@@ -223,11 +261,12 @@ local function CypWorCbOnDistrictBuildProgressChanged(
   if iCultureBombType == 0 then return end
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
+  local bConvertReligion = bCaptureOwnedTerritory and CypWorCbHasActiveCultureBombConvertModifier(iPlayer);
   local iMaxCultureBombRange = 4;
   if CypWorBuildingAExists(pCity) then
     iMaxCultureBombRange = 5;
   end
-  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory);
+  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory, bConvertReligion);
 end
 
 -- ---------------------------------------------------------------------------
@@ -254,11 +293,12 @@ local function CypWorCbOnBuildingConstructed( iPlayer : number, iCity : number, 
   if iCultureBombType == 0 then return end
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
+  local bConvertReligion = bCaptureOwnedTerritory and CypWorCbHasActiveCultureBombConvertModifier(iPlayer);
   local iMaxCultureBombRange = 4;
   if CypWorBuildingAExists(pCity) then
     iMaxCultureBombRange = 5;
   end
-  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory);
+  CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory, bConvertReligion);
 end
 
 
