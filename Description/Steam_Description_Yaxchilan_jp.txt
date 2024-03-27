@@ -1,0 +1,66 @@
+[b]ヤシュチラン[/b]区域を追加し、都市から5タイル以内のタイルを利用できるようにする。
+
+[img]https://i.imgur.com/VogbSSm.gif[/img]
+
+[h1]ひらめき[/h1]
+このMODは[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]FuzzleのYaxchilan[/b][/url]から着想を得ている。
+
+[h1]詳細[/h1]
+[list][*]この区域は専門区域ではないため、人口を必要としない。
+[*]外側のタイルは3タイル以內のタイルと同じように働くことができる。
+[*]外側のタイルは遺產や区域を建てない。
+[*]外側のタイルを交換することができる。
+
+[引用][h2][img]https://i.ibb.co/Ldft3bk/District-WOR-Text-jp.png[/img][/h2]
+[i]地区（中世紀-封建制度）[/i］
+
+市民は都市から4タイル以内のタイルを利用できる。
+この都市がゴールドで4タイル以内のタイルを購入できるようになる。
+所有者のいない隣接タイルに対して文化爆弾を発動させる。
+この都市の4タイル以内のタイルを文化爆弾で併合することができる。
+
++1住宅
+[i]都心に隣接することはできない[/i][/quote]。
+
+[quote][h2][img]https://i.ibb.co/5GXHJjm/Building-LS-Text-jp.png[/img][/h2]
+[i]建築（産業時代-都市化）[/i］
+
+市民は都市から5タイル以内のタイルを利用できる。
+この都市がゴールドで5タイル以内のタイルを購入できるようになる。
+完成時に「蒸気機関」技術が研究した後なら、1タイル以内のタイルに鉄道を作る。
+この都市の5タイル以内のタイルを文化爆弾で併合することができる。
+
+[i]必要：開拓地の町[/i][/quote][/quote]。
+
+[h1]相性の良いMOD[/h1]
+このMODは[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url]と相性が良い。
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+[h1]言語[/h1]
+[list][*][b]ヤシュチラン[/b]
+[*][b]English[/b]
+[*][b]Japanese | 日本語[/b] (Phantagonist)
+[*][b]German | Deutsch[/b] (CypRyan)
+[*][b]French | Français[/b] (DeepL)
+[*][b]Spanish | Español[/b] (TheColdHands)
+[*][b]Portuguese | Português[/b] (TheColdHands)
+[*][b]Polish | Polski[/b] (MC)
+[*][b]Italian | Italiano[/b] (DeepL)
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
+
+
+[h1]Special Thanks[/h1]
+[list][*][b]Fuzzle[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
+[url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
+
+[h1]コーヒーを奢って[/h1]
+[url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]

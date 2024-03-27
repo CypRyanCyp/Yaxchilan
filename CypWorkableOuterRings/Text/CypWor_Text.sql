@@ -18,9 +18,9 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('pt_BR',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "Anéis externos trabalháveis do Cyp"),
 ('es_ES',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "Anillos exteriores practicables de Cyp"),
 ('it_IT',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "Anelli esterni lavorabili di Cyp"),
-('ja_JP',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "???"), -- TODO
-('zh_Hant_HK',  'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "???"), -- TODO
-('zh_Hans_CN',  'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "开发外环"), -- TODO
+('ja_JP',       'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "4/5タイル開発"),
+('zh_Hant_HK',  'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "开发城市外环"),
+('zh_Hans_CN',  'LOC_CYP_WOR_MOD_NAME_SIMPLE',                            "开发城市外环"),
 -- Mod Name
 ('en_US',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan's Workable Outer Rings"),
 ('de_DE',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan's Workable Outer Rings"),
@@ -28,16 +28,16 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('pt_BR',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "Anéis externos trabalháveis do [COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan"),
 ('es_ES',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "Anillos exteriores practicables de [COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan"),
 ('it_IT',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "Anelli esterni lavorabili di [COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan"),
-('ja_JP',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "???"), -- TODO
-('zh_Hant_HK',  'LOC_CYP_WOR_MOD_NAME_COLOR',                             "???"), -- TODO
-('zh_Hans_CN',  'LOC_CYP_WOR_MOD_NAME_COLOR',                             "开发外环"), -- TODO
+('ja_JP',       'LOC_CYP_WOR_MOD_NAME_COLOR',                             "4/5タイル開発"),
+('zh_Hant_HK',  'LOC_CYP_WOR_MOD_NAME_COLOR',                             "开发城市外环"),
+('zh_Hans_CN',  'LOC_CYP_WOR_MOD_NAME_COLOR',                             "开发城市外环"),
 -- Mod Creator
 ('en_US',       'LOC_CYP_WOR_MOD_CREATOR',                                "[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan"),
 -- Mod Teaser & Description
-('en_US',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "Adds the [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring."),
-('ja_JP',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "???"), -- TODO
-('zh_Hant_HK',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "???"), -- TODO
-('zh_Hans_CN',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "新增允许在第四和第五城市圈使用工作牌的[COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]地区。"),
+('en_US',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "Adds the [ICON_DISTRICT_CYP_WOR] [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring."),
+('ja_JP',       'LOC_CYP_WOR_MOD_DESCRIPTION',                            "[b]開拓地の町[/b]区域を追加し、都市から5タイル以内のタイルを利用できるようにする。"),
+('zh_Hant_HK',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "新增允许在第四和第五城市圈使用工作牌的 [ICON_DISTRICT_CYP_WOR] [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]地区。"),
+('zh_Hans_CN',  'LOC_CYP_WOR_MOD_DESCRIPTION',                            "新增允许在第四和第五城市圈使用工作牌的 [ICON_DISTRICT_CYP_WOR] [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]地区。"),
 -- Compatibility Note Message
 ('en_US',       'LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE', '{LOC_CYP_WOR_MOD_NAME_SIMPLE} compatibility note'),
 ('de_DE',       'LOC_CYP_WOR_NOTIFICATION_VERSION_COMPATIBILITY_MESSAGE', '{LOC_CYP_WOR_MOD_NAME_SIMPLE} Kompatibilität Hinweis'),
@@ -66,23 +66,50 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES 
 -- District
 ('en_US',       'LOC_DISTRICT_CYP_WOR_NAME',          "Frontier Town Quarters"),
-('en_US',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold. Culture bombs adjacent neutral tiles."),
+('en_US',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Citizens can work tiles in the fourth ring of this city.[NEWLINE]" || 
+                                                      "Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold.[NEWLINE]" ||
+                                                      "Culture bombs adjacent neutral tiles.[NEWLINE]" ||
+                                                      "Culture bombs can annex tiles in the fourth ring of this city."),
 ('de_DE',       'LOC_DISTRICT_CYP_WOR_NAME',          "Grenzstadt Viertel"),
-('de_DE',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Bürger können Geländerfelder im vierten Ring dieser Stadt zu bearbeiten. Geländefelder im vierten Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden. Verursacht Kulturschock für angrenzende Geländefelder"),
+('de_DE',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Bürger können Geländerfelder im vierten Ring dieser Stadt zu bearbeiten.[NEWLINE]" || 
+                                                      "Geländefelder im vierten Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden.[NEWLINE]" || 
+                                                      "Verursacht Kulturschock für angrenzende Geländefelder.[NEWLINE]" || 
+                                                      "Kulturschocks können Geländefelder im vierten Ring dieser Stadt annektieren."),
 ('fr_FR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Quartiers de la ville Frontière"),
-('fr_FR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Les citoyens peuvent travailler les cases dans le quatrième anneau de cette ville. Les tuiles du quatrième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD]. Lance une bombe culturelle sur les cases neutres adjacentes."),
+('fr_FR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Les citoyens peuvent travailler les cases dans le quatrième anneau de cette ville.[NEWLINE]" || 
+                                                      "Les tuiles du quatrième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD].[NEWLINE]" || 
+                                                      "Lance une bombe culturelle sur les cases neutres adjacentes.[NEWLINE]" || 
+                                                      "Les bombes culturelles peuvent annexer des tuiles dans le quatrième anneau de cette ville."),
 ('pt_BR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Bairros Fronteiriços"),
-('pt_BR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Os cidadãos podem trabalhar nos painéis do quarto anel desta cidade. Os painéis do quarto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro. Causa uma explosão cultural em painéis neutros adjacentes."),
+('pt_BR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Os cidadãos podem trabalhar nos painéis do quarto anel desta cidade.[NEWLINE]" || 
+                                                      "Os painéis do quarto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro.[NEWLINE]" || 
+                                                      "Causa uma explosão cultural em painéis neutros adjacentes.[NEWLINE]" || 
+                                                      "Explosões culturais podem anexar blocos no quarto anel desta cidade."),
 ('es_ES',       'LOC_DISTRICT_CYP_WOR_NAME',          "Barrios de la Frontera"),
-('es_ES',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Los ciudadanos pueden trabajar en las casillas del cuarto anillo de esta ciudad. Las casillas del cuarto anillo de esta ciudad se pueden comprar con Oro [ICON_GOLD]. Bombardea culturalmente las casillas neutrales adyacentes"),
+('es_ES',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Los ciudadanos pueden trabajar en las casillas del cuarto anillo de esta ciudad.[NEWLINE]" || 
+                                                      "Las casillas del cuarto anillo de esta ciudad se pueden comprar con Oro [ICON_GOLD].[NEWLINE]" || 
+                                                      "Bombardea culturalmente las casillas neutrales adyacentes" ||
+                                                      "Las bombas culturales pueden anexar losetas en el cuarto anillo de esta ciudad."),
 ('it_IT',       'LOC_DISTRICT_CYP_WOR_NAME',          "Quartieri della città di Frontiera"),
-('it_IT',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "I cittadini possono lavorare le tessere nel quarto anello di questa città. Le tessere del quarto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Bombardea culturalmente las casillas neutrales adyacentes"),
+('it_IT',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "I cittadini possono lavorare le tessere nel quarto anello di questa città.[NEWLINE]" || 
+                                                      "Le tessere del quarto anello di questa città possono essere acquistate con [ICON_GOLD] Oro.[NEWLINE]" || 
+                                                      "Bombardea culturalmente las casillas neutrales adyacentes" ||
+                                                      "Le bombe culturali possono annettere le caselle di terreno nel quarto anello di questa città."),
 ('ja_JP',       'LOC_DISTRICT_CYP_WOR_NAME',          "開拓地の町"),
-('ja_JP',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "市民は都市から4タイル以内のタイルを利用できる。この都市が [ICON_Gold] ゴールドで4タイル以内のタイルを購入できるようになる。所有者のいない隣接タイルに対して文化爆弾を発動させる。"),
+('ja_JP',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "市民は都市から4タイル以内のタイルを利用できる。" ||
+                                                      "この都市が [ICON_Gold] ゴールドで4タイル以内のタイルを購入できるようになる。" ||
+                                                      "所有者のいない隣接タイルに対して文化爆弾を発動させる。" ||
+                                                      "この都市の4タイル以内のタイルを文化爆弾で併合することができる。"),
 ('zh_Hant_HK',  'LOC_DISTRICT_CYP_WOR_NAME',          "拓荒駐地"),
-('zh_Hant_HK',  'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "城市人口可以在此城市四環內工作。此城市可使用 [ICON_Gold] 金幣購買四環單元格。建成時觸發文化炸彈，對相鄰中立單元格施放文化炸彈。"),
+('zh_Hant_HK',  'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "城市人口可以在此城市四環內工作。" ||
+                                                      "此城市可使用 [ICON_Gold] 金幣購買四環單元格。" ||
+                                                      "建成時觸發文化炸彈，對相鄰中立單元格施放文化炸彈。" ||
+                                                      "可以通過文化炸彈獲得此城市4環的單元格。"),
 ('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_NAME',          "拓荒驻地"),
-('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "城市人口可以在此城市四环内工作。此城市可使用 [ICON_Gold] 金币购买四环单元格。建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。"),
+('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "城市人口可以在此城市四环内工作。" ||
+                                                      "此城市可使用 [ICON_Gold] 金币购买四环单元格。" ||
+                                                      "建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。" ||
+                                                      "可以通过文化炸弹获得此城市4环的单元格。"),
 -- District Adjacency
 ('en_US',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] Gold from the adjacent {LOC_DISTRICT_CYP_WOR_NAME} district.'),
 ('de_DE',       'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] Gold durch den angrenzenden {LOC_DISTRICT_CYP_WOR_NAME} Bezirk.'),
@@ -95,23 +122,50 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] 金币来自相邻港口。'),
 -- Building - Customs House
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistics Center"),
-('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold. Railroad bombs adjacent owned tiles if the technology {LOC_TECH_STEAM_POWER_NAME} is researched at the time of completion."),
+('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city.[NEWLINE]" || 
+                                                                      "Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.[NEWLINE]" || 
+                                                                      "Railroad bombs adjacent owned tiles if the technology {LOC_TECH_STEAM_POWER_NAME} is researched at the time of completion.[NEWLINE]" || 
+                                                                      "Culture bombs can annex tiles in the fifth ring of this city."),
 ('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistik Zentrum"),
-('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Bürger können Geländerfelder im fünften Ring dieser Stadt zu bearbeiten. Geländefelder im fünften Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden. Verbessert umliegende Geländefelder mit Bahnschienen, wenn die Technologie {LOC_TECH_STEAM_POWER_NAME} zum Zeitpunkt der Fertigstellung erforscht ist."),
+('de_DE',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Bürger können Geländerfelder im fünften Ring dieser Stadt zu bearbeiten.[NEWLINE]" || 
+                                                                      "Geländefelder im fünften Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden.[NEWLINE]" || 
+                                                                      "Verbessert umliegende Geländefelder mit Bahnschienen, wenn die Technologie {LOC_TECH_STEAM_POWER_NAME} zum Zeitpunkt der Fertigstellung erforscht ist.[NEWLINE]" || 
+                                                                      "Kulturschocks können Geländefelder im fünften Ring dieser Stadt annektieren."),
 ('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centre Logistique"),
-('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Les citoyens peuvent travailler les cases dans le cinquième anneau de cette ville. Les tuiles du cinquième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD]. Améliore les cases de terrain environnantes avec des rails de chemin de fer si la technologie {LOC_TECH_STEAM_POWER_NAME} est recherchée au moment de l'achèvement."),
+('fr_FR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Les citoyens peuvent travailler les cases dans le cinquième anneau de cette ville.[NEWLINE]" || 
+                                                                      "Les tuiles du cinquième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD].[NEWLINE]" || 
+                                                                      "Améliore les cases de terrain environnantes avec des rails de chemin de fer si la technologie {LOC_TECH_STEAM_POWER_NAME} est recherchée au moment de l'achèvement.[NEWLINE]" || 
+                                                                      "Les bombes culturelles peuvent annexer des tuiles dans le cinquième anneau de cette ville."),
 ('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logístico"),
-('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Os cidadãos podem trabalhar nos painéis do quinto anel desta cidade. Os painéis do quinto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro. Melhora os campos do terreno circundante com trilhos de trem se a tecnologia {LOC_TECH_STEAM_POWER_NAME} for pesquisada no momento da conclusão."),
+('pt_BR',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Os cidadãos podem trabalhar nos painéis do quinto anel desta cidade.[NEWLINE]" || 
+                                                                      "Os painéis do quinto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro.[NEWLINE]" || 
+                                                                      "Melhora os campos do terreno circundante com trilhos de trem se a tecnologia {LOC_TECH_STEAM_POWER_NAME} for pesquisada no momento da conclusão.[NEWLINE]" || 
+                                                                      "Bombas culturais podem anexar blocos no quinto anel desta cidade."),
 ('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logístico"),
-('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Los ciudadanos pueden trabajar en las casillas del quinto anillo de esta ciudad. Las casillas del quinto anillo de esta ciudad se pueden comprar con oro [ICON_GOLD]. Mejora los campos de terreno circundantes con vías férreas si la tecnología {LOC_TECH_STEAM_POWER_NAME} está investigada en el momento de la finalización."),
+('es_ES',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Los ciudadanos pueden trabajar en las casillas del quinto anillo de esta ciudad.[NEWLINE]" || 
+                                                                      "Las casillas del quinto anillo de esta ciudad se pueden comprar con oro [ICON_GOLD].[NEWLINE]" || 
+                                                                      "Mejora los campos de terreno circundantes con vías férreas si la tecnología {LOC_TECH_STEAM_POWER_NAME} está investigada en el momento de la finalización.[NEWLINE]" || 
+                                                                      "Las bombas culturales pueden anexar casillas en el quinto anillo de esta ciudad."),
 ('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Centro Logistico"),
-('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città. Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro. Migliora i campi di terreno circostanti con binari ferroviari se la tecnologia {LOC_TECH_STEAM_POWER_NAME} è ricercata al momento del completamento.");
+('it_IT',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "I cittadini possono lavorare le tessere nel quinto anello di questa città.[NEWLINE]" || 
+                                                                      "Le tessere del quinto anello di questa città possono essere acquistate con [ICON_GOLD] Oro.[NEWLINE]" || 
+                                                                      "Migliora i campi di terreno circostanti con binari ferroviari se la tecnologia {LOC_TECH_STEAM_POWER_NAME} è ricercata al momento del completamento.[NEWLINE]" || 
+                                                                      "Le bombe culturali possono annettere le caselle nel quinto anello di questa città."),
 ('ja_JP',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "物流センター"),
-('ja_JP',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "市民は都市から5タイル以内のタイルを利用できる。この都市が [ICON_Gold] ゴールドで5タイル以内のタイルを購入できるようになる。完成時に「蒸気機関」技術が研究した後なら、1タイル以内のタイルに鉄道を作る。"),
+('ja_JP',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "市民は都市から5タイル以内のタイルを利用できる。" ||
+                                                                      "この都市が [ICON_Gold] ゴールドで5タイル以内のタイルを購入できるようになる。" ||
+                                                                      "完成時に「蒸気機関」技術が研究した後なら、1タイル以内のタイルに鉄道を作る。" ||
+                                                                      "この都市の5タイル以内のタイルを文化爆弾で併合することができる。"),
 ('zh_Hant_HK',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "物流中心"),
-('zh_Hant_HK',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "城市人口可以在此城市五環內工作。此城市可使用 [ICON_Gold] 金幣購買五環單元格。若建成時已研究「蒸汽動力」科技，則在1單元格內所有陸地單元格鋪設鐵路。"),
+('zh_Hant_HK',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "城市人口可以在此城市五環內工作。" ||
+                                                                      "此城市可使用 [ICON_Gold] 金幣購買五環單元格。" ||
+                                                                      "若建成時已研究「蒸汽動力」科技，則在1單元格內所有陸地單元格鋪設鐵路。" ||
+                                                                      "可以通過文化炸彈獲得此城市5環的單元格。"),
 ('zh_Hans_CN',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "物流中心"),
-('zh_Hans_CN',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "城市人口可以在此城市五环内工作。此城市可使用 [ICON_Gold] 金币购买五环单元格。若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。");
+('zh_Hans_CN',  'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "城市人口可以在此城市五环内工作。" ||
+                                                                      "此城市可使用 [ICON_Gold] 金币购买五环单元格。" ||
+                                                                      "若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。" ||
+                                                                      "可以通过文化炸弹获得此城市5环的单元格。");
 
 --------------------------------------------------------------
 -- Civilopedia

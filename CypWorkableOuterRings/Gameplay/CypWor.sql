@@ -22,7 +22,8 @@ INSERT INTO "Modifiers" ("ModifierId", "ModifierType") VALUES
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'MODIFIER_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER');
 -- ModifierArguments
 INSERT INTO "ModifierArguments" ("ModifierId", "Name", "Value") VALUES 
-('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR');
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR'),
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'CaptureOwnedTerritory', '0');
 -- GameModifiers
 INSERT INTO "GameModifiers" ("ModifierId") VALUES 
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB');
@@ -37,6 +38,13 @@ SELECT  d.DistrictType  "DistrictType",
 FROM "Districts" d
 WHERE d.DistrictType IN
 ('DISTRICT_COMMERCIAL_HUB', 'DISTRICT_HARBOR');
+-- District_GreatPersonPoints
+INSERT INTO "District_GreatPersonPoints" ("DistrictType", "GreatPersonClassType", "PointsPerTurn")
+SELECT    'DISTRICT_CYP_WOR'        "DistrictType", 
+          gpc.GreatPersonClassType  "GreatPersonClassType", 
+          1                         "PointsPerTurn"
+FROM "GreatPersonClasses" gpc
+WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
 -- Workable outer ring buildings
@@ -48,6 +56,13 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 INSERT INTO "Buildings" 
 ("BuildingType",                      "Name",                                       "Description",                                        "Cost", "PrereqDistrict",   "PrereqCivic")  VALUES
 ('BUILDING_CYP_WOR_LOGISTICS_CENTER', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME', 'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  100,    'DISTRICT_CYP_WOR', "CIVIC_URBANIZATION");
+-- Building_GreatPersonPoints
+INSERT INTO "Building_GreatPersonPoints" ("BuildingType", "GreatPersonClassType", "PointsPerTurn")
+SELECT  'BUILDING_CYP_WOR_LOGISTICS_CENTER'   "BuildingType", 
+        gpc.GreatPersonClassType              "GreatPersonClassType", 
+        1                                     "PointsPerTurn"
+FROM "GreatPersonClasses" gpc
+WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
 -- Temporary list for binary digits
@@ -84,22 +99,22 @@ CREATE TABLE IF NOT EXISTS "CypWtUiInvisibleBuildings" (
 --------------------------------------------------------------
 -- Types
 INSERT INTO "Types" ("Type", "Kind") VALUES
-('BUILDING_CYP_WOR', 'KIND_BUILDING');
+('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'KIND_BUILDING');
 -- Buildings
 INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly")  VALUES
-('BUILDING_CYP_WOR', 'LOC_BUILDING_CYP_WOR_NAME', 999, 'DISTRICT_CYP_WOR', 'LOC_BUILDING_CYP_WOR_DESCRIPTION', 0, 1);
+('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'LOC_BUILDING_CYP_WOR_NAME', 999, 'DISTRICT_CYP_WOR', 'LOC_BUILDING_CYP_WOR_DESCRIPTION', 0, 1);
 -- Building_CitizenYieldChanges
 INSERT INTO "Building_CitizenYieldChanges" ("BuildingType", "YieldType", "YieldChange")
-SELECT  'BUILDING_CYP_WOR'                  "BuildingType",
-        y.YieldType                         "YieldType", 
-        20                                  "YieldChange"
+SELECT  'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS' "BuildingType",
+        y.YieldType                             "YieldType", 
+        20                                      "YieldChange"
 FROM Yields y;
 -- CypWtUiInvisibleBuildings
 INSERT INTO "CypWtUiInvisibleBuildings" ("BuildingType", "Name") VALUES
-('BUILDING_CYP_WOR', 'LOC_BUILDING_CYP_WOR_NAME');
+('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'LOC_BUILDING_CYP_WOR_NAME');
 -- CivilopediaPageExcludes
 INSERT INTO "CivilopediaPageExcludes" ("SectionId", "PageId") VALUES
-('BUILDINGS', 'BUILDING_CYP_WOR');
+('BUILDINGS', 'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS');
 
 --------------------------------------------------------------
 -- Yield Modifiers
@@ -167,7 +182,7 @@ JOIN "CypWorTmpBinaryDigits" bd
 ORDER BY y.YieldType, bd.BinaryDigit;
 -- BuildingModifiers
 INSERT INTO "BuildingModifiers" ("BuildingType", "ModifierId")
-SELECT  'BUILDING_CYP_WOR'                                                                  "BuildingType",
+SELECT  'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS'                                             "BuildingType",
         'MOD_BUILDING_CYP_WOR_BONUS_' || y.YieldType || '_' || bd.BinaryDigit               "ModifierId"
 FROM "Yields" y
 JOIN "CypWorTmpBinaryDigits" bd
@@ -223,7 +238,7 @@ SELECT  'MOD_BUILDING_CYP_WOR_MALUS_' || y.YieldType                            
 FROM "Yields" y;
 -- BuildingModifiers
 INSERT INTO "BuildingModifiers" ("BuildingType", "ModifierId")
-SELECT  'BUILDING_CYP_WOR'                                                                  "BuildingType",
+SELECT  'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS'                                             "BuildingType",
         'MOD_BUILDING_CYP_WOR_MALUS_' || y.YieldType                                        "ModifierId"
 FROM "Yields" y;
 
@@ -232,19 +247,19 @@ FROM "Yields" y;
 --------------------------------------------------------------
 -- Types
 INSERT INTO "Types" ("Type", "Kind")
-SELECT  'BUILDING_CYP_WOR_WORKERS_' || bd.BinaryDigit   "Type",
-        'KIND_BUILDING'                                 "Kind"
+SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit   "Type",
+        'KIND_BUILDING'                                          "Kind"
 FROM "CypWorTmpBinaryDigits" bd
 WHERE bd.BinaryDigit <= 7;
 -- Buildings
 INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly") 
-SELECT  'BUILDING_CYP_WOR_WORKERS_' || bd.BinaryDigit     "BuildingType", 
-        'LOC_BUILDING_CYP_WOR_WORKERS_NAME'               "Name", 
-        999                                               "Cost", 
-        'DISTRICT_CYP_WOR'                                "PrereqDistrict", 
-        'LOC_BUILDING_CYP_WOR_WORKERS_DESCRIPTION'        "Description", 
-        bd.DecimalValue                                   "CitizenSlots",
-        1                                                 "InternalOnly"
+SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit  "BuildingType", 
+        'LOC_BUILDING_CYP_WOR_INTERNAL_WORKERS_NAME'            "Name", 
+        999                                                     "Cost", 
+        'DISTRICT_CYP_WOR'                                      "PrereqDistrict", 
+        'LOC_BUILDING_CYP_WOR_INTERNAL_WORKERS_DESCRIPTION'     "Description", 
+        bd.DecimalValue                                         "CitizenSlots",
+        1                                                       "InternalOnly"
 FROM "CypWorTmpBinaryDigits" bd
 WHERE bd.BinaryDigit <= 7;
 -- CypWtUiInvisibleBuildings
@@ -252,13 +267,13 @@ INSERT INTO "CypWtUiInvisibleBuildings" ("BuildingType", "Name")
 SELECT  b.BuildingType    "BuildingType",
         b.Name            "Name"
 FROM "Buildings" b
-WHERE b.BuildingType LIKE '%BUILDING_CYP_WOR_WORKERS_%';
+WHERE b.BuildingType LIKE 'BUILDING_CYP_WOR_INTERNAL_WORKERS_%';
 -- CivilopediaPageExcludes
 INSERT INTO "CivilopediaPageExcludes" ("SectionId", "PageId")
 SELECT  'BUILDINGS'       "SectionId",
         b.BuildingType    "PageId"
 FROM "Buildings" b
-WHERE b.BuildingType LIKE '%BUILDING_CYP_WOR_WORKERS_%';
+WHERE b.BuildingType LIKE 'BUILDING_CYP_WOR_INTERNAL_WORKERS_%';
 
 --------------------------------------------------------------
 -- Cleanup

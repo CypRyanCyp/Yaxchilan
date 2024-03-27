@@ -1,38 +1,34 @@
 Adds the [b]Frontier Town Quarter[/b] district that allows working tiles in the fourth and fifth city ring.
-新增允许在第四和第五城市圈使用工作牌的[b]拓荒驻地[/b]地区。
 
 [img]https://i.imgur.com/VogbSSm.gif[/img]
 
 
-[h1]Details | 详细信息[/h1]
+[h1]Details[/h1]
 [list][*]This isn’t a specialty district, so it doesn’t require population.
 [*]Tiles in the outer ring can be worked just like those in the inner three rings.
 [*]Wonders or districts cannot be placed in the outer rings.
-[*]Tiles in the outer rings can now be swapped.
-[*]这不是一个特殊区域，所以不需要人口。
-[*]外环的瓷砖可以像内三环的瓷砖一样工作。
-[*]奇迹或区域不能放在外环。
-[*]外环的瓷砖现在有了交换的能力。[/list]
+[*]Tiles in the outer rings can now be swapped.[/list]
 
-[quote][h2][img]https://i.ibb.co/JCRVF4w/District-Wor-Text.png[/img][/h2]
-[i]District (Medieval Era - Feudalism) | 区域 (中世纪 - 封建主义)[/i]
+[quote][h2][img]https://i.ibb.co/Y799qWs/District-Wor-Text-en.png[/img][/h2]
+[i]District (Medieval Era - Feudalism)[/i]
 
-Citizens can work tiles in the fourth ring of this city. Tiles in the fourth ring of this city can be purchased by Gold. Culture bombs adjacent neutral tiles.
+Citizens can work tiles in the fourth ring of this city.
+Tiles in the fourth ring of this city can be purchased by Gold. 
+Culture bombs adjacent neutral tiles.
+Culture bombs can annex tiles in the fourth ring of this city.
 
-城市人口可以在此城市四环内工作。此城市可使用金币购买四环单元格。建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。
++1 Housing
+[i]Cannot be adjacent to a City Center.[/i][/quote]
 
-+1 Housing | +1 住房
+[quote][h2][img]https://i.ibb.co/k1Mpk8x/Building-LS-Text-en.png[/img][/h2]
+[i]Building (Industrial Era - Urbanization)[/i]
 
-[i]Cannot be adjacent to a City Center. | 不能靠近市中心。[/i][/quote]
+Citizens can work tiles in the fifth ring of this city.
+Tiles in the fifth ring of this city can be purchased by Gold.
+Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
+Culture bombs can annex tiles in the fifth ring of this city.
 
-[quote][h2][img]https://i.ibb.co/tpf1jKf/Building-LS-Text.png[/img][/h2]
-[i]Building (Industrial Era - Urbanization) | 区域 (工业时代 - 城市化)[/i]
-
-Citizens can work tiles in the fifth ring of this city. Tiles in the fifth ring of this city can be purchased by Gold. Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
-
-城市人口可以在此城市五环内工作。此城市可使用金币购买五环单元格。若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。
-
-[i]Requires: Frontier Town Quarter | 需求：拓荒驻地[/i][/quote]
+[i]Requires: Frontier Town Quarter[/i][/quote]
 
 
 [h1]Related Mods[/h1]
@@ -40,9 +36,16 @@ This mod is based on the [b]Neighborhood Tall Extension[/b] from [url=steamcommu
 If you combine these mods the [b]Neighborhood Tall Extension[/b] will be removed and the [b]Frontier Town Quarter[/b] district remains.
 In case you feel like the ability to work the outer rings should be harder to unlock, the [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url] without this mod.
 [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][img]https://i.ibb.co/D8ZTTJM/Workshop-Link.png[/img][/url]
+Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist's Lady Xoc of Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
 
-[h1]Languages | 语言[/h1]
+[h1]Known Issues & How To Contribute?[/h1]
+[list][*]Worked tiles in the outer rings do not show animations like spinning windmills. Contact us if you are familiar with improvement 3D modding and feel like contributing.
+[*]Currently game assets are reused for the district and building. Unique 3D models would be a great improvement.[/list]
+
+
+[h1]Languages[/h1]
 [list][*][b]English[/b]
 [*][b]German | Deutsch[/b] (CypRyan)
 [*][b]French | Français[/b] (DeepL)
@@ -54,12 +57,12 @@ In case you feel like the ability to work the outer rings should be harder to un
 [*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
 
 
-[h1]Special Thanks | 特别感谢[/h1]
+[h1]Special Thanks[/h1]
 [list][*][b]Fuzzle[/b]
 [*][b]Phantagonist[/b]
 [*][b]TheColdHands[/b]
 [*][b]MC[/b]
-[*][b]Zolar[/b]
+[*][b]Zolaar[/b]
 [*]Zegangani
 [*]SailorCat
 [*]ZeAmadhe
@@ -69,5 +72,5 @@ In case you feel like the ability to work the outer rings should be harder to un
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 
 
-[h1]Buy me a coffee | 请我喝咖啡[/h1]
+[h1]Buy me a coffee[/h1]
 [url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]

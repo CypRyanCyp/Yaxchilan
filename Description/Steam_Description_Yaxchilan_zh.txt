@@ -1,0 +1,72 @@
+新增[b]亚斯奇兰[/b]区域，允许公民在第四和第五环工作。
+
+[img]https://i.imgur.com/VogbSSm.gif[/img]
+
+
+[h1]灵感[/h1]
+这个MOD的灵感来自 [url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][b]Fuzzle's Yaxchilan[/b][/url].
+[url=steamcommunity.com/sharedfiles/filedetails/?id=2955667092][img]https://i.ibb.co/5c0q2FD/Fuzzles-Yaxchilan.png[/img][/url]
+
+[h1]详细信息[/h1]
+[list][*]这并非专业化区域，所以不受人口限制。
+[*]公民可以像三环的单元格一样在外环的单元格工作。
+[*]奇观或区域不能放在外环。
+[*]外环的单元格可以交换。[/list]
+
+[quote][h2][img]https://i.ibb.co/WK7dr7c/District-Yaxchilan-Text-zh.png[/img][/h2]
+[i]区域 (中世纪 - 封建主义)[/i]
+
+城市人口可以在此城市四环内工作。
+此城市可使用金币购买四环单元格。
+建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。
+可以通过文化炸弹获得此城市4环的单元格。
+
++1 住房
+[i]不能靠近市中心。[/i][/quote]
+
+[quote][h2][img]https://i.ibb.co/LSXC2bd/Building-LS-Text-zh.png[/img][/h2]
+[i]区域 (工业时代 - 城市化)[/i]
+
+城市人口可以在此城市五环内工作。
+此城市可使用金币购买五环单元格。
+若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。
+可以通过文化炸弹获得此城市5环的单元格。
+
+[i]需求：拓荒驻地[/i][/quote]
+
+
+[h1]建议搭配[/h1]
+这个MOD建议搭配[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist：亚斯奇兰的舒克夫人[/b][/url]启用。
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+
+[h1]语言[/h1]
+[list][*][b]亚斯奇兰[/b]
+[*][b]English[/b]
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)
+[*][b]German | Deutsch[/b] (CypRyan)
+[*][b]French | Français[/b] (DeepL)
+[*][b]Spanish | Español[/b] (TheColdHands)
+[*][b]Portuguese | Português[/b] (TheColdHands)
+[*][b]Polish | Polski[/b] (MC)
+[*][b]Italian | Italiano[/b] (DeepL)
+[*][b]Japanese | 日本語[/b] (Phantagonist)
+[/list]
+
+
+[h1]特别感谢[/h1]
+[list][*][b]Fuzzle[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][b]Yaxchilan[/b]
+[*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
+[url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
+
+
+[h1]请作者喝咖啡[/h1]
+[url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]
