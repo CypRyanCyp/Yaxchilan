@@ -18,6 +18,8 @@ include "CypWor_Utility.lua"
 local m_CypWorCultureBombModifierTypes = {};
 local m_CypWorWildcardCultureBombModifierTypes = {};
 local m_CypWorCultureBombConvertsModifierTypes = {}
+-- Event cache (to prevent double execution)
+local m_CypWorDistrictEventCache = {};
 
 
 
@@ -81,9 +83,9 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
         -- If plot has no completed wonder or district
         local bHasCompletedWonderOrDistrict = false;
         if pPlotCity ~= nil then
-          if bHasDistrict and pPlotCity:GetDistricts():GetDistrict(iDistrict):IsComplete() then
+          if bHasWonder and pPlot:IsWonderComplete() then
             bHasCompletedWonderOrDistrict = true;
-          elseif bHasWonder and pPlotCity:GetBuildings():HasBuilding(iWonder) then
+          elseif not bHasWonder and bHasDistrict and pPlotCity:GetDistricts():GetDistrict(iDistrict):IsComplete() then
             bHasCompletedWonderOrDistrict = true;
           end
         end
@@ -108,9 +110,9 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
           if bConvertReligion and iOwnerPlayer ~= -1 and pPlotCity ~= nil then
             -- Determine player religion
             local iPlayerReligion = nil;
-            for _, pReligionInfo in ipairs(m_pGameReligion:GetReligions()) do
+            for _, pReligionInfo in ipairs(Game.GetReligion():GetReligions()) do
               if pReligionInfo.Founder == iPlayer then
-                iPlayerReligion = religionInfo.Religion;
+                iPlayerReligion = pReligionInfo.Religion;
                 break;
               end
             end
@@ -173,27 +175,29 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
       local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
       local sModifierType = pModifier.ModifierType;
       -- Check modifier type
-      local bIsWildcard = bIncludeWildcardModifierTypes and m_CypWorWildcardCultureBombModifierTypes[sModifierType];
-      local bIsSpecific = m_CypWorCultureBombModifierTypes[sModifierType];
-      if not bIsWildcard and not bIsSpecific then return 0 end
-      -- Check arguments
-      local sValueObjectType = nil;
-      local bCaptureOwnedTerritory = true;
-      for sKey, sValue in pairs(tModifierDefinition.Arguments) do
-        if sKey == "CaptureOwnedTerritory" then
-          bCaptureOwnedTerritory = sValue == 1 or sValue == "1" or sValue == true;
+      local bIsWildcard = bIncludeWildcardModifierTypes and m_CypWorWildcardCultureBombModifierTypes[sModifierType] == true;
+      local bIsSpecific = m_CypWorCultureBombModifierTypes[sModifierType] == true;
+      if bIsWildcard or bIsSpecific then
+        -- Check arguments
+        local sValueObjectType = nil;
+        local bCaptureOwnedTerritory = true;
+        for sKey, sValue in pairs(tModifierDefinition.Arguments) do
+          if sKey == "CaptureOwnedTerritory" then
+            bCaptureOwnedTerritory = sValue == 1 or sValue == "1" or sValue == true;
+          end
+          if sKey == sArgumentName then
+            sValueObjectType = sValue;
+          end
         end
-        if sKey == sArgumentName then
-          sValueObjectType = sValue;
+        if bIsWildcard or sValueObjectType == sObjectType then
+          if bCaptureOwnedTerritory == true then
+            return 2;
+          else
+            return 1;
+          end
         end
       end
-      if bIsWildcard or sValueObjectType == sObjectType then
-        if bCaptureOwnedTerritory then
-          return 2;
-        else
-          return 1;
-        end
-      end
+    end
   end
   return 0;
 end
@@ -252,6 +256,10 @@ local function CypWorCbOnDistrictBuildProgressChanged(
   if pCity == nil then return end
   -- Check if city has district
   if not CypWorDistrictExists(pCity) then return end
+  -- Check cache
+  local iTurn = Game.GetCurrentGameTurn();
+  if m_CypWorDistrictEventCache[iDistrict] == iTurn then return end
+  m_CypWorDistrictEventCache[iDistrict] = iTurn;
   -- Get district
   local kDistrict = GameInfo.Districts[iDistrictType];
   if kDistrict == nil then return end
@@ -291,6 +299,11 @@ local function CypWorCbOnBuildingConstructed( iPlayer : number, iCity : number, 
   -- Check if has active culture bomb modifier
   local iCultureBombType = CypWorCbHasActiveCultureBombModifier("BuildingType", sObjectType, false, iPlayer);
   if iCultureBombType == 0 then return end
+  -- Get plot
+  local iPlot = pCity:GetBuildings():GetBuildingLocation(iBuilding);
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  local iX = pPlot:GetX();
+  local iY = pPlot:GetY();
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
   local bConvertReligion = bCaptureOwnedTerritory and CypWorCbHasActiveCultureBombConvertModifier(iPlayer);

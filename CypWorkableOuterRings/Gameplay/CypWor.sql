@@ -22,7 +22,8 @@ INSERT INTO "Modifiers" ("ModifierId", "ModifierType") VALUES
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'MODIFIER_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER');
 -- ModifierArguments
 INSERT INTO "ModifierArguments" ("ModifierId", "Name", "Value") VALUES 
-('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR');
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR'),
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'CaptureOwnedTerritory', '0');
 -- GameModifiers
 INSERT INTO "GameModifiers" ("ModifierId") VALUES 
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB');

@@ -447,6 +447,9 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorPlotInfoGetGoldCostInfo(pPlayer)
 
+  -- Get player
+  local iPlayer = pPlayer:GetID();
+
   -- Base cost
   local iPlotBuyBaseCost = GameInfo.GlobalParameters["PLOT_BUY_BASE_COST"].Value;
   local iGoldCostPerDistance = iPlotBuyBaseCost / 2;
@@ -480,32 +483,34 @@ function CypWorPlotInfoGetGoldCostInfo(pPlayer)
   local iModifierScaling = 1;
   local tTerrainModifierScalings = {};
   for i, iModifier in ipairs(GameEffects.GetModifiers()) do
-    local iOwner = GameEffects.GetModifierOwner(iModifier);
-    local iModifierPlayer = GameEffects.GetObjectsPlayerId(iOwner);
-    if pPlayer:GetID() == iModifierPlayer then
-      local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
-      local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
-      if pModifier ~= nil then
-        -- Plot purchase
-        if pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST' then
-          -- Check arguments
-          for sKey, xValue in pairs(tModifierDefinition.Arguments) do
-            if sKey == 'Amount' then
-              local iModScaling = (100 + xValue) / 100;
-              iModifierScaling = iModifierScaling * iModScaling;
+    if CypWorIsModifierActive(iModifier, iPlayer) then
+      local iOwner = GameEffects.GetModifierOwner(iModifier);
+      local iModifierPlayer = GameEffects.GetObjectsPlayerId(iOwner);
+      if iPlayer == iModifierPlayer then
+        local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
+        local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
+        if pModifier ~= nil then
+          -- Plot purchase
+          if pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST' then
+            -- Check arguments
+            for sKey, xValue in pairs(tModifierDefinition.Arguments) do
+              if sKey == 'Amount' then
+                local iModScaling = (100 + xValue) / 100;
+                iModifierScaling = iModifierScaling * iModScaling;
+              end
             end
-          end
-        -- Plot terrain purchase
-        elseif pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST_TERRAIN' then
-          tTerrainModifierScalings[pModifier.ModifierId] = {};
-          -- Check arguments
-          for sKey, xValue in pairs(tModifierDefinition.Arguments) do
-            if sKey == 'Amount' then
-              tTerrainModifierScalings[pModifier.ModifierId]['Multiplier'] = (100 + xValue) / 100;
-            elseif sKey == 'TerrainType' then
-              local tTerrain = GameInfo.Terrains[xValue];
-              if tTerrain ~= nil then
-                tTerrainModifierScalings[pModifier.ModifierId]['TerrainTypeId'] = tTerrain.Index;
+          -- Plot terrain purchase
+          elseif pModifier.ModifierType == 'MODIFIER_PLAYER_CITIES_ADJUST_PLOT_PURCHASE_COST_TERRAIN' then
+            tTerrainModifierScalings[pModifier.ModifierId] = {};
+            -- Check arguments
+            for sKey, xValue in pairs(tModifierDefinition.Arguments) do
+              if sKey == 'Amount' then
+                tTerrainModifierScalings[pModifier.ModifierId]['Multiplier'] = (100 + xValue) / 100;
+              elseif sKey == 'TerrainType' then
+                local tTerrain = GameInfo.Terrains[xValue];
+                if tTerrain ~= nil then
+                  tTerrainModifierScalings[pModifier.ModifierId]['TerrainTypeId'] = tTerrain.Index;
+                end
               end
             end
           end

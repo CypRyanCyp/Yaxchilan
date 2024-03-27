@@ -54,6 +54,7 @@ CYP_WOR_DST_MAX = 5;
 
 -- ---------------------------------------------------------------------------
 -- CypWorIsModifierActive
+-- Note: This only supports player modifiers
 -- ---------------------------------------------------------------------------
 function CypWorIsModifierActive( iModifier : number, iPlayer : number )
   -- Validate
@@ -70,7 +71,6 @@ function CypWorIsModifierActive( iModifier : number, iPlayer : number )
   if iModifierPlayer == 0 or iModifierPlayer == nil then return true end
   -- Player
   return iModifierPlayer == iPlayer;
-  -- Note: No need to check for owner type GameEffects.GetObjectType(iOwner) since we only support player modifiers
 end
 
 -- ---------------------------------------------------------------------------
