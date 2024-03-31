@@ -36,6 +36,14 @@
 また、[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]PhantagonistのLady Xoc of Yaxchilan[/b][/url] もチェックしてみよう。
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
+
+[h1]これは、「既知の問題と貢献方法」 に関するものです。[/h1]
+[list][*]外側のリングのタイルは、現在回転する風車などのアニメーションが欠けています。もしあなたが改善型3Dモデリングの経験を持っていて、貢献したい場合は、ぜひご連絡ください。
+[*]現在、ゲームのアセットは地区と建物で再利用されています。ユニークな3Dモデルは、このModを大幅に向上させるでしょう。
+[*]購入、交換、または文化爆弾で取得した外側のリングのタイルは、ゲームが再読み込みされるまで修飾子（例：ハリカルナッソスの霊廟）を適用しません。
+[*]ロシア語、ポーランド語、および韓国語に翻訳することも検討しています。[/list]
+
+
 [h1]言語[/h1]
 [list][*][b]English[/b]
 [*][b]Japanese | 日本語[/b] (Phantagonist)
