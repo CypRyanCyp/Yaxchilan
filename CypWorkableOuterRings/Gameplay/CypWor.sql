@@ -10,8 +10,8 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 ('DISTRICT_CYP_WOR', 'KIND_DISTRICT');
 -- Districts
 INSERT INTO "Districts"
-("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPlacement",  "NoAdjacentCity", "Appeal", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
-('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     1,                    1,                -1,       0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
+("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPopulation", "RequiresPlacement",  "NoAdjacentCity", "Appeal", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
+('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     0,                    1,                    1,                -1,       0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
 -- District_TradeRouteYields
 INSERT INTO "District_TradeRouteYields" 
 ("DistrictType",      "YieldType",  "YieldChangeAsOrigin",  "YieldChangeAsDomesticDestination", "YieldChangeAsInternationalDestination") VALUES 

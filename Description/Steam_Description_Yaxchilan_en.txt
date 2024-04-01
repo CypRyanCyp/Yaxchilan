@@ -33,7 +33,7 @@ Tiles in the fifth ring of this city can be purchased by Gold.
 Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
 Culture bombs can annex tiles in the fifth ring of this city.
 
-[i]Requires: Frontier Town Quarter[/i][/quote]
+[i]Requires: Yaxchilan[/i][/quote]
 
 
 [h1]Good Fit Mods[/h1]
