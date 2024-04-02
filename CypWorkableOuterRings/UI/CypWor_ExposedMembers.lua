@@ -36,6 +36,15 @@ function CypWorCityGetLockedPlots( iPlayer : number, iCity : number )
   return tCityLockedPlots, iCityLockedCount;
 end
 
+-- ---------------------------------------------------------------------------
+-- CypWorCityGetPlotYields
+-- ---------------------------------------------------------------------------
+function CypWorCityGetPlotYields( iPlot : number, iYieldType : number )
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  if pPlot == nil then return 0 end
+  return pPlot:GetYield(iYieldType);
+end
+
 
 
 -- ===========================================================================
@@ -49,6 +58,7 @@ local function CypWorExposedMembersInitialize()
   -- ExposedMembers
   if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
   ExposedMembers.CypWor.CityGetLockedPlots = CypWorCityGetLockedPlots;
+  ExposedMembers.CypWor.GetPlotYields = CypWorCityGetPlotYields;
   -- Initialized
   print("CypWor_ExposedMembers.lua initialized!");
 end

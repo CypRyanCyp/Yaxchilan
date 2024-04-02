@@ -67,7 +67,7 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorDeterminePlotHasAnyYield(pPlot)
   for pYield in GameInfo.Yields() do
-    if pPlot:GetYield(pYield.Index) > 0 then return true end
+    if ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index) > 0 then return true end
   end
   return false;
 end
@@ -77,25 +77,32 @@ end
 --  Determine if plot can be worked.
 -- ---------------------------------------------------------------------------
 function CypWorPlotIsWorkable(pPlot)
+  print("CypWorPlotIsWorkable", pPlot:GetIndex(), "(", pPlot:GetX(), pPlot:GetY(), ")");
   -- Check wonder (not workable)
+  print(">", "A");
   if pPlot:GetWonderType() ~= -1 then return false end
   -- Check improvement (not workable)
   local sImprovementType = pPlot:GetImprovementType();
+  print(">", "B");
   if sImprovementType ~= -1 then
     local pImprovement = GameInfo.Improvements[sImprovementType];
     if not pImprovement.Workable then return false end
   end
   -- Check feature (danger value)
+  print(">", "C");
   local pFeature = pPlot:GetFeature();
   if pFeature ~= nil then
     if pFeature.DangerValue ~= nil and pFeature.DangerValue > 0 then return false end
   end
   -- Check has any yields
+  print(">", "D");
   if not CypWorDeterminePlotHasAnyYield(pPlot) then return false end
   -- Check disasters
+  print(">", "E");
   if GameClimate.GetActiveDroughtAtPlot(pPlot) ~= nil 
   or GameClimate.GetActiveStormAtPlot(pPlot) ~= nil then return false end
   -- Workable
+  print(">", "F", true);
   return true;
 end
 
@@ -178,7 +185,7 @@ function CypWorDeterminePlotScore( pPlot, tYieldMultipliers :table )
   -- Determine score
   local iScore = 0;
   for pYield in GameInfo.Yields() do
-    iScore = iScore + pPlot:GetYield(pYield.Index) * tYieldMultipliers[pYield.Index];
+    iScore = iScore + ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index) * tYieldMultipliers[pYield.Index];
   end
   return iScore;
 end
@@ -247,7 +254,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
       iAssignedDistrictWorkerCount = iAssignedDistrictWorkerCount + 1;
       local pPlot = Map.GetPlotByIndex(xOuterRingPlotInfo.iPlot); 
       for pYield in GameInfo.Yields() do
-        tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] + pPlot:GetYield(pYield.Index);
+        tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] + ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index);
       end
     end
   end

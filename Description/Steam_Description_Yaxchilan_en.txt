@@ -33,7 +33,7 @@ Tiles in the fifth ring of this city can be purchased by Gold.
 Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
 Culture bombs can annex tiles in the fifth ring of this city.
 
-[i]Requires: Frontier Town Quarter[/i][/quote]
+[i]Requires: Yaxchilan[/i][/quote]
 
 
 [h1]Good Fit Mods[/h1]
@@ -42,8 +42,10 @@ This mod pairs well with [url=steamcommunity.com/sharedfiles/filedetails/?id=301
 
 
 [h1]Known Issues & How To Contribute?[/h1]
-[list][*]Worked tiles in the outer rings do not show animations like spinning windmills. Contact us if you are familiar with improvement 3D modding and feel like contributing.
-[*]Currently game assets are reused for the district and building. Unique 3D models would be a great improvement.[/list]
+[list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
+[*]Currently game assets are reused for the district and building. Unique 3D models would significantly enhance the mod.
+[*]Tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Petra or Mausoleum of Halicarnassus).
+[*]Translating into Russian, Polish, and Korean.[/list]
 
 
 [h1]Languages[/h1]

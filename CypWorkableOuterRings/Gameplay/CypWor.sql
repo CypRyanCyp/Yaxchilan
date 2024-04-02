@@ -10,8 +10,8 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 ('DISTRICT_CYP_WOR', 'KIND_DISTRICT');
 -- Districts
 INSERT INTO "Districts"
-("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPlacement",  "NoAdjacentCity", "Appeal", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
-('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     1,                    1,                -1,       0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
+("DistrictType",     "Name",                      "Description",                      "PrereqCivic",      "Cost", "RequiresPopulation", "RequiresPlacement",  "NoAdjacentCity", "Appeal", "Aqueduct", "InternalOnly", "CaptureRemovesBuildings",  "CaptureRemovesCityDefenses", "PlunderType",  "PlunderAmount",  "MilitaryDomain", "OnePerCity", "Housing",  "CostProgressionModel",           "CostProgressionParam1") VALUES 
+('DISTRICT_CYP_WOR', 'LOC_DISTRICT_CYP_WOR_NAME', 'LOC_DISTRICT_CYP_WOR_DESCRIPTION', "CIVIC_FEUDALISM",  35,     0,                    1,                    1,                -1,       0,          0,              0,                          0,                            'PLUNDER_GOLD', 50,               'NO_DOMAIN',      1,            1,          'COST_PROGRESSION_GAME_PROGRESS', 1000);
 -- District_TradeRouteYields
 INSERT INTO "District_TradeRouteYields" 
 ("DistrictType",      "YieldType",  "YieldChangeAsOrigin",  "YieldChangeAsDomesticDestination", "YieldChangeAsInternationalDestination") VALUES 
@@ -65,6 +65,16 @@ FROM "GreatPersonClasses" gpc
 WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
+-- Dummy trait
+--------------------------------------------------------------
+-- Traits
+INSERT INTO "Types" ("Type", "Kind") VALUES 
+('TRAIT_CYP_WOR_DUMMY', 'KIND_TRAIT');
+-- Traits
+INSERT INTO "Traits" ("TraitType", "InternalOnly") VALUES 
+('TRAIT_CYP_WOR_DUMMY', '1');
+
+--------------------------------------------------------------
 -- Temporary list for binary digits
 --------------------------------------------------------------
 -- CypWorTmpBinaryDigits
@@ -101,8 +111,8 @@ CREATE TABLE IF NOT EXISTS "CypWtUiInvisibleBuildings" (
 INSERT INTO "Types" ("Type", "Kind") VALUES
 ('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'KIND_BUILDING');
 -- Buildings
-INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly")  VALUES
-('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'LOC_BUILDING_CYP_WOR_NAME', 999, 'DISTRICT_CYP_WOR', 'LOC_BUILDING_CYP_WOR_DESCRIPTION', 0, 1);
+INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly", "TraitType")  VALUES
+('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'LOC_BUILDING_CYP_WOR_NAME', 0, 'DISTRICT_CYP_WOR', 'LOC_BUILDING_CYP_WOR_DESCRIPTION', 0, 1, 'TRAIT_CYP_WOR_DUMMY');
 -- Building_CitizenYieldChanges
 INSERT INTO "Building_CitizenYieldChanges" ("BuildingType", "YieldType", "YieldChange")
 SELECT  'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS' "BuildingType",
@@ -252,14 +262,15 @@ SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit   "Type",
 FROM "CypWorTmpBinaryDigits" bd
 WHERE bd.BinaryDigit <= 7;
 -- Buildings
-INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly") 
+INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly", "TraitType") 
 SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit  "BuildingType", 
         'LOC_BUILDING_CYP_WOR_INTERNAL_WORKERS_NAME'            "Name", 
-        999                                                     "Cost", 
+        0                                                       "Cost", 
         'DISTRICT_CYP_WOR'                                      "PrereqDistrict", 
         'LOC_BUILDING_CYP_WOR_INTERNAL_WORKERS_DESCRIPTION'     "Description", 
         bd.DecimalValue                                         "CitizenSlots",
-        1                                                       "InternalOnly"
+        1                                                       "InternalOnly",
+        'TRAIT_CYP_WOR_DUMMY'                                   "TraitType"
 FROM "CypWorTmpBinaryDigits" bd
 WHERE bd.BinaryDigit <= 7;
 -- CypWtUiInvisibleBuildings

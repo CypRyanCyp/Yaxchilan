@@ -62,6 +62,9 @@ end
 -- CypWorCbCultureBombOuterRing
 -- ---------------------------------------------------------------------------
 function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : number, iCity : number, iMaxCultureBombRange : number, bCaptureOwnedTerritory, bConvertReligion )
+  -- Get player
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return end
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
@@ -109,15 +112,9 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
           -- Check if religion has to be converted
           if bConvertReligion and iOwnerPlayer ~= -1 and pPlotCity ~= nil then
             -- Determine player religion
-            local iPlayerReligion = nil;
-            for _, pReligionInfo in ipairs(Game.GetReligion():GetReligions()) do
-              if pReligionInfo.Founder == iPlayer then
-                iPlayerReligion = pReligionInfo.Religion;
-                break;
-              end
-            end
+            local iPlayerReligion = pPlayer:GetReligion():GetReligionTypeCreated();
             -- Only if player has founded a religion
-            if iPlayerReligion ~= nil then
+            if iPlayerReligion ~= nil and iPlayerReligion ~= -1 then
               local iPlotCityDominantReligion = pPlotCity:GetReligion():GetMajorityReligion();
               if iPlayerReligion ~= iPlotCityDominantReligion then
                 pPlotCity:GetReligion():SetAllCityToReligion(iPlayerReligion);
