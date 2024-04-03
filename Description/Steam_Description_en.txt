@@ -43,7 +43,7 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 [h1]Known Issues & How To Contribute?[/h1]
 [list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
 [*]Currently game assets are reused for the district and building. Unique 3D models would significantly enhance the mod.
-[*]Tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Petra and Mausoleum of Halicarnassus).
+[*]Tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Petra and Mausoleum of Halicarnassus) until reloading the game.
 [*]Translating into Russian, Polish, and Korean.[/list]
 
 

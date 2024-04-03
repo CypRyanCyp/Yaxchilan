@@ -8,7 +8,7 @@
 -- INCLUDES
 -- ===========================================================================
 include "SupportFunctions.lua";
-include "CypWor_Utility.lua"
+include "CypWor_Utility.lua";
 
 
 
@@ -77,32 +77,25 @@ end
 --  Determine if plot can be worked.
 -- ---------------------------------------------------------------------------
 function CypWorPlotIsWorkable(pPlot)
-  print("CypWorPlotIsWorkable", pPlot:GetIndex(), "(", pPlot:GetX(), pPlot:GetY(), ")");
   -- Check wonder (not workable)
-  print(">", "A");
   if pPlot:GetWonderType() ~= -1 then return false end
   -- Check improvement (not workable)
   local sImprovementType = pPlot:GetImprovementType();
-  print(">", "B");
   if sImprovementType ~= -1 then
     local pImprovement = GameInfo.Improvements[sImprovementType];
     if not pImprovement.Workable then return false end
   end
   -- Check feature (danger value)
-  print(">", "C");
   local pFeature = pPlot:GetFeature();
   if pFeature ~= nil then
     if pFeature.DangerValue ~= nil and pFeature.DangerValue > 0 then return false end
   end
   -- Check has any yields
-  print(">", "D");
   if not CypWorDeterminePlotHasAnyYield(pPlot) then return false end
   -- Check disasters
-  print(">", "E");
-  if GameClimate.GetActiveDroughtAtPlot(pPlot) ~= nil 
-  or GameClimate.GetActiveStormAtPlot(pPlot) ~= nil then return false end
+  if CypWorHasXp2() and (GameClimate.GetActiveDroughtAtPlot(pPlot) ~= nil 
+  or GameClimate.GetActiveStormAtPlot(pPlot) ~= nil) then return false end
   -- Workable
-  print(">", "F", true);
   return true;
 end
 

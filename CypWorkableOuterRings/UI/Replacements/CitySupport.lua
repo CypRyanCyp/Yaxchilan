@@ -538,7 +538,9 @@ function GetCityData( pCity:table )
 	data.AmenitiesLostFromWarWeariness	= pCityGrowth:GetAmenitiesLostFromWarWeariness();
 	data.AmenitiesLostFromBankruptcy	= pCityGrowth:GetAmenitiesLostFromBankruptcy();
 	data.AmenitiesRequiredNum			= pCityGrowth:GetAmenitiesNeeded();
-	data.AmenitiesFromGovernors			= pCityGrowth:GetAmenitiesFromGovernors();
+  if IsExpansion1Active() or IsExpansion2Active() then
+    data.AmenitiesFromGovernors			= pCityGrowth:GetAmenitiesFromGovernors(); -- TODO cyp
+  end
 	data.AmenitiesFromDistricts			= pCityGrowth:GetAmenitiesFromDistricts();
 	data.AmenitiesFromNaturalWonders			= pCityGrowth:GetAmenitiesFromNaturalWonders();
 	data.AmenitiesFromTraits			= pCityGrowth:GetAmenitiesFromTraits();

@@ -52,7 +52,13 @@ function CypWorCheckRailroadBomb( iPlayer : number, iCity : number, iCypWorPlot 
   -- Get surrounding tiles
   local tRangePlots = Map.GetNeighborPlots(iX, iY, 1);
   for _, pPlot in ipairs(tRangePlots) do
-    if iPlayer == pPlot:GetOwner() then
+    if iPlayer == pPlot:GetOwner() 
+    and not pPlot:IsImpassable()
+    and not pPlot:IsMountain()
+    and not pPlot:IsShallowWater()
+    and not pPlot:IsWater()
+    and not pPlot:IsNaturalWonder()
+    then
       RouteBuilder.SetRouteType(pPlot, kRailroad.Index);
     end
   end

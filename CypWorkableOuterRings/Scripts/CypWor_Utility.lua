@@ -74,10 +74,18 @@ function CypWorIsModifierActive( iModifier : number, iPlayer : number )
 end
 
 -- ---------------------------------------------------------------------------
+-- CypWorHasXp2
+-- ---------------------------------------------------------------------------
+function CypWorHasXp2()
+  if Modding == nil then return false end
+  return Modding.IsModActive("4873eb62-8ccc-4574-b784-dda455e74e68");
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorDistrictExists
 -- ---------------------------------------------------------------------------
 function CypStringStartsWith(a, b)
-    return string.sub(a, 1, string.len(b)) == b;
+  return string.sub(a, 1, string.len(b)) == b;
 end
 
 -- ---------------------------------------------------------------------------
