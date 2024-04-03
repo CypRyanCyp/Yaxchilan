@@ -5,7 +5,7 @@
     <Name>{LOC_CYP_WOR_MOD_NAME_COLOR}</Name>
     <Guid>3b857081-842a-484a-86d8-10acf5e62b61</Guid>
     <ProjectGuid>5d160bf3-6062-4b6a-b301-da3b294956ea</ProjectGuid>
-    <ModVersion>2</ModVersion>
+    <ModVersion>3</ModVersion>
     <Teaser>{LOC_CYP_WOR_MOD_DESCRIPTION}</Teaser>
     <Description>{LOC_CYP_WOR_MOD_DESCRIPTION}</Description>
     <Authors>{LOC_CYP_WOR_MOD_CREATOR}</Authors>
