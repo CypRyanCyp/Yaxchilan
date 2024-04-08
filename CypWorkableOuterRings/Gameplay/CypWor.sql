@@ -53,6 +53,27 @@ FROM "GreatPersonClasses" gpc
 WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
 
 --------------------------------------------------------------
+-- Vampire Castle fix
+--------------------------------------------------------------
+-- Adjacency_YieldChanges
+INSERT INTO "Adjacency_YieldChanges" ("ID", "Description", "YieldType", "YieldChange", "TilesRequired")
+SELECT  'CYPWT_NBHTE_VAMPIRECASTLE_COMPENSATION_' || y.YieldType  "ID", 
+        'Placeholder'                                             "Description", 
+        y.YieldType                                               "YieldType", 
+        -20                                                       "YieldChange", 
+        'DISTRICT_CYP_WOR'                                        "AdjacentDistrict"
+FROM "Yields" y
+JOIN "Improvements" i
+WHERE i.ImprovementType = 'IMPROVEMENT_VAMPIRE_CASTLE';
+-- Improvement_Adjacencies
+INSERT INTO "Improvement_Adjacencies" ("ImprovementType", "YieldChangeId") 
+SELECT  i.ImprovementType                                         "ImprovementType", 
+        'CYPWT_NBHTE_VAMPIRECASTLE_COMPENSATION_' || y.YieldType  "YieldChangeId"
+FROM "Yields" y
+JOIN "Improvements" i
+WHERE i.ImprovementType = 'IMPROVEMENT_VAMPIRE_CASTLE';
+
+--------------------------------------------------------------
 -- Workable outer ring buildings
 --------------------------------------------------------------
 -- Types
