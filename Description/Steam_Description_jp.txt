@@ -44,6 +44,10 @@
 [*]ロシア語、ポーランド語、および韓国語に翻訳することも検討しています。[/list]
 
 
+[h1]バグを見つけましたか[/h1]?
+バグ報告は [url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]バグ報告ディスカッション[/url] で行ってください。
+
+
 [h1]言語[/h1]
 [list][*][b]English[/b]
 [*][b]Japanese | 日本語[/b] (Phantagonist)

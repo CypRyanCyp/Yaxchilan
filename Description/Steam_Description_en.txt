@@ -47,6 +47,10 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 [*]Translating into Russian, Polish, and Korean.[/list]
 
 
+[h1]Found a bug?[/h1]
+Please report bugs in the [url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url].
+
+
 [h1]Languages[/h1]
 [list][*][b]English[/b]
 [*][b]German | Deutsch[/b] (CypRyan)

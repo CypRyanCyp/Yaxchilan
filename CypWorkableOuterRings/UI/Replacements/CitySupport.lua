@@ -538,9 +538,11 @@ function GetCityData( pCity:table )
 	data.AmenitiesLostFromWarWeariness	= pCityGrowth:GetAmenitiesLostFromWarWeariness();
 	data.AmenitiesLostFromBankruptcy	= pCityGrowth:GetAmenitiesLostFromBankruptcy();
 	data.AmenitiesRequiredNum			= pCityGrowth:GetAmenitiesNeeded();
+  -- CYP GOV_AMENITIES START
   if IsExpansion1Active() or IsExpansion2Active() then
-    data.AmenitiesFromGovernors			= pCityGrowth:GetAmenitiesFromGovernors(); -- TODO cyp
+    data.AmenitiesFromGovernors			= pCityGrowth:GetAmenitiesFromGovernors();
   end
+  -- CYP GOV_AMENITIES START
 	data.AmenitiesFromDistricts			= pCityGrowth:GetAmenitiesFromDistricts();
 	data.AmenitiesFromNaturalWonders			= pCityGrowth:GetAmenitiesFromNaturalWonders();
 	data.AmenitiesFromTraits			= pCityGrowth:GetAmenitiesFromTraits();
@@ -601,7 +603,7 @@ function GetCityData( pCity:table )
 	data.YieldFilters[YieldTypes.SCIENCE]	= GetYieldState(YieldTypes.SCIENCE);
 	data = UpdateYieldData( pCity, data );
 
-  -- CYP_WOR PREPARE START
+  -- CYP PREPARE START
   local tInvisibleUiBuildingIds : table = {};
   for row in GameInfo.CypWtUiInvisibleBuildings() do
     local pBuilding = GameInfo.Buildings[row.BuildingType];
@@ -609,7 +611,7 @@ function GetCityData( pCity:table )
       tInvisibleUiBuildingIds[pBuilding.Index] = true;
     end
   end
-  -- CYP_WOR PREPARE END
+  -- CYP PREPARE END
 
 	-- Determine builds, districts, and wonders
 	local pCityBuildings	:table = pCity:GetBuildings();
@@ -617,16 +619,16 @@ function GetCityData( pCity:table )
 	if (kCityPlots ~= nil) then
 		for _,plotID in pairs(kCityPlots) do
 			local kPlot:table =  Map.GetPlotByIndex(plotID);
-      -- CYP_WOR A REMOVE ORIGINAL
+      -- CYP A REMOVE ORIGINAL
 			--local kBuildingTypes:table = pCityBuildings:GetBuildingsAtLocation(plotID);
-      -- CYP_WOR A START
+      -- CYP A START
       local kBuildingTypes:table = {};
       for i, buildingType in ipairs(pCityBuildings:GetBuildingsAtLocation(plotID)) do
         if not tInvisibleUiBuildingIds[buildingType] then
           kBuildingTypes[i] = buildingType;
         end
       end
-      -- CYP_WOR A END
+      -- CYP A END
 			for _, type in ipairs(kBuildingTypes) do
 				local building	= GameInfo.Buildings[type];
         table.insert( data.Buildings, { 
@@ -708,16 +710,16 @@ function GetCityData( pCity:table )
 			}
 		};
 
-    -- CYP_WOR B REMOVE ORIGINAL
+    -- CYP B REMOVE ORIGINAL
 		--local buildingTypes = pCityBuildings:GetBuildingsAtLocation(plotID);
-    -- CYP_WOR B START
+    -- CYP B START
     local buildingTypes = {};
     for i, buildingType in ipairs(pCityBuildings:GetBuildingsAtLocation(plotID)) do
       if not tInvisibleUiBuildingIds[buildingType] then
         buildingTypes[i] = buildingType;
       end
     end
-    -- CYP_WOR B END
+    -- CYP B END
     
 		for _, buildingType in ipairs(buildingTypes) do
 			local building		:table = GameInfo.Buildings[buildingType];
