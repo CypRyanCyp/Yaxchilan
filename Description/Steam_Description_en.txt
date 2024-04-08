@@ -25,10 +25,13 @@ Culture bombs can annex tiles in the fourth ring of this city.
 
 Citizens can work tiles in the fifth ring of this city.
 Tiles in the fifth ring of this city can be purchased by Gold.
-Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion.
-Culture bombs can annex tiles in the fifth ring of this city.
+Railroad bombs adjacent owned tiles if the technology Steam Power is researched at the time of completion. Culture bombs can annex tiles in the fifth ring of this city.
 
 [i]Requires: Frontier Town Quarter[/i][/quote]
+
+
+[h1]Manual Download[/h1]
+Hop over to [url=https://discord.gg/PnWGUXphBF][b]Discord[/b][/url] to manually download the latest release.
 
 
 [h1]Related Mods[/h1]
@@ -42,13 +45,14 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 
 [h1]Known Issues & How To Contribute?[/h1]
 [list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
-[*]Currently game assets are reused for the district and building. Unique 3D models would significantly enhance the mod.
 [*]Tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Petra and Mausoleum of Halicarnassus) until reloading the game.
 [*]Translating into Russian, Polish, and Korean.[/list]
 
 
-[h1]Found a bug?[/h1]
-Please report bugs in the [url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url].
+[h1]Bugs & Features[/h1]
+Please report bugs or suggest features here:
+[list][*][url=https://discord.gg/yWdsz24Hx8][b]Discord[/b][/url] (prefered)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url][/list]
 
 
 [h1]Languages[/h1]
@@ -57,23 +61,26 @@ Please report bugs in the [url=steamcommunity.com/workshop/filedetails/discussio
 [*][b]French | Français[/b] (DeepL)
 [*][b]Spanish | Español[/b] (TheColdHands)
 [*][b]Portuguese | Português[/b] (TheColdHands)
-[*][b]Polish | Polski[/b] (MC)
 [*][b]Italian | Italiano[/b] (DeepL)
 [*][b]Japanese | 日本語[/b] (Phantagonist)
 [*][b]Chinese | 汉语/漢語[/b] (Phantagonist)[/list]
 
 
+[h1]Developers & Contributors[/h1]
+[list][*][b]CypRyan[/b]
+[*][b]Mikecro[/b] (3D models)
+[*][b]Phantagonist[/b] (Chinese and Japanese translation)
+[*][b]TheColdHands[/b] (French, Spanish and Portugese translation)[/list]
+
+
 [h1]Special Thanks[/h1]
-[list][*][b]Fuzzle[/b]
-[*][b]Phantagonist[/b]
-[*][b]TheColdHands[/b]
-[*][b]MC[/b]
-[*][b]Zolaar[/b]
-[*]Zegangani
+[list][*]Zegangani
 [*]SailorCat
 [*]ZeAmadhe
 [*]Jamie-nyanchi
 [*]JNR
+[*]MC
+[*]Zolaar
 [*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 

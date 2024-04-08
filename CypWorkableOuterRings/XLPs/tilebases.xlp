@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="TileBase"/>
+	<m_PackageName text="landmarks/tilebases"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="IND_Era_BLDG"/>
+			<m_ObjectName text="IND_Era_BLDG"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yaxchilan_FrontierTown01_CLA"/>
+			<m_ObjectName text="Yaxchilan_FrontierTown01_CLA"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FrontierHouse2"/>
+			<m_ObjectName text="FrontierHouse2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FrontierHouseC"/>
+			<m_ObjectName text="FrontierHouseC"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FrontierTownHouse1"/>
+			<m_ObjectName text="FrontierTownHouse1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FrontierTownHouseIND1"/>
+			<m_ObjectName text="FrontierTownHouseIND1"/>
+		</Element>
+		<Element>
+			<m_EntryID text="FrontierTownHouseIND2"/>
+			<m_ObjectName text="FrontierTownHouseIND2"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yaxchilan_FrontierTown_MOD_02"/>
+			<m_ObjectName text="Yaxchilan_FrontierTown_MOD_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yaxchilan_FrontierTown_IND_01"/>
+			<m_ObjectName text="Yaxchilan_FrontierTown_IND_01"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yaxchilan_FrontierTown_IND_02"/>
+			<m_ObjectName text="Yaxchilan_FrontierTown_IND_02"/>
+		</Element>
+		<Element>
+			<m_EntryID text="Yaxchilan_FrontierTown_MOD_01"/>
+			<m_ObjectName text="Yaxchilan_FrontierTown_MOD_01"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

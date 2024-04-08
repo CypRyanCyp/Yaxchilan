@@ -17,9 +17,15 @@ INSERT INTO "District_TradeRouteYields"
 ("DistrictType",      "YieldType",  "YieldChangeAsOrigin",  "YieldChangeAsDomesticDestination", "YieldChangeAsInternationalDestination") VALUES 
 ('DISTRICT_CYP_WOR',  'YIELD_FOOD', '0.0',                  '1.0',                              '0.0'),
 ('DISTRICT_CYP_WOR',  'YIELD_GOLD', '0.0',                  '0.0',                              '1.0');
+-- Types (culture bomb)
+INSERT OR IGNORE INTO "Types" ("Type", "Kind") VALUES 
+('MODIFIER_CYP_WOR_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER', 'KIND_MODIFIER');
+-- DynamicModifiers (culture bomb)
+INSERT OR IGNORE INTO "DynamicModifiers" ("ModifierType", "CollectionType", "EffectType") VALUES 
+('MODIFIER_CYP_WOR_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER', 'COLLECTION_MAJOR_PLAYERS', 'EFFECT_ADD_CULTURE_BOMB_TRIGGER');
 -- Modifiers (culture bomb)
 INSERT INTO "Modifiers" ("ModifierId", "ModifierType") VALUES 
-('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'MODIFIER_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER');
+('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'MODIFIER_CYP_WOR_ALL_PLAYERS_ADD_CULTURE_BOMB_TRIGGER');
 -- ModifierArguments
 INSERT INTO "ModifierArguments" ("ModifierId", "Name", "Value") VALUES 
 ('MOD_DISTRICT_CYP_WOR_CULTURE_BOMB', 'DistrictType', 'DISTRICT_CYP_WOR'),

@@ -42,7 +42,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Landmark001"/>
+							<m_Name text="Landmark01"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -71,32 +71,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="StrategicView001"/>
-							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-						</Element>
-						<Element>
-							<m_Fields>
-								<m_Values>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="CypWor_Pillaged"/>
-										<m_RootCollectionName text="Districts"/>
-										<m_ArtDefPath text="StrategicView.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="StrategicView"/>
-										<m_ParamName text="XrefName"/>
-									</Element>
-									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="Pillaged"/>
-										<m_RootCollectionName text="BuildStates"/>
-										<m_ArtDefPath text="Districts.artdef"/>
-										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Districts"/>
-										<m_ParamName text="State"/>
-									</Element>
-								</m_Values>
-							</m_Fields>
-							<m_ChildCollections/>
-							<m_Name text="StrategicView002"/>
+							<m_Name text="STR_VIEW_01"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -121,7 +96,32 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="StrategicView003"/>
+							<m_Name text="STR_VIEW_03"/>
+							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+						</Element>
+						<Element>
+							<m_Fields>
+								<m_Values>
+									<Element class="AssetObjects..ArtDefReferenceValue">
+										<m_ElementName text="CypWor_Pillaged"/>
+										<m_RootCollectionName text="Districts"/>
+										<m_ArtDefPath text="StrategicView.artdef"/>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
+										<m_TemplateName text="StrategicView"/>
+										<m_ParamName text="XrefName"/>
+									</Element>
+									<Element class="AssetObjects..ArtDefReferenceValue">
+										<m_ElementName text="Pillaged"/>
+										<m_RootCollectionName text="BuildStates"/>
+										<m_ArtDefPath text="Districts.artdef"/>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
+										<m_TemplateName text="Districts"/>
+										<m_ParamName text="State"/>
+									</Element>
+								</m_Values>
+							</m_Fields>
+							<m_ChildCollections/>
+							<m_Name text="STR_VIEW_02"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>

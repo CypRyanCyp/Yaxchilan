@@ -14,8 +14,7 @@
 
 城市人口可以在此城市四环内工作。
 此城市可使用金币购买四环单元格。
-建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。
-可以通过文化炸弹获得此城市4环的单元格。
+建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。可以通过文化炸弹获得此城市4环的单元格。
 
 +1 住房
 [i]不能靠近市中心。[/i][/quote]
@@ -31,6 +30,10 @@
 [i]需求：拓荒驻地[/i][/quote]
 
 
+[h1]手册下载[/h1]
+请登录 [url=https://discord.gg/PnWGUXphBF][b]纪和声[/b][/url] 手动下载最新版本。
+
+
 [h1]关联MOD[/h1]
 此模组基于[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url]的[b]Neighborhood Tall Expansion[/b]。
 当同时启用时，[b]Neighborhood Expansion[/b]将失效，[b]拓荒驻地[/b]继续有效。
@@ -42,13 +45,14 @@
 
 [h1]已知问题和如何贡献？[/h1]
 [list][*]外环工作瓦片动画：目前，外环中的工作瓦片缺乏动画效果，例如旋转的风车。如果您具有改进3D模型的经验，并且愿意为此做出贡献，请与我们联系。
-[*]区域和建筑的独特3D模型：目前，游戏资产在区域和建筑之间被重复使用。引入独特的3D模型将极大地增强模组。
 [*]外环瓦片的修饰符延迟：通过购买、交换或文化炸弹获得的外环瓦片在游戏重新加载之前不会应用修饰符（例如哈利卡纳苏斯陵墓）。
 [*]俄语、波兰语和韩语翻译。[/list]
 
 
-[h1]发现错误？[/h1]
-请在 [url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url]中报告错误。
+[h1]错误和功能[/h1]
+请在此报告错误或建议功能：
+[list][*][url=https://discord.gg/44m2uSTwcU][b]不和[/b][/url] (首选)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url][/list]
 
 
 [h1]语言[/h1]
@@ -58,23 +62,25 @@
 [*][b]French | Français[/b] (DeepL)
 [*][b]Spanish | Español[/b] (TheColdHands)
 [*][b]Portuguese | Português[/b] (TheColdHands)
-[*][b]Polish | Polski[/b] (MC)
 [*][b]Italian | Italiano[/b] (DeepL)
-[*][b]Japanese | 日本語[/b] (Phantagonist)
-[/list]
+[*][b]Japanese | 日本語[/b] (Phantagonist)[/list]
+
+
+[h1]开发者和贡献者[/h1]
+[list][*][b]CypRyan[/b]
+[*][b]Mikecro[/b] (三维模型)
+[*][b]Phantagonist[/b] (翻译成中文和日文)
+[*][b]TheColdHands[/b] (译文)[/list]
 
 
 [h1]特别感谢[/h1]
-[list][*][b]Fuzzle[/b]
-[*][b]Phantagonist[/b]
-[*][b]TheColdHands[/b]
-[*][b]MC[/b]
-[*][b]Zolaar[/b]
-[*]Zegangani
+[list][*]Zegangani
 [*]SailorCat
 [*]ZeAmadhe
 [*]Jamie-nyanchi
 [*]JNR
+[*]MC
+[*]Zolaar
 [*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
 [url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
 

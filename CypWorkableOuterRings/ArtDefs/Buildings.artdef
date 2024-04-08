@@ -39,7 +39,7 @@
 							<m_ParamName text="UsesDecalMaterialOverrides"/>
 						</Element>
 						<Element class="AssetObjects..StringValue">
-							<m_Value text=""/>
+							<m_Value text="LOGISTICS_CENTER"/>
 							<m_ParamName text="AttachmentPointName"/>
 						</Element>
 					</m_Values>
@@ -59,7 +59,7 @@
 										<m_ElementName text="LogisticsCenter"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
-										<m_CollectionIsLocked>false</m_CollectionIsLocked>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="StrategicView"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
@@ -74,7 +74,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="StrategicView001"/>
+							<m_Name text="STR_VIEW_A_01"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -84,7 +84,7 @@
 										<m_ElementName text="LogisticsCenter_Pillaged"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
-										<m_CollectionIsLocked>false</m_CollectionIsLocked>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="StrategicView"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
@@ -99,7 +99,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="StrategicView002"/>
+							<m_Name text="STR_VIEW_A_02"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 						<Element>
@@ -109,7 +109,7 @@
 										<m_ElementName text="LogisticsCenter_UnderConstruction"/>
 										<m_RootCollectionName text="Buildings"/>
 										<m_ArtDefPath text="StrategicView.artdef"/>
-										<m_CollectionIsLocked>false</m_CollectionIsLocked>
+										<m_CollectionIsLocked>true</m_CollectionIsLocked>
 										<m_TemplateName text="StrategicView"/>
 										<m_ParamName text="XrefName"/>
 									</Element>
@@ -124,7 +124,7 @@
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="StrategicView003"/>
+							<m_Name text="STR_VIEW_A_03"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -141,14 +141,6 @@
 					<m_Values/>
 				</m_Fields>
 				<m_ChildCollections/>
-				<m_Name text="UnderConstruction"/>
-				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
-			</Element>
-			<Element>
-				<m_Fields>
-					<m_Values/>
-				</m_Fields>
-				<m_ChildCollections/>
 				<m_Name text="Completed"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
@@ -158,6 +150,14 @@
 				</m_Fields>
 				<m_ChildCollections/>
 				<m_Name text="Pillaged"/>
+				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
+			</Element>
+			<Element>
+				<m_Fields>
+					<m_Values/>
+				</m_Fields>
+				<m_ChildCollections/>
+				<m_Name text="UnderConstruction"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>
@@ -176,17 +176,17 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="DISTRICT_CYP_WOR"/>
+										<m_ElementName text=""/>
 										<m_RootCollectionName text="District"/>
 										<m_ArtDefPath text="Districts.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Districts"/>
+										<m_TemplateName text=""/>
 										<m_ParamName text="District"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="Districts"/>
+							<m_Name text="1Frontier Town"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -197,17 +197,17 @@
 							<m_Fields>
 								<m_Values>
 									<Element class="AssetObjects..ArtDefReferenceValue">
-										<m_ElementName text="BUILDING_CYP_WOR_LOGISTICS_CENTER"/>
+										<m_ElementName text=""/>
 										<m_RootCollectionName text="Building"/>
 										<m_ArtDefPath text="Buildings.artdef"/>
 										<m_CollectionIsLocked>true</m_CollectionIsLocked>
-										<m_TemplateName text="Buildings"/>
+										<m_TemplateName text=""/>
 										<m_ParamName text="Building"/>
 									</Element>
 								</m_Values>
 							</m_Fields>
 							<m_ChildCollections/>
-							<m_Name text="LogisticsCenter"/>
+							<m_Name text="1LogisticalCenter"/>
 							<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 						</Element>
 					</Element>
@@ -220,7 +220,7 @@
 						<m_ReplaceMergedCollectionElements>false</m_ReplaceMergedCollectionElements>
 					</Element>
 				</m_ChildCollections>
-				<m_Name text="CypWorBuildings"/>
+				<m_Name text="Frontier_Buildings"/>
 				<m_AppendMergedParameterCollections>false</m_AppendMergedParameterCollections>
 			</Element>
 		</Element>

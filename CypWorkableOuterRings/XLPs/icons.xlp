@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<AssetObjects..XLP>
+	<m_Version>
+		<major>1</major>
+		<minor>0</minor>
+		<build>0</build>
+		<revision>0</revision>
+	</m_Version>
+	<m_ClassName text="UITexture"/>
+	<m_PackageName text="UI/Icons"/>
+	<m_Entries>
+		<Element>
+			<m_EntryID text="WOR_Building_128"/>
+			<m_ObjectName text="WOR_Building_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_Building_256"/>
+			<m_ObjectName text="WOR_Building_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_Building_32"/>
+			<m_ObjectName text="WOR_Building_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_Building_38"/>
+			<m_ObjectName text="WOR_Building_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_Building_50"/>
+			<m_ObjectName text="WOR_Building_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_Building_80"/>
+			<m_ObjectName text="WOR_Building_80"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_128"/>
+			<m_ObjectName text="WOR_District_128"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_22"/>
+			<m_ObjectName text="WOR_District_22"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_256"/>
+			<m_ObjectName text="WOR_District_256"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_32"/>
+			<m_ObjectName text="WOR_District_32"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_38"/>
+			<m_ObjectName text="WOR_District_38"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_50"/>
+			<m_ObjectName text="WOR_District_50"/>
+		</Element>
+		<Element>
+			<m_EntryID text="WOR_District_80"/>
+			<m_ObjectName text="WOR_District_80"/>
+		</Element>
+	</m_Entries>
+	<m_AllowedPlatforms>
+		<Element>WINDOWS</Element>
+		<Element>MACOS</Element>
+		<Element>IOS</Element>
+		<Element>LINUX</Element>
+		<Element>XBONE</Element>
+		<Element>PS4</Element>
+		<Element>SWITCH</Element>
+		<Element>STADIA</Element>
+	</m_AllowedPlatforms>
+</AssetObjects..XLP>
+

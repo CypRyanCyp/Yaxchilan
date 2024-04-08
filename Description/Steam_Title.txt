@@ -7,10 +7,7 @@ CypRyan's Working Outer Rings
 -- JP
 ヤシュチラン - 4/5タイル開発
 
---- Yaxchilan ---
--- EN
-CypRyan's Yaxchilan - Working Outer Rings
--- ZH
-亚斯奇兰 - 开发城市外环
--- JP
-開拓地の町 - 4/5タイル開発
+--- Changelog ---
+v4
+- Added 3D models (Mikecro)
+- Fixed culture bomb without GS expansion.
