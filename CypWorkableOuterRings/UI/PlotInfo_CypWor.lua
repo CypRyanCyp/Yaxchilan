@@ -29,6 +29,8 @@ local CITIZEN_BUTTON_HEIGHT		        :number = 64;
 local PADDING_SWAP_BUTTON		          :number = 24;
 local CITY_CENTER_DISTRICT_INDEX              = GameInfo.Districts["DISTRICT_CITY_CENTER"].Index;
 -- PLOT INFO
+local YIELD_NUMBER_VARIATION	                = "Yield_Variation_";
+local YIELD_VARIATION_MANY		                = "Yield_Variation_Many";
 local YIELD_VARIATION_MAP		:table = {
 	YIELD_FOOD			  = "Yield_Food_",
 	YIELD_PRODUCTION	= "Yield_Production_",

@@ -282,7 +282,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
         iYieldAmount = CYP_WOR_PROPERTY_YIELD_MALUS_AMOUNT + iYieldAmount;
       end
       pCityPlot:SetProperty(sNegativeYieldPropertyName, iNegativeYield);
-      -- Handle positie yield part
+      -- Handle positive yield part
       CypWorApplyPropertiesToPlotWithBinaryConvertedValue(
           iYieldAmount, 
           CYP_WOR_YIELD_BINARY_DIGITS, 
@@ -290,6 +290,9 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
           pCityPlot);
     end
   end
+  
+  -- Soft refresh by resetting city name
+  pCity:SetName(pCity:GetName());
   
   -- Notify event outer ring workers changed
   local tParameters = {};

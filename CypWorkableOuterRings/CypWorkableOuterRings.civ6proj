@@ -21,6 +21,7 @@
     <AssociationData><![CDATA[<Associations>
   <Reference type="Dlc" title="Expansion: Gathering Storm" id="4873eb62-8ccc-4574-b784-dda455e74e68" />
   <Reference type="Dlc" title="Expansion: Rise and Fall" id="1B28771A-C749-434B-9053-D1380C553DE9" />
+  <Reference type="Dlc" title="DLC: Ethiopia Pack" id="1B394FE9-23DC-4868-8F0A-5220CB8FB427" />
   <Reference type="Mod" title="CypRyan's Wide and Tall" id="96b6e6ba-8ee9-4ddd-9891-fd5a3996a491" />
   <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
   <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
@@ -29,6 +30,13 @@
 <ActionCriteria>
   <Criteria id="HAS_MOD_SSUA" any="1">
     <ModInUse>805cc499-c534-4e0a-bdce-32fb3c53ba38</ModInUse>
+  </Criteria>
+  <Criteria id="GAMEMODE_SECRET_SOCIETIES">
+    <ConfigurationValueMatches>
+      <ConfigurationId>GAMEMODE_SECRETSOCIETIES</ConfigurationId>
+      <Group>Game</Group>
+      <Value>1</Value>
+    </ConfigurationValueMatches>
   </Criteria>
 </ActionCriteria>]]></ActionCriteriaData>
     <InGameActionData><![CDATA[
@@ -41,6 +49,13 @@
   <UpdateDatabase id="Gameplay">
     <File>Gameplay/CypWor.sql</File>
   </UpdateDatabase>
+  <UpdateDatabase id="Gameplay_ModeSecretSocieties">
+    <Properties>
+      <LoadOrder>1000</LoadOrder>
+    </Properties>
+    <Criteria>GAMEMODE_SECRET_SOCIETIES</Criteria>
+    <File>Gameplay/CypWor_ModeSecretSocieties.sql</File>
+  </UpdateDatabase>
   <!-- Icons -->
   <UpdateIcons id="Icons">
     <File>Icons/Icons.xml</File>
@@ -51,6 +66,13 @@
       <LoadOrder>100</LoadOrder>
     </Properties>
     <File>Text/CypWor_Text.sql</File>
+  </UpdateText>
+  <UpdateText id="Text_ModeSecretSocieties">
+    <Properties>
+      <LoadOrder>1000</LoadOrder>
+    </Properties>
+    <Criteria>GAMEMODE_SECRET_SOCIETIES</Criteria>
+    <File>Text/CypWor_Text_ModeSecretSocieties.sql</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
@@ -195,6 +217,9 @@
     <Content Include="Gameplay\CypWor.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Gameplay\CypWor_ModeSecretSocieties.sql">
+      <SubType>Content</SubType>
+    </Content>
     <!-- Icons -->
     <Content Include="Icons\Icons.xml">
       <SubType>Content</SubType>
@@ -240,6 +265,9 @@
     </Content>
     <!-- Text -->
     <Content Include="Text\CypWor_Text.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text_ModeSecretSocieties.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->

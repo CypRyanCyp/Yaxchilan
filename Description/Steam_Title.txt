@@ -11,3 +11,7 @@ CypRyan's Working Outer Rings
 v4
 - Added 3D models (Mikecro)
 - Fixed culture bomb without GS expansion.
+[b]v5[/b] (2024-04-09)
+- [b]Bug[/b]: Fix bug that caused [b]plot yield icons[/b] to disappear (reported by ekids789788).
+- [b]Bug[/b]: Fix dummy yields that got applied to [b]Vampire Castles[/b].
+- [b]Bug[/b]: Fix plot tooltip when [b]Barbarian Clans[/b] mode is activated (reported by born).

@@ -14,6 +14,10 @@ local includeFileVersions = {
 	"Suk_PlotTooltips.lua",
   "plottooltip_CQUI_expansion2.lua",
 	"plottooltip_CQUI_basegame.lua",
+  "PlotToolTip_Expansion2_BarbarianClansMode.lua",
+  "PlotToolTip_BarbarianClansMode.lua",
+  "PlotToolTip_BlackDeathScenario.lua",
+  "PlotToolTip_PiratesScenario.lua",
 	"PlotTooltip_Expansion2.lua",
 	"PlotTooltip.lua",
 }
