@@ -277,10 +277,10 @@
     <Content Include="Scripts\CypWor_CultureBombs.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Scripts\CypWor_Version.lua">
+    <Content Include="Scripts\CypWor_Utility.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Scripts\CypWor_Utility.lua">
+    <Content Include="Scripts\CypWor_Version.lua">
       <SubType>Content</SubType>
     </Content>
     <!-- UI -->

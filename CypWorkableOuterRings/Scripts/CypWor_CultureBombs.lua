@@ -17,7 +17,7 @@ include "CypWor_Utility.lua"
 -- CultureBomb modifier types
 local m_CypWorCultureBombModifierTypes = {};
 local m_CypWorWildcardCultureBombModifierTypes = {};
-local m_CypWorCultureBombConvertsModifierTypes = {}
+local m_CypWorCultureBombConvertsModifierTypes = {};
 -- Event cache (to prevent double execution)
 local m_CypWorDistrictEventCache = {};
 

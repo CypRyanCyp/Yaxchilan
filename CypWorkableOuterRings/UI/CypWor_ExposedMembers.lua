@@ -48,6 +48,28 @@ end
 
 
 -- ===========================================================================
+-- CUSTOM EVENTS
+-- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- CypWorUnitRequestCommand
+-- ---------------------------------------------------------------------------
+function CypWorUnitRequestCommand( iPlayer : number, iUnit : number, sUnitCommandType )
+  print("CypWorUnitRequestCommand", iPlayer, iUnit, sUnitCommandType);
+  -- Get unit
+  local pUnit = UnitManager.GetUnit(iPlayer, iUnit);
+  if pUnit == nil then return end
+  -- Get unit command
+  local kActivateUnitCommand = GameInfo.UnitCommands[sUnitCommandType];
+  if kActivateUnitCommand == nil then return end
+  -- Request command
+	UnitManager.RequestCommand(pUnit, kActivateUnitCommand.Hash);
+  print("CypWorUnitRequestCommand", "executed");
+end
+
+
+
+-- ===========================================================================
 -- INITIALIZE
 -- ===========================================================================
 
@@ -55,10 +77,11 @@ end
 -- CypWorExposedMembersInitialize
 -- ---------------------------------------------------------------------------
 local function CypWorExposedMembersInitialize()
-  -- ExposedMembers
+  -- Exposed Members
   if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
   ExposedMembers.CypWor.CityGetLockedPlots = CypWorCityGetLockedPlots;
   ExposedMembers.CypWor.GetPlotYields = CypWorCityGetPlotYields;
+  ExposedMembers.CypWor.UnitRequestCommand = CypWorUnitRequestCommand;
   -- Initialized
   print("CypWor_ExposedMembers.lua initialized!");
 end

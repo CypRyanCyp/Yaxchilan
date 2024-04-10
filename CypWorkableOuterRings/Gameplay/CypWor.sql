@@ -3,6 +3,52 @@
 --------------------------------------------------------------
 
 --------------------------------------------------------------
+-- Dummy trait
+--------------------------------------------------------------
+-- Traits
+INSERT INTO "Types" ("Type", "Kind") VALUES 
+('TRAIT_CYP_WOR_DUMMY', 'KIND_TRAIT');
+-- Traits
+INSERT INTO "Traits" ("TraitType", "InternalOnly") VALUES 
+('TRAIT_CYP_WOR_DUMMY', '1');
+
+--------------------------------------------------------------
+-- Dummy GP to acquire tiles
+--------------------------------------------------------------
+-- Types
+INSERT INTO "Types" ("Type", "Kind") VALUES 
+('UNIT_CYP_WOR_GREAT_DUMMY', 'KIND_UNIT'),
+('GREAT_PERSON_CLASS_CYP_WOR', 'KIND_GREAT_PERSON_CLASS'),
+('MODIFIER_CYP_WOR_UNIT_GRANT_PLOT', 'KIND_MODIFIER'),
+('GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT', 'KIND_GREAT_PERSON_INDIVIDUAL');
+-- Units
+INSERT INTO "Units" 
+("UnitType",                  "Name", "BaseSightRange", "BaseMoves",  "Domain",       "FormationClass",           "Cost", "Description",  "Flavor", "CanCapture", "CanRetreatWhenCaptured", "TraitType",            "PromotionClass", "CanTrain", "Stackable") VALUES 
+('UNIT_CYP_WOR_GREAT_DUMMY',  '-',    0,                0,            'DOMAIN_AIR',   'FORMATION_CLASS_AIR',      1,      "-",            NULL,     1,            1,                        "TRAIT_CYP_WOR_DUMMY",  "",               0,          1);
+-- Units_XP2
+INSERT OR IGNORE INTO "Units_XP2" 
+("UnitType",                  "CanEarnExperience",  "CanFormMilitaryFormation") VALUES 
+('UNIT_CYP_WOR_GREAT_DUMMY',  0,                    0);
+-- GreatPersonClasses
+INSERT INTO "GreatPersonClasses" 
+("GreatPersonClassType",        "Name", "UnitType",                 "DistrictType",         "MaxPlayerInstances", "PseudoYieldType",  "IconString", "ActionIcon",                         "AvailableInTimeline",  "GenerateDuplicateIndividuals") VALUES 
+('GREAT_PERSON_CLASS_CYP_WOR',  '-',    'UNIT_CYP_WOR_GREAT_DUMMY', 'DISTRICT_CITY_CENTER', 0,                    NULL,               '-',          'ICON_UNITOPERATION_GENERAL_ACTION',  '0',                    '1');
+-- GreatPersonIndividuals
+INSERT INTO "GreatPersonIndividuals" 
+("GreatPersonIndividualType",                     "Name", "GreatPersonClassType",       "EraType",    "ActionCharges",  "ActionRequiresAdjacentOwnedTile", "Gender") VALUES 
+('GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT',  '-',    'GREAT_PERSON_CLASS_CYP_WOR', 'ERA_ANCIENT', '1',             '1',                               'M');
+-- DynamicModifiers
+INSERT INTO "DynamicModifiers" ("ModifierType", "CollectionType", "EffectType") VALUES 
+('MODIFIER_CYP_WOR_UNIT_GRANT_PLOT', 'COLLECTION_OWNER', 'EFFECT_GRANT_PLOT');
+-- Modifiers
+INSERT INTO "Modifiers" ("ModifierId", "ModifierType", "RunOnce", "Permanent") VALUES 
+('MOD_CYP_WOR_GREATPERSON_GRANT_PLOT', 'MODIFIER_CYP_WOR_UNIT_GRANT_PLOT', '1', '1');
+-- GreatPersonIndividualActionModifiers
+INSERT INTO "GreatPersonIndividualActionModifiers" 
+("GreatPersonIndividualType",                     "ModifierId",                         "AttachmentTargetType") VALUES 
+('GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT',  'MOD_CYP_WOR_GREATPERSON_GRANT_PLOT', 'GREAT_PERSON_ACTION_ATTACHMENT_TARGET_UNIT_GREATPERSON');
+
+--------------------------------------------------------------
 -- Workable outer ring district
 --------------------------------------------------------------
 -- Types
@@ -69,16 +115,6 @@ SELECT  'BUILDING_CYP_WOR_LOGISTICS_CENTER'   "BuildingType",
         1                                     "PointsPerTurn"
 FROM "GreatPersonClasses" gpc
 WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
-
---------------------------------------------------------------
--- Dummy trait
---------------------------------------------------------------
--- Traits
-INSERT INTO "Types" ("Type", "Kind") VALUES 
-('TRAIT_CYP_WOR_DUMMY', 'KIND_TRAIT');
--- Traits
-INSERT INTO "Traits" ("TraitType", "InternalOnly") VALUES 
-('TRAIT_CYP_WOR_DUMMY', '1');
 
 --------------------------------------------------------------
 -- Temporary list for binary digits

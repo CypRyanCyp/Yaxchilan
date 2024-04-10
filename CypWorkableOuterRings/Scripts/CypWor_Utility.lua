@@ -45,12 +45,47 @@ CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS = "CYP_WOR_WORKER_LOCKED_OUTER_RING_PLO
 -- Configurations
 CYP_WOR_DST_MIN = 4;
 CYP_WOR_DST_MAX = 5;
+-- Acquire plot
+local CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE = 'GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT';
+local CYP_WOR_GP_ACTIVATE_ACTION_TYPE = 'UNITCOMMAND_ACTIVATE_GREAT_PERSON';
 
 
 
 -- ===========================================================================
 -- FUNCTIONS (UTILITY)
 -- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- CypWorAcquirePlot
+-- ---------------------------------------------------------------------------
+function CypWorAcquirePlot( iPlayer : number, pPlot )
+  print("CypWorAcquirePlot");
+  -- Spawn dummy GP
+  print("CypWorAcquirePlot", "Spawn GP");
+  Game.GetGreatPeople():CreatePerson(iPlayer, CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE, pPlot:GetX(), pPlot:GetY());
+  print("CypWorAcquirePlot", "Get unit");
+  -- Get unit
+  local tPlotUnits = Units.GetUnitsInPlot(pPlot);
+  local pGpUnit = nil;
+  for i, pUnit in ipairs(tPlotUnits) do
+    local iGpIndividual = pUnit:GetGreatPerson():GetIndividual();
+    if iGpIndividual >= 0 then
+      local sGpIndividualType = GameInfo.GreatPersonIndividuals[iGp].GreatPersonIndividualType;
+      if sGpIndividualType == CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE then
+        pGpUnit = pUnit;
+        break;
+      end
+    end
+  end
+  if pGpUnit == nil then return false end
+  local iUnit = pGpUnit:GetID();
+  -- Activate action
+  print("CypWorAcquirePlot", "UnitRequestCommand", iPlayer, iUnit, CYP_WOR_GP_ACTIVATE_ACTION_TYPE);
+	ExposedMembers.CypWor.UnitRequestCommand(iPlayer, iUnit, CYP_WOR_GP_ACTIVATE_ACTION_TYPE);
+  print("CypWorAcquirePlot", true);
+  -- Return
+  return true;
+end
 
 -- ---------------------------------------------------------------------------
 -- CypWorIsModifierActive

@@ -9,6 +9,7 @@
 -- ===========================================================================
 include "SupportFunctions.lua";
 include "CypWor_Utility.lua";
+include "CypWor_AcquirePlots.lua";
 
 
 
@@ -739,8 +740,15 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return end
-  -- Set plot owner
-  WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+  -- Acquire plot
+  CypWorAcquirePlot(iPlayer, pPlot);
+  -- Set plot owned city if not match (this happens when the acquired tile was closer to another city)
+  local pPlotCity = Cities.GetPlotPurchaseCity(iPlot);
+  if pPlotCity == nil then return end
+  local iPlotCity = pPlotCity:GetID();
+  if iPlotCity ~= iCity then
+    WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+  end
   -- Update player gold
   if iGoldCost > 0 then
     pTreasury:ChangeGoldBalance(-iGoldCost);
