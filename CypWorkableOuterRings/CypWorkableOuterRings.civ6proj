@@ -49,6 +49,12 @@
   <UpdateDatabase id="Gameplay">
     <File>Gameplay/CypWor.sql</File>
   </UpdateDatabase>
+  <UpdateDatabase id="Gameplay_CityPlotYieldAdjustments">
+    <Properties>
+      <LoadOrder>999999</LoadOrder>
+    </Properties>
+    <File>Gameplay/CypWor_CityPlotYieldAdjustments.sql</File>
+  </UpdateDatabase>
   <UpdateDatabase id="Gameplay_ModeSecretSocieties">
     <Properties>
       <LoadOrder>1000</LoadOrder>
@@ -218,6 +224,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Gameplay\CypWor_ModeSecretSocieties.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Gameplay\CypWor_CityPlotYieldAdjustments.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Icons -->

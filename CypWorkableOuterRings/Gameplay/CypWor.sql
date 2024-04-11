@@ -24,15 +24,15 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 -- Units
 INSERT INTO "Units" 
 ("UnitType",                  "Name", "BaseSightRange", "BaseMoves",  "Domain",       "FormationClass",           "Cost", "Description",  "Flavor", "CanCapture", "CanRetreatWhenCaptured", "TraitType",            "PromotionClass", "CanTrain", "Stackable") VALUES 
-('UNIT_CYP_WOR_GREAT_DUMMY',  '-',    0,                0,            'DOMAIN_AIR',   'FORMATION_CLASS_AIR',      1,      "-",            NULL,     1,            1,                        "TRAIT_CYP_WOR_DUMMY",  NULL,             0,          1);
+('UNIT_CYP_WOR_GREAT_DUMMY',  '-',    0,                0,            'DOMAIN_LAND',  'FORMATION_CLASS_CIVILIAN', 1,      "-",            NULL,     1,            1,                        "TRAIT_CYP_WOR_DUMMY",  NULL,             0,          0);
 -- Units_XP2
 INSERT OR IGNORE INTO "Units_XP2" 
 ("UnitType",                  "CanEarnExperience",  "CanFormMilitaryFormation") VALUES 
 ('UNIT_CYP_WOR_GREAT_DUMMY',  0,                    0);
 -- GreatPersonClasses
 INSERT INTO "GreatPersonClasses" 
-("GreatPersonClassType",        "Name", "UnitType",                 "DistrictType",         "MaxPlayerInstances", "PseudoYieldType",  "IconString", "ActionIcon",                         "AvailableInTimeline",  "GenerateDuplicateIndividuals") VALUES 
-('GREAT_PERSON_CLASS_CYP_WOR',  '-',    'UNIT_CYP_WOR_GREAT_DUMMY', 'DISTRICT_CITY_CENTER', NULL,                 NULL,               '-',          'ICON_UNITOPERATION_GENERAL_ACTION',  '0',                    '1');
+("GreatPersonClassType",        "Name", "UnitType",                 "DistrictType",         "MaxPlayerInstances", "PseudoYieldType",  "IconString",           "ActionIcon",                         "AvailableInTimeline",  "GenerateDuplicateIndividuals") VALUES 
+('GREAT_PERSON_CLASS_CYP_WOR',  '-',    'UNIT_CYP_WOR_GREAT_DUMMY', 'DISTRICT_CITY_CENTER', NULL,                  NULL,               '[ICON_GreatGeneral]', 'ICON_UNITOPERATION_GENERAL_ACTION',  '0',                    '1');
 -- GreatPersonIndividuals
 INSERT INTO "GreatPersonIndividuals" 
 ("GreatPersonIndividualType",                     "Name", "GreatPersonClassType",       "EraType",    "ActionCharges",  "ActionRequiresAdjacentOwnedTile", "Gender") VALUES 
