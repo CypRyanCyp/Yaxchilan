@@ -14,12 +14,15 @@
 -- Plot swapped property
 --------------------------------------------------------------
 -- Requirements
-INSERT INTO "Requirements" ("RequirementId", "RequirementType") VALUES
-('REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED', 'REQUIREMENT_PLOT_PROPERTY_MATCHES');
+INSERT INTO "Requirements" ("RequirementId", "RequirementType", "Inverse") VALUES
+('REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', 0),
+('REQUIRES_CYP_WOR_PLOT_IS_NOT_SPECIAL_SWAPPED', 'REQUIREMENT_PLOT_PROPERTY_MATCHES', 1);
 -- RequirementArguments
 INSERT INTO "RequirementArguments" ("RequirementId", "Name", "Value") VALUES
 ('REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED', 'PropertyName', 'CYP_WOR_PLOT_SPECIAL_SWAP'),
-('REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED', 'PropertyMinimum', '1');
+('REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED', 'PropertyMinimum', '1'),
+('REQUIRES_CYP_WOR_PLOT_IS_NOT_SPECIAL_SWAPPED', 'PropertyName', 'CYP_WOR_PLOT_SPECIAL_SWAP'),
+('REQUIRES_CYP_WOR_PLOT_IS_NOT_SPECIAL_SWAPPED', 'PropertyMinimum', '1');
 
 --------------------------------------------------------------
 -- Player plot yields modifier
@@ -64,7 +67,8 @@ AND m.SubjectRequirementSetId NOT IN (
 	JOIN Requirements r
 	ON rsr.RequirementId = r.RequirementId
 	WHERE r.RequirementType NOT LIKE '%PLOT%'
-);
+)
+AND bm.BuildingType NOT LIKE 'MOD_BUILDING_CYP_WOR_%';
 -- Insert city wide plot yield modifiers from buildings (B)
 INSERT INTO "CypWorPlotYieldAdjustmentObjects" ("ObjectType", "ObjectTypeName", "ObjectTypeRequirementType", "ModifierId")
 SELECT  bm.BuildingType                   "ObjectType",
@@ -192,7 +196,7 @@ FROM "CypWorPlotYieldAdjustmentObjects" t;
 -- RequirementSetRequirements (not special swapped)
 INSERT INTO "RequirementSetRequirements" ("RequirementSetId", "RequirementId")
 SELECT  'REQ_SET_CYP_WOR_SWAP_FOR_UNSWAPPED_' || t.ModifierId                     "RequirementSetId", 
-        'REQUIRES_CYP_WOR_PLOT_IS_SPECIAL_SWAPPED'                                "RequirementId"
+        'REQUIRES_CYP_WOR_PLOT_IS_NOT_SPECIAL_SWAPPED'                            "RequirementId"
 FROM "CypWorPlotYieldAdjustmentObjects" t;
 -- Requirements (has infrastructure AND not special swapped)
 INSERT INTO "Requirements" ("RequirementId", "RequirementType") 
@@ -271,11 +275,10 @@ ON t.ModifierId = m.ModifierId
 WHERE m.SubjectRequirementSetId IS NOT NULL
 GROUP BY m.SubjectRequirementSetId;
 -- Modifiers (UPDATE)
-UPDATE "Modifiers"
+UPDATE Modifiers
 SET ModifierType = 'MODIFIER_CYP_WOR_PLAYER_ADJUST_PLOT_YIELD',
-    SubjectRequirementSetId = 'REQ_SET_CYP_WOR_SWAP_FOR_' || t.ModifierId
-FROM "CypWorPlotYieldAdjustmentObjects" t
-WHERE Modifiers.ModifierId = t.ModifierId;
+    SubjectRequirementSetId = (SELECT 'REQ_SET_CYP_WOR_SWAP_FOR_' || t.ModifierId FROM "CypWorPlotYieldAdjustmentObjects" t WHERE t.ModifierId = Modifiers.ModifierId)
+WHERE ModifierId IN (SELECT t.ModifierId FROM "CypWorPlotYieldAdjustmentObjects" t);
 
 --------------------------------------------------------------
 -- Temporary table

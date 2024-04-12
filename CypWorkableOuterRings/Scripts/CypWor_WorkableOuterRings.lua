@@ -9,7 +9,6 @@
 -- ===========================================================================
 include "SupportFunctions.lua";
 include "CypWor_Utility.lua";
-include "CypWor_AcquirePlots.lua";
 
 
 
@@ -60,12 +59,19 @@ local m_CypWorPlotOriginalOwningCities = {};
 -- CypWorGetCityRingPlots
 -- ---------------------------------------------------------------------------
 function CypWorPlotSetCityOwnership( iPlayer : number, iCity : number, iPlot : number)
+  print("CypWorPlotSetCityOwnership", "A");
   -- Get plot
   local pPlot = Map.GetPlotByIndex(iPlot); 
   if pPlot == nil then return end
+  -- Get city
+  print("CypWorPlotSetCityOwnership", "B");
+  local pCity = CityManager.GetCity(iPlayer, iCity);
+  if pCity == nil then return end
   -- Validate
+  print("CypWorPlotSetCityOwnership", "C");
   if pPlot:GetOwner() ~= iPlayer then return end
   -- Get currently owning city
+  print("CypWorPlotSetCityOwnership", "D");
   local pWorkingCity = Cities.GetPlotPurchaseCity(iPlot);
   if pWorkingCity == nil then return end
   local iWorkingCity = pWorkingCity:GetID();
@@ -79,8 +85,10 @@ function CypWorPlotSetCityOwnership( iPlayer : number, iCity : number, iPlot : n
   if iOriginalPlotCity == iCity then
     m_CypWorPlotOriginalOwningCities[iPlot] = nil;
   end
+  print("CypWorPlotSetCityOwnership", "E", "iOriginalPlotCity", iOriginalPlotCity, "iCity", iCity);
   -- Switch plot owning city
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+  print("CypWorPlotSetCityOwnership", "F");
   -- Reset properties
   for pBuilding in GameInfo.CypWorPlotYieldAdjustmentBuildings() do
     pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pBuilding.BuildingType, 0);
@@ -89,13 +97,16 @@ function CypWorPlotSetCityOwnership( iPlayer : number, iCity : number, iPlot : n
     pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pDistrict.DistrictType, 0);
   end
   pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_SPECIAL_SWAP, 0);
+  print("CypWorPlotSetCityOwnership", "G");
   -- Set swapped and infrastructure properties
-  if iOriginalPlotCity ~= iCity then  
+  if iOriginalPlotCity ~= iCity then 
+  print(" >", "CypWorPlotSetCityOwnership", CYP_WOR_PROPERTY_PLOT_SPECIAL_SWAP, 1);
     pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_SPECIAL_SWAP, 1);
     for pBuilding in GameInfo.CypWorPlotYieldAdjustmentBuildings() do
       local kBuilding = GameInfo.Buildings[pBuilding.BuildingType];
       if kBuilding ~= nil then
-        if pCity::GetBuildings():HasBuilding(kBuilding.Index) then
+        if pCity:GetBuildings():HasBuilding(kBuilding.Index) then
+          print(" >", "CypWorPlotSetCityOwnership", CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pBuilding.BuildingType, 1);
           pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pBuilding.BuildingType, 1);
         end
       end
@@ -103,13 +114,17 @@ function CypWorPlotSetCityOwnership( iPlayer : number, iCity : number, iPlot : n
     for pDistrict in GameInfo.CypWorPlotYieldAdjustmentDistricts() do
       local kDistrict = GameInfo.Districts[pDistrict.DistrictType];
       if kDistrict ~= nil then
-        if pCity::GetDistricts():HasDistrict(kDistrict.Index) then
+        if pCity:GetDistricts():HasDistrict(kDistrict.Index) then
+          print(" >", "CypWorPlotSetCityOwnership", CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pDistrict.DistrictType, 1);
           pPlot:SetProperty(CYP_WOR_PROPERTY_PLOT_BELONGS_TO_CITY_THAT_HAS_PREFIX .. pDistrict.DistrictType, 1);
         end
       end
     end
   end
+  print("CypWorPlotSetCityOwnership", "H");
   
+  -- TODO CYP - use GPP without effect showing?
+  -- TODO CYP - update when tile is swapped in inner ring (with vanilla call). Update UI to call update after?
   -- TODO CYP - clear on startup
   -- TODO CYP - update all on building, district or governor change
   -- * when building is built check for each plot in this city if it is a swapped tile 
@@ -838,6 +853,7 @@ local function CypWorSwapTile( iPlayer : number, tParameters : table )
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
   -- Set plot owner
+  print("CypWorSwapTile", "CypWorPlotSetCityOwnership");
   CypWorPlotSetCityOwnership(iPlayer, iCity, iPlot);
   -- Update info
   CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
