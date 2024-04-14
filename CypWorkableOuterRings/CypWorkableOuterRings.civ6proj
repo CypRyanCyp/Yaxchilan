@@ -2,13 +2,13 @@
 <Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
-    <Name>{LOC_CYP_WOR_MOD_NAME_COLOR}</Name>
+    <Name>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan's Workable Outer Rings | 开发城市外环</Name>
     <Guid>3b857081-842a-484a-86d8-10acf5e62b61</Guid>
     <ProjectGuid>5d160bf3-6062-4b6a-b301-da3b294956ea</ProjectGuid>
-    <ModVersion>4</ModVersion>
-    <Teaser>{LOC_CYP_WOR_MOD_DESCRIPTION}</Teaser>
-    <Description>{LOC_CYP_WOR_MOD_DESCRIPTION}</Description>
-    <Authors>{LOC_CYP_WOR_MOD_CREATOR}</Authors>
+    <ModVersion>6</ModVersion>
+    <Teaser>Adds the [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Teaser>
+    <Description>Adds the [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] district that allows working tiles in the fourth and fifth city ring.</Description>
+    <Authors>[COLOR_FLOAT_GOLD]Cyp[ENDCOLOR]Ryan</Authors>
     <SpecialThanks>Civ VI Modding Helpline, Phantagonist, TheColdHands, MC</SpecialThanks>
     <AffectsSavedGames>true</AffectsSavedGames>
     <SupportsSinglePlayer>true</SupportsSinglePlayer>
