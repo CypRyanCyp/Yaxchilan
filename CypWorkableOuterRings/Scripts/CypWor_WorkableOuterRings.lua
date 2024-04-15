@@ -739,8 +739,10 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return end
-  -- Set plot owner
+  -- Set plot city owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+  -- Acquire plot (update modifiers)
+  CypWorAcquirePlot(iPlayer, pPlot);
   -- Update player gold
   if iGoldCost > 0 then
     pTreasury:ChangeGoldBalance(-iGoldCost);
@@ -767,8 +769,10 @@ local function CypWorSwapTile( iPlayer : number, tParameters : table )
   -- Validate distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
-  -- Set plot owner
+  -- Set plot city owner
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+  -- Acquire plot (update modifiers)
+  CypWorAcquirePlot(iPlayer, pPlot);
   -- Update info
   CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
 end

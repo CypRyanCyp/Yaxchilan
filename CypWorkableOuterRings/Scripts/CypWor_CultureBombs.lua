@@ -17,7 +17,7 @@ include "CypWor_Utility.lua"
 -- CultureBomb modifier types
 local m_CypWorCultureBombModifierTypes = {};
 local m_CypWorWildcardCultureBombModifierTypes = {};
-local m_CypWorCultureBombConvertsModifierTypes = {}
+local m_CypWorCultureBombConvertsModifierTypes = {};
 -- Event cache (to prevent double execution)
 local m_CypWorDistrictEventCache = {};
 
@@ -129,6 +129,8 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
           end
           -- Change owner
           WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+          -- Acquire plot (update modifiers)
+          CypWorAcquirePlot(iPlayer, pPlot);
         end
       end
     end

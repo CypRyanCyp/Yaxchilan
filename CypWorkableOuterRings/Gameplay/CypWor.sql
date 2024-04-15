@@ -3,6 +3,16 @@
 --------------------------------------------------------------
 
 --------------------------------------------------------------
+-- Dummy trait
+--------------------------------------------------------------
+-- Traits
+INSERT INTO "Types" ("Type", "Kind") VALUES 
+('TRAIT_CYP_WOR_DUMMY', 'KIND_TRAIT');
+-- Traits
+INSERT INTO "Traits" ("TraitType", "InternalOnly") VALUES 
+('TRAIT_CYP_WOR_DUMMY', '1');
+
+--------------------------------------------------------------
 -- Workable outer ring district
 --------------------------------------------------------------
 -- Types
@@ -69,16 +79,6 @@ SELECT  'BUILDING_CYP_WOR_LOGISTICS_CENTER'   "BuildingType",
         1                                     "PointsPerTurn"
 FROM "GreatPersonClasses" gpc
 WHERE gpc.GreatPersonClassType = 'GREAT_PERSON_CLASS_JNR_EXPLORER';
-
---------------------------------------------------------------
--- Dummy trait
---------------------------------------------------------------
--- Traits
-INSERT INTO "Types" ("Type", "Kind") VALUES 
-('TRAIT_CYP_WOR_DUMMY', 'KIND_TRAIT');
--- Traits
-INSERT INTO "Traits" ("TraitType", "InternalOnly") VALUES 
-('TRAIT_CYP_WOR_DUMMY', '1');
 
 --------------------------------------------------------------
 -- Temporary list for binary digits

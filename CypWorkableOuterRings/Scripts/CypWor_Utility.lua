@@ -45,12 +45,42 @@ CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS = "CYP_WOR_WORKER_LOCKED_OUTER_RING_PLO
 -- Configurations
 CYP_WOR_DST_MIN = 4;
 CYP_WOR_DST_MAX = 5;
+-- Acquire plot
+local CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE = 'GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT';
 
 
 
 -- ===========================================================================
 -- FUNCTIONS (UTILITY)
 -- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- CypWorAcquirePlot
+-- ---------------------------------------------------------------------------
+function CypWorAcquirePlot( iPlayer : number, pPlot )
+  -- Check if mountain
+  if pPlot:IsMountain() then return false end
+  -- Spawn dummy GP
+  Game.GetGreatPeople():CreatePerson(iPlayer, CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE, pPlot:GetX(), pPlot:GetY());
+  -- Get unit
+  local tPlotUnits = Units.GetUnitsInPlot(pPlot);
+  local pGpUnit = nil;
+  for i, pUnit in ipairs(tPlotUnits) do
+    local iGpIndividual = pUnit:GetGreatPerson():GetIndividual();
+    if iGpIndividual >= 0 then
+      local sGpIndividualType = GameInfo.GreatPersonIndividuals[iGpIndividual].GreatPersonIndividualType;
+      if sGpIndividualType == CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE then
+        pGpUnit = pUnit;
+        break;
+      end
+    end
+  end
+  if pGpUnit == nil then return false end
+  -- Delete
+  UnitManager.Kill(pGpUnit);
+  -- Return
+  return true;
+end
 
 -- ---------------------------------------------------------------------------
 -- CypWorIsModifierActive
