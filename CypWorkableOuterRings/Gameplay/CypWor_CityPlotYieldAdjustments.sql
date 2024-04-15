@@ -1,7 +1,4 @@
 -- City Plot Yield Adjustments
--- Description: Adds quite complex mechanic to solve the
--- bug that when changign tile ownership via LUA the city
--- plot yield adjustments are not updated until reload.
 --------------------------------------------------------------
 
 --------------------------------------------------------------

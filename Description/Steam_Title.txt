@@ -8,10 +8,22 @@ CypRyan's Working Outer Rings
 ヤシュチラン - 4/5タイル開発
 
 --- Changelog ---
-v4
-- Added 3D models (Mikecro)
-- Fixed culture bomb without GS expansion.
-[b]v5[/b] (2024-04-09)
-- [b]Bug[/b]: Fix bug that caused [b]plot yield icons[/b] to disappear (reported by ekids789788).
-- [b]Bug[/b]: Fix dummy yields that got applied to [b]Vampire Castles[/b].
-- [b]Bug[/b]: Fix plot tooltip when [b]Barbarian Clans[/b] mode is activated (reported by born).
+[b]v7[/b] (2024-04-15)
+[list][*][b]Bug[/b]: [b]Plot yields effects[/b] like [b]Petra[/b] do now update correctly in the outer rings without reloading, except for mountain tiles.
+[*][b]Modification[/b]: [b]Shorter District Name[/b] for romance languages.[list]
+
+
+
+[b]v7.0[/b] (2024-04-13)[list][/list]
+
+[b]English[/b]
+[list][*][b]Bug[/b]: [b]Plot yields effects[/b] like [b]Petra[/b] do now update correctly in the outer rings without reloading, except for mountain tiles.
+[*][b]Modification[/b]: [b]Shorter District Name[/b] for romance languages.[/list]
+
+[b]中文[/b]
+[list][*][b]错误[/b]: 现在，[b]佩特拉[/b]等[b]地形产量效果[/b]在外环中无需重新加载即可正确更新，但山地瓷砖除外。
+[*][b]修改[/b]: 罗曼语区的简称。[/list]
+
+[b]ジャパニッシュ[/b]
+[list][*][b]バグ[/b]: [b]ペトラ[/b]のような[b]プロットの収穫効果[/b]は、山のタイルを除いて、リロードなしで外側のリングで正しく更新されるようになりました。
+[*][b]修正[/b]: ロマンス諸語の短縮地区名。[/list]

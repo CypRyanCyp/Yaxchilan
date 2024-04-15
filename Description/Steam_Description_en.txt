@@ -14,8 +14,7 @@ Adds the [b]Frontier Town Quarter[/b] district that allows working tiles in the 
 
 Citizens can work tiles in the fourth ring of this city.
 Tiles in the fourth ring of this city can be purchased by Gold. 
-Culture bombs adjacent neutral tiles.
-Culture bombs can annex tiles in the fourth ring of this city.
+Culture bombs adjacent neutral tiles. Culture bombs can annex tiles in the fourth ring of this city.
 
 +1 Housing
 [i]Cannot be adjacent to a City Center.[/i][/quote]
