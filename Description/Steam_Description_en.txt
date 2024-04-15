@@ -45,8 +45,8 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 
 [h1]Known Issues & How To Contribute?[/h1]
 [list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
-[*]Tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Petra and Mausoleum of Halicarnassus) until reloading the game.
-[*]Translating into Russian, Polish, and Korean.[/list]
+[*]Mountain tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Inca production) until reloading the game.
+[*]Translation to Russian, Polish, and Korean.[/list]
 
 
 [h1]Bugs & Features[/h1]

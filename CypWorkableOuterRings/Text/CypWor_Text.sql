@@ -65,32 +65,32 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 -- LocalizedText
 INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES 
 -- District
-('en_US',       'LOC_DISTRICT_CYP_WOR_NAME',          "Frontier Town Quarters"),
+('en_US',       'LOC_DISTRICT_CYP_WOR_NAME',          "Frontier Town"),
 ('en_US',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Citizens can work tiles in the fourth ring of this city.[NEWLINE]" || 
                                                       "Tiles in the fourth ring of this city can be purchased by [ICON_GOLD] Gold.[NEWLINE]" ||
                                                       "Culture bombs adjacent neutral tiles.[NEWLINE]" ||
                                                       "Culture bombs can annex tiles in the fourth ring of this city."),
-('de_DE',       'LOC_DISTRICT_CYP_WOR_NAME',          "Grenzstadt Viertel"),
+('de_DE',       'LOC_DISTRICT_CYP_WOR_NAME',          "Grenzstadt"),
 ('de_DE',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Bürger können Geländerfelder im vierten Ring dieser Stadt zu bearbeiten.[NEWLINE]" || 
                                                       "Geländefelder im vierten Ring diser Stadt können mit [ICON_GOLD] Gold erworben werden.[NEWLINE]" || 
                                                       "Verursacht Kulturschock für angrenzende Geländefelder.[NEWLINE]" || 
                                                       "Kulturschocks können Geländefelder im vierten Ring dieser Stadt annektieren."),
-('fr_FR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Quartiers de la ville Frontière"),
+('fr_FR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Ville Frontière"),
 ('fr_FR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Les citoyens peuvent travailler les cases dans le quatrième anneau de cette ville.[NEWLINE]" || 
                                                       "Les tuiles du quatrième anneau de cette ville peuvent être achetées avec de l'or [ICON_GOLD].[NEWLINE]" || 
                                                       "Lance une bombe culturelle sur les cases neutres adjacentes.[NEWLINE]" || 
                                                       "Les bombes culturelles peuvent annexer des tuiles dans le quatrième anneau de cette ville."),
-('pt_BR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Bairros Fronteiriços"),
+('pt_BR',       'LOC_DISTRICT_CYP_WOR_NAME',          "Cidade de Fronteira"),
 ('pt_BR',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Os cidadãos podem trabalhar nos painéis do quarto anel desta cidade.[NEWLINE]" || 
                                                       "Os painéis do quarto anel dessa cidade podem ser comprados com [ICON_GOLD] Ouro.[NEWLINE]" || 
                                                       "Causa uma explosão cultural em painéis neutros adjacentes.[NEWLINE]" || 
                                                       "Explosões culturais podem anexar blocos no quarto anel desta cidade."),
-('es_ES',       'LOC_DISTRICT_CYP_WOR_NAME',          "Barrios de la Frontera"),
+('es_ES',       'LOC_DISTRICT_CYP_WOR_NAME',          "Ciudad Fronteriza"),
 ('es_ES',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "Los ciudadanos pueden trabajar en las casillas del cuarto anillo de esta ciudad.[NEWLINE]" || 
                                                       "Las casillas del cuarto anillo de esta ciudad se pueden comprar con Oro [ICON_GOLD].[NEWLINE]" || 
                                                       "Bombardea culturalmente las casillas neutrales adyacentes" ||
                                                       "Las bombas culturales pueden anexar losetas en el cuarto anillo de esta ciudad."),
-('it_IT',       'LOC_DISTRICT_CYP_WOR_NAME',          "Quartieri della città di Frontiera"),
+('it_IT',       'LOC_DISTRICT_CYP_WOR_NAME',          "Città di Frontiera"),
 ('it_IT',       'LOC_DISTRICT_CYP_WOR_DESCRIPTION',   "I cittadini possono lavorare le tessere nel quarto anello di questa città.[NEWLINE]" || 
                                                       "Le tessere del quarto anello di questa città possono essere acquistate con [ICON_GOLD] Oro.[NEWLINE]" || 
                                                       "Bombardea culturalmente las casillas neutrales adyacentes" ||
