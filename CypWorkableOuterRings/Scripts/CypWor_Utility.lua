@@ -47,7 +47,6 @@ CYP_WOR_DST_MIN = 4;
 CYP_WOR_DST_MAX = 5;
 -- Acquire plot
 local CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE = 'GREAT_PERSON_INDIVIDUAL_CYP_WOR_ACQUIRE_PLOT';
-local CYP_WOR_GP_ACTIVATE_ACTION_TYPE = 'UNITCOMMAND_ACTIVATE_GREAT_PERSON';
 
 
 
@@ -59,18 +58,17 @@ local CYP_WOR_GP_ACTIVATE_ACTION_TYPE = 'UNITCOMMAND_ACTIVATE_GREAT_PERSON';
 -- CypWorAcquirePlot
 -- ---------------------------------------------------------------------------
 function CypWorAcquirePlot( iPlayer : number, pPlot )
-  print("CypWorAcquirePlot");
+  -- Check if mountain
+  if pPlot:IsMountain() then return false end
   -- Spawn dummy GP
-  print("CypWorAcquirePlot", "Spawn GP");
   Game.GetGreatPeople():CreatePerson(iPlayer, CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE, pPlot:GetX(), pPlot:GetY());
-  print("CypWorAcquirePlot", "Get unit");
   -- Get unit
   local tPlotUnits = Units.GetUnitsInPlot(pPlot);
   local pGpUnit = nil;
   for i, pUnit in ipairs(tPlotUnits) do
     local iGpIndividual = pUnit:GetGreatPerson():GetIndividual();
     if iGpIndividual >= 0 then
-      local sGpIndividualType = GameInfo.GreatPersonIndividuals[iGp].GreatPersonIndividualType;
+      local sGpIndividualType = GameInfo.GreatPersonIndividuals[iGpIndividual].GreatPersonIndividualType;
       if sGpIndividualType == CYP_WOR_GP_DUMMY_ACQUIRE_PLOT_TYPE then
         pGpUnit = pUnit;
         break;
@@ -78,11 +76,8 @@ function CypWorAcquirePlot( iPlayer : number, pPlot )
     end
   end
   if pGpUnit == nil then return false end
-  local iUnit = pGpUnit:GetID();
-  -- Activate action
-  print("CypWorAcquirePlot", "UnitRequestCommand", iPlayer, iUnit, CYP_WOR_GP_ACTIVATE_ACTION_TYPE);
-	ExposedMembers.CypWor.UnitRequestCommand(iPlayer, iUnit, CYP_WOR_GP_ACTIVATE_ACTION_TYPE);
-  print("CypWorAcquirePlot", true);
+  -- Delete
+  UnitManager.Kill(pGpUnit);
   -- Return
   return true;
 end

@@ -129,6 +129,8 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
           end
           -- Change owner
           WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
+          -- Acquire plot (update modifiers)
+          CypWorAcquirePlot(iPlayer, pPlot);
         end
       end
     end
