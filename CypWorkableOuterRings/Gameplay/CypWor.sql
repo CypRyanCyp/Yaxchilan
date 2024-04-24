@@ -296,3 +296,15 @@ WHERE b.BuildingType LIKE 'BUILDING_CYP_WOR_INTERNAL_WORKERS_%';
 -- Cleanup
 --------------------------------------------------------------
 DROP TABLE IF EXISTS "CypWorTmpBinaryDigits";
+
+--------------------------------------------------------------
+-- AI (do not build district)
+--------------------------------------------------------------
+-- AiFavoredItems
+INSERT INTO "AiFavoredItems" ("ListType", "Item", "Favored", "Value")
+SELECT  al.ListType           "ListType", 
+        'DISTRICT_CYP_WOR'    "Item", 
+        '0'                   "Favored", 
+        '0'                   "Value"
+FROM "AiLists" al
+WHERE al.System = 'CityEvents';
