@@ -37,6 +37,44 @@ local CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT = "CYP_WOR_SPECIALIST_SLOT_COUNT";
 
 
 -- ===========================================================================
+-- CACHES
+-- ===========================================================================
+-- Yields
+local CYP_WOR_GAMEINFO_YIELD_INDEXES = {};
+local CYP_WOR_GAMEINFO_YIELD_TYPES = {};
+for pYield in GameInfo.Yields() do
+  table.insert(CYP_WOR_GAMEINFO_YIELD_INDEXES, pYield.Index);
+  CYP_WOR_GAMEINFO_YIELD_TYPES[pYield.Index] = pYield.YieldType;
+end
+-- Districts
+local CYP_WOR_GAMEINFO_DISTRICTS = {};
+local CYP_WOR_GAMEINFO_DISTRICTS_BY_TYPES = {};
+for tDistrict in GameInfo.Districts() do
+  CYP_WOR_GAMEINFO_DISTRICTS[tDistrict.Index] = tDistrict;
+  CYP_WOR_GAMEINFO_DISTRICTS_BY_TYPES[tDistrict.DistrictType] = tDistrict;
+end
+-- Buildings
+local CYP_WOR_GAMEINFO_BUILDINGS = {};
+local CYP_WOR_GAMEINFO_BUILDINGS_BY_TYPES = {};
+for tBuilding in GameInfo.Buildings() do
+  CYP_WOR_GAMEINFO_BUILDINGS[tBuilding.Index] = tBuilding;
+  CYP_WOR_GAMEINFO_BUILDINGS_BY_TYPES[tBuilding.BuildingType] = tBuilding;
+end
+-- Improvements
+local CYP_WOR_GAMEINFO_IMPROVEMENTS = {};
+for tItem in GameInfo.Improvements() do
+  CYP_WOR_GAMEINFO_IMPROVEMENTS[tItem.Index] = tItem;
+end
+-- City plot cached yields
+local m_CypWorCachedPlotYields = {};
+local m_CypWorCachedCityLockedPlots = {};
+-- Properties
+local m_CypWorCachedPlotProperties = {};
+local m_CypWorCachedCityProperties = {};
+
+
+
+-- ===========================================================================
 -- MEMBERS
 -- ===========================================================================
 -- City plot yields changed
@@ -51,6 +89,93 @@ local m_CypWorCityIsUpdatingSpecialists = {};
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
+-- CypWorSetCityProperty
+-- ---------------------------------------------------------------------------
+function CypWorSetCityProperty( pCity, xKey, xValue )
+  -- Set value
+  pCity:SetProperty(xKey, xValue);
+  -- Update cache
+  m_CypWorCachedCityProperties[pCity:GetID()][xKey] = xValue;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetCityProperty
+-- ---------------------------------------------------------------------------
+function CypWorGetCityProperty( pCity, xKey )
+  -- Get city
+  if pCity == nil then return nil end
+  local iCity = pCity:GetID();
+  -- Update cache
+  if m_CypWorCachedCityProperties[iCity] == nil or m_CypWorCachedCityProperties[iCity][xKey] == nil then
+    if m_CypWorCachedCityProperties[iCity] == nil then
+      m_CypWorCachedCityProperties[iCity] = {};
+    end
+    m_CypWorCachedCityProperties[iCity][xKey] = pCity:GetProperty(xKey);
+  end
+  -- Return
+  return m_CypWorCachedCityProperties[iCity][xKey];
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorSetPlotProperty
+-- ---------------------------------------------------------------------------
+function CypWorSetPlotProperty( pPlot, xKey, xValue )
+  -- Set value
+  pPlot:SetProperty(xKey, xValue);
+  -- Update cache
+  m_CypWorCachedPlotProperties[pPlot:GetIndex()][xKey] = xValue;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetPlotProperty
+-- ---------------------------------------------------------------------------
+function CypWorGetPlotProperty( iPlot : number, xKey )
+  -- Update cache
+  if m_CypWorCachedPlotProperties[iPlot] == nil or m_CypWorCachedPlotProperties[iPlot][xKey] == nil then
+    if m_CypWorCachedPlotProperties[iPlot] == nil then
+      m_CypWorCachedPlotProperties[iPlot] = {};
+    end
+    local pPlot = Map.GetPlotByIndex(iPlot);
+    local xValue = nil;
+    if pPlot ~= nil then 
+      xValue = pPlot:GetProperty(xKey);
+    end
+    m_CypWorCachedPlotProperties[iPlot][xKey] = xValue;
+  end
+  -- Return
+  return m_CypWorCachedPlotProperties[iPlot][xKey];
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetCityRingPlots
+-- Get plots in the nth ring of a city.
+-- ---------------------------------------------------------------------------
+function CypWorGetCityLockedPlots( iPlayer : number, iCity : number )
+  -- Update cache
+  if m_CypWorCachedCityLockedPlots[iCity] == nil then
+    -- Get player
+    local pPlayer = Players[iPlayer];
+    if pPlayer == nil then 
+      return {},0;
+    end
+    -- Get city
+    local pCity = pPlayer:GetCities():FindID(iCity);
+    if pCity == nil then 
+      return {},0; 
+    end
+    -- Get locked plots
+    m_CypWorCachedCityLockedPlots[iCity] = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
+  end
+  -- Count
+  local iCityLockedCount = 0;
+  for iPlot, iLockedCount in pairs(m_CypWorCachedCityLockedPlots[iCity]) do
+    iCityLockedCount = iCityLockedCount + iLockedCount;
+  end
+  -- Return
+  return m_CypWorCachedCityLockedPlots[iCity], iCityLockedCount;
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorGetCityRingPlots
 -- Get plots in the nth ring of a city.
 -- ---------------------------------------------------------------------------
@@ -62,14 +187,38 @@ function CypWorGetCityRingPlots(pCity, iMin : number, iMax : number)
 end
 
 -- ---------------------------------------------------------------------------
+-- CypWorUpdatePlotYieldCache
+-- ---------------------------------------------------------------------------
+function CypWorUpdatePlotYieldCache( iPlot : number, bForce )
+  -- Clear cache
+  if bForce == true then
+    m_CypWorCachedPlotYields[iPlot] = nil;
+  end
+  -- Check cache
+  if m_CypWorCachedPlotYields[iPlot] ~= nil then return end
+  -- Update cache
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  if pPlot == nil then return end
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    m_CypWorCachedPlotYields[iPlot][iYield] = pPlot:GetYield(iYield);
+  end
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorDeterminePlotHasAnyYield
 -- Determine if this plot has any yield.
 -- ---------------------------------------------------------------------------
 function CypWorDeterminePlotHasAnyYield(pPlot)
-  for pYield in GameInfo.Yields() do
-    if ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index) > 0 then return true end
+  -- Get plot
+  if pPlot == nil then return false end
+  local iPlot = pPlot:GetIndex();
+  -- Update cache
+  CypWorUpdatePlotYieldCache(iPlot);
+  -- Check if has any yields
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    if m_CypWorCachedPlotYields[iPlot][iYield] > 0 then return true end
   end
-  return false;
+  return false
 end
 
 -- ---------------------------------------------------------------------------
@@ -80,9 +229,9 @@ function CypWorPlotIsWorkable(pPlot)
   -- Check wonder (not workable)
   if pPlot:GetWonderType() ~= -1 then return false end
   -- Check improvement (not workable)
-  local sImprovementType = pPlot:GetImprovementType();
-  if sImprovementType ~= -1 then
-    local pImprovement = GameInfo.Improvements[sImprovementType];
+  local iImprovement = pPlot:GetImprovementType();
+  if iImprovement ~= -1 then
+    local pImprovement = CYP_WOR_GAMEINFO_IMPROVEMENTS[iImprovement];
     if not pImprovement.Workable then return false end
   end
   -- Check feature (danger value)
@@ -108,12 +257,12 @@ function CypWorGetPlotWorkerSlots(pCity, pPlot)
   if pPlot:GetDistrictType() ~= -1 then
     local iWorkerSlots = 0;
     -- District specialist slots
-    local tDistrict = GameInfo.Districts[pPlot:GetDistrictType()];
-    local iDistrictCitizenSlots = GameInfo.Districts[pPlot:GetDistrictType()].CitizenSlots;
+    local tDistrict = CYP_WOR_GAMEINFO_DISTRICTS[pPlot:GetDistrictType()];
+    local iDistrictCitizenSlots = CYP_WOR_GAMEINFO_DISTRICTS[pPlot:GetDistrictType()].CitizenSlots;
     if iDistrictCitizenSlots == nil then iDistrictCitizenSlots = 0 end
     iWorkerSlots = iWorkerSlots + iDistrictCitizenSlots;
     -- Building specialist slots
-    for tBuilding in GameInfo.Buildings() do
+    for _,tBuilding in pairs(CYP_WOR_GAMEINFO_BUILDINGS_BY_TYPES) do
       if tBuilding.PrereqDistrict == tDistrict.DistrictType and tBuilding.CitizenSlots ~= nil then
         iWorkerSlots = iWorkerSlots + tBuilding.CitizenSlots;
       end
@@ -154,7 +303,7 @@ function CypWorCreateDummyBuildingWithBinaryConvertedValue(
         -- Determine if desired and actual existence states match and...
         local bBuildingShouldExist = iValueBinaryDigit == 1;
         local sBuildingType = sBuildingTypePrefix .. i;
-        local iBuilding = GameInfo.Buildings[sBuildingType].Index;
+        local iBuilding = CYP_WOR_GAMEINFO_BUILDINGS_BY_TYPES[sBuildingType].Index;
         local bBuildingExists = pCity:GetBuildings():HasBuilding(iBuilding);
         -- ... if not setup desired state
         if bBuildingShouldExist ~= bBuildingExists then
@@ -175,10 +324,15 @@ end
 -- A plot score is the sum of weighted yield type sums.
 -- ---------------------------------------------------------------------------
 function CypWorDeterminePlotScore( pPlot, tYieldMultipliers :table )
+  -- Get plot
+  if pPlot == nil then return 0 end
+  local iPlot = pPlot:GetIndex();
+  -- Update cache
+  CypWorUpdatePlotYieldCache(iPlot);
   -- Determine score
   local iScore = 0;
-  for pYield in GameInfo.Yields() do
-    iScore = iScore + ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index) * tYieldMultipliers[pYield.Index];
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    iScore = iScore + m_CypWorCachedPlotYields[iPlot][iYield] * tYieldMultipliers[iYield];
   end
   return iScore;
 end
@@ -188,8 +342,7 @@ end
 -- Determine yield multiplier/weight based on citizen favor.
 -- This determines how much the amount of yields of a certain type is weighted.
 -- ---------------------------------------------------------------------------
-function CypWorCitizenYieldFavorMultiplier( pCitizens, pYield )
-  local iYield = pYield.Index;
+function CypWorCitizenYieldFavorMultiplier( pCitizens, iYield : number )
   if pCitizens:IsYieldFavored(iYield) then
     return CYP_WOR_YIELD_SCORE_FAVORED;
   elseif pCitizens:IsYieldDisfavored(iYield) then
@@ -226,13 +379,13 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
   
   -- Prepare yield sum
   local tYieldSums = {};
-  for pYield in GameInfo.Yields() do
-    tYieldSums[pYield.YieldType] = 0;
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    tYieldSums[iYield] = 0;
   end
   
   -- Determine to be worked outer ring plots
   -- Get n best workable outer ring tiles, while n is the amount of specialists
-  local tWorkableOuterPlotData : table = pCity:GetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES);
+  local tWorkableOuterPlotData : table = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES);
   local iAssignedDistrictWorkerCount = 0;
   local tOuterRingPlotsData = {};
   for _, xOuterRingPlotInfo in ipairs(tWorkableOuterPlotData) do
@@ -245,35 +398,36 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
     -- Count yield sum and assigned
     if xPlotData.bIsWorked then 
       iAssignedDistrictWorkerCount = iAssignedDistrictWorkerCount + 1;
-      local pPlot = Map.GetPlotByIndex(xOuterRingPlotInfo.iPlot); 
-      for pYield in GameInfo.Yields() do
-        tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] + ExposedMembers.CypWor.GetPlotYields(pPlot:GetIndex(), pYield.Index);
+      for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+        tYieldSums[iYield] = tYieldSums[iYield] + m_CypWorCachedPlotYields[xOuterRingPlotInfo.iPlot][iYield];
       end
     end
   end
   
   -- Store properties
-  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_VALUES, tYieldSums);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_VALUES, tYieldSums);
   -- Compensate ingame specialist yields and set property
-  for pYield in GameInfo.Yields() do
-    tYieldSums[pYield.YieldType] = tYieldSums[pYield.YieldType] - (iCypWorWorkerCount * CYP_WOR_SPECIALIST_COMPENSATION_YIELD_AMOUNT);
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    tYieldSums[iYield] = tYieldSums[iYield] - (iCypWorWorkerCount * CYP_WOR_SPECIALIST_COMPENSATION_YIELD_AMOUNT);
   end
-  pCityPlot:SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, tYieldSums);
-  pCity:SetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, tOuterRingPlotsData);
+  CypWorSetPlotProperty(pCityPlot, CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, tYieldSums);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, tOuterRingPlotsData);
 
   -- Check hash (determines if desired yields already applied)
   local sCityOuterRingYieldHash = '|';
-  for pYield in GameInfo.Yields() do
-    sCityOuterRingYieldHash = sCityOuterRingYieldHash .. tYieldSums[pYield.YieldType] .. '|';
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    sCityOuterRingYieldHash = sCityOuterRingYieldHash .. tYieldSums[iYield] .. '|';
   end
-  local sStoredHash = pCity:GetProperty(CYP_WOR_PROPERTY_YIELD_HASH);
+  local sStoredHash = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH);
   if sStoredHash ~= sCityOuterRingYieldHash then
     -- Force focus refresh
     if not bForceFocusRefresh then bForceFocusRefresh = true end
     -- Store hash
-    pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_HASH, sCityOuterRingYieldHash);
+    CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH, sCityOuterRingYieldHash);
     -- Apply yield properties to add worked plot yields
-    for sYieldType, iYieldAmount in pairs(tYieldSums) do
+    for iYield, iYieldAmount in pairs(tYieldSums) do
+      -- Get yield type
+      local sYieldType = CYP_WOR_GAMEINFO_YIELD_TYPES[iYield];
       -- Handle negative yield part
       local sNegativeYieldPropertyName = CYP_WOR_PROPERTY_YIELD_MALUS_PREFIX .. sYieldType;
       local iNegativeYield = 0;
@@ -311,8 +465,8 @@ function CypWorDetermineAutoAssignedOuterRingWorkers( pCity, iCypWorPlot : numbe
   -- Determine yield multipliers (depends on city yield favor)
   local pCitizens = pCity:GetCitizens();
   local tYieldMultipliers = {};
-  for pYield in GameInfo.Yields() do
-    tYieldMultipliers[pYield.Index] = CypWorCitizenYieldFavorMultiplier(pCitizens, pYield);
+  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    tYieldMultipliers[iYield] = CypWorCitizenYieldFavorMultiplier(pCitizens, iYield);
   end
   
   -- Determine maximum ring
@@ -445,8 +599,8 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
   if not bCypWorIsPillaged then
     
     -- Determine locked plots
-    local tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
-    local tCityLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    local tCityLockedPlots, iCityLockedCount = CypWorGetCityLockedPlots(iPlayer, iCity);
+    local tCityLockedOuterRingPlots = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
     if tCityLockedOuterRingPlots == nil then tCityLockedOuterRingPlots = {} end
     
     -- Correct too high amount of locked outer ring plots
@@ -468,7 +622,7 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
           end          
         end
         tCityLockedOuterRingPlots = tCorrectedCityLockedOuterRingPlots;
-        pCity:SetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tCityLockedOuterRingPlots);
+        CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tCityLockedOuterRingPlots);
       end
     end
     
@@ -478,17 +632,16 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
   end
   
   -- Store amount of actual workable outer ring tiles (used in UI)
-  pCity:SetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, tWorkableOuterPlotData);
-  pCity:SetProperty(CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, table.count(tWorkableOuterPlotData));
-  
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, tWorkableOuterPlotData);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, table.count(tWorkableOuterPlotData));
   -- Check if to be worked outer ring tiles count has changed
-  local iPropertyStoredCount = pCity:GetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT);
+  local iPropertyStoredCount = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT);
   -- Always update, caching worker count leads to bugs
   if iPropertyStoredCount ~= iOuterRingTileSpecialistSlots then
     -- Force focus refresh
     if not bForceFocusRefresh then bForceFocusRefresh = true end
     -- Store cache
-    pCity:SetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, iOuterRingTileSpecialistSlots);
+    CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, iOuterRingTileSpecialistSlots);
     --- Apply amount of specialist slots (if worked count changed)
     m_CypWorCityIsUpdatingSpecialists[iCity] = true;
     CypWorCreateDummyBuildingWithBinaryConvertedValue(
@@ -512,13 +665,15 @@ function CypWorCleanupProperties( iPlayer : number, iCity : number )
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
   -- Clear properties
-  pCity:SetProperty(CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
-  pCity:SetProperty(CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
-  pCity:SetProperty(CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, nil);
-  pCity:SetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, nil);
-  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_HASH, nil);
-  pCity:SetProperty(CYP_WOR_PROPERTY_YIELD_VALUES, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_TOTAL_WORKABLE_OUTER_RING_PLOT_COUNT, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH, nil);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_VALUES, nil);
   pCity:GetPlot():SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
+  -- Clear caches
+  m_CypWorCachedCityLockedPlots[iCity] = nil;
 end
 
 
@@ -528,40 +683,46 @@ end
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
--- CypWorOnOnMapYieldsChanged
+-- CypWorOnMapYieldsChanged
 -- ---------------------------------------------------------------------------
-local function CypWorOnOnMapYieldsChanged()
-  for iCity, iPlayer in ipairs(m_CypWorCityChangedPlotYields) do
-    CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
+local function CypWorOnMapYieldsChanged( iPlayer : number)
+  if iPlayer == nil then iPlayer = -1 end
+  for iCity, iCityOwnerPlayer in pairs(m_CypWorCityChangedPlotYields) do
+    if iCityOwnerPlayer ~= nil then
+      if iPlayer == -1 or iPlayer == iCityOwnerPlayer then
+        CypWorRefreshCityWorWorkerSlots(iCityOwnerPlayer, iCity, false);
+      end
+    end
   end
   -- Make sure list is cleared after
-  m_CypWorCityChangedPlotYields = {};
+  if iPlayer == -1 then
+    m_CypWorCityChangedPlotYields = {};
+  end
 end
 
 -- ---------------------------------------------------------------------------
 -- CypWorOnPlotYieldChanged
--- Add to list of changed cities that will be processed in CypWorOnOnMapYieldsChanged.
+-- Add to list of changed cities that will be processed in CypWorOnMapYieldsChanged.
 -- ---------------------------------------------------------------------------
 local function CypWorOnPlotYieldChanged(iX : number, iY : number)
   -- Get city
   local pCity = Cities.GetPlotWorkingCity(iX, iY);
   if pCity == nil then return end
-  -- Store in tmp table
-  local iCity = pCity:GetID();
-  local iPlayer = pCity:GetOwner();
-  local pPlayer = Players[iPlayer];
   -- Ignore city center
   if iX == pCity:GetX() and iY == pCity:GetY() then return end
   -- Validate city has WOR district
   if not CypWorDistrictExists(pCity) then return end
-  local iCypWorPlot, iWorX, iWorY = CypWorDistrictPlotId(pCity);
-  if iX == iWorX and iY == iWorY then return end
-  -- Check if is player turn
-  if pPlayer:IsTurnActive() then
-    CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
-  else
-    m_CypWorCityChangedPlotYields[iCity] = iPlayer;
-  end
+  -- Get plot
+  local pPlot = Map.GetPlot(iX, iY);
+  if pPlot == nil then return end
+  local iPlot = pPlot:GetIndex();
+  -- Get city and player ID
+  local iCity = pCity:GetID();
+  local iPlayer = pCity:GetOwner();
+  -- Update cached yields
+  CypWorUpdatePlotYieldCache(iPlot, true);
+  -- Register plot city for updated cache
+  m_CypWorCityChangedPlotYields[iCity] = iPlayer;
 end
 
 -- ---------------------------------------------------------------------------
@@ -569,7 +730,7 @@ end
 -- ---------------------------------------------------------------------------
 local function CypWorOnPlayerTurnActivated( iPlayer : number )
   -- Update all changed yields on any turn activation
-  CypWorOnOnMapYieldsChanged(); 
+  CypWorOnMapYieldsChanged(iPlayer);
 end
 
 -- ---------------------------------------------------------------------------
@@ -793,7 +954,7 @@ local function CypWorTogglePlotLock( iPlayer : number, tParameters : table )
   -- Validate city has WOR district
   if not CypWorDistrictExists(pCity) then return end
   -- Get locked outer ring plots
-  local tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+  local tLockedOuterRingPlots = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
   if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
   -- Get old locked state
   local bWasLocked = tLockedOuterRingPlots[iPlot] == true;
@@ -804,10 +965,20 @@ local function CypWorTogglePlotLock( iPlayer : number, tParameters : table )
   else
     tLockedOuterRingPlots[iPlot] = nil;
   end
-  pCity:SetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tLockedOuterRingPlots);
+  CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS, tLockedOuterRingPlots);
   -- Refresh yields
   local bForceRefresh = true;
   CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, bForceRefresh);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorClearPlotLockCache
+-- ---------------------------------------------------------------------------
+local function CypWorClearPlotLockCache( iPlayer : number, tParameters : table )
+  -- Get params
+  local iCity = tParameters.iCity;
+  -- Clear cache
+  m_CypWorCachedCityLockedPlots[iCity] = nil;
 end
 
 
@@ -823,7 +994,7 @@ local function CypWorLateInitialize()
   -- Event and GameEvent subscriptions
   Events.PlotYieldChanged.Add(                          CypWorOnPlotYieldChanged);
   Events.PlayerTurnActivated.Add(                       CypWorOnPlayerTurnActivated);
-	Events.MapYieldsChanged.Add(                          CypWorOnOnMapYieldsChanged);            -- plots + score + slots + yields
+	Events.MapYieldsChanged.Add(                          CypWorOnMapYieldsChanged);            -- plots + score + slots + yields
   Events.CityTileOwnershipChanged.Add(                  CypWorOnCityTileOwnershipChanged);      -- plots + score + slots + yields
   Events.DistrictBuildProgressChanged.Add(              CypWorOnDistrictBuildProgressChanged);  -- plots + score + slots + yields
   Events.BuildingAddedToMap.Add(                        CypWorOnBuildingAddedToMap);            -- plots + score + slots + yields
@@ -839,6 +1010,7 @@ local function CypWorLateInitialize()
   GameEvents.CypWor_CC_PurchasePlot.Add(                CypWorPurchasePlot);
   GameEvents.CypWor_CC_SwapTile.Add(                    CypWorSwapTile)
   GameEvents.CypWor_CC_TogglePlotLock.Add(              CypWorTogglePlotLock);                   -- plots + score + slots + yields
+  GameEvents.CypWor_CC_ClearPlotLockCache.Add(          CypWorClearPlotLockCache);
   -- Log the initialization
   print("CypWor_WorkableOuterRings.lua initialized!");
 end
