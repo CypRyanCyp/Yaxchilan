@@ -12,14 +12,69 @@ include "CypWor_Utility.lua"
 
 
 -- ===========================================================================
--- MEMBERS
+-- CONSTANTS
 -- ===========================================================================
+-- Culture bomb modifier argument object types
+local CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_DISTRICT = "DistrictType";
+local CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_BUILDING = "BuildingType";
+local CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_IMPROVEMENT = "ImprovementType";
+local CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES = {};
+CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES[CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_DISTRICT] = true;
+CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES[CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_BUILDING] = true;
+CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES[CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_IMPROVEMENT] = true;
+local CYP_WOR_CULTUREBOMB_MODIFIER_WILDCARD = "wildcard";
+
+
+-- ===========================================================================
+-- CACHES
+-- ===========================================================================
+-- Districts
+local CYP_WOR_GAMEINFO_DISTRICTS = {};
+for tDistrict in GameInfo.Districts() do
+  CYP_WOR_GAMEINFO_DISTRICTS[tDistrict.Index] = tDistrict;
+end
+-- Buildings
+local CYP_WOR_GAMEINFO_BUILDINGS = {};
+for tBuilding in GameInfo.Buildings() do
+  CYP_WOR_GAMEINFO_BUILDINGS[tBuilding.Index] = tBuilding;
+end
+-- Improvements
+local CYP_WOR_GAMEINFO_IMPROVEMENTS = {};
+for tItem in GameInfo.Improvements() do
+  CYP_WOR_GAMEINFO_IMPROVEMENTS[tItem.Index] = tItem;
+end
+-- DynamicModifiers
+local CYP_WOR_GAMEINFO_DYNAMICMODIFIERS = {};
+for tItem in GameInfo.DynamicModifiers() do
+  CYP_WOR_GAMEINFO_DYNAMICMODIFIERS[tItem.Index] = tItem;
+end
+-- Modifiers
+local CYP_WOR_GAMEINFO_MODIFIERS = {};
+for tItem in GameInfo.Modifiers() do
+  CYP_WOR_GAMEINFO_MODIFIERS[tItem.Index] = tItem;
+end
+-- Railroad
+local CYP_WOR_GAMEINFO_ROUTES_RAILROAD = GameInfo.Routes['ROUTE_RAILROAD'];
 -- CultureBomb modifier types
-local m_CypWorCultureBombModifierTypes = {};
-local m_CypWorWildcardCultureBombModifierTypes = {};
-local m_CypWorCultureBombConvertsModifierTypes = {};
+local CYP_WOR_CACHE_CULTUREBOMB_MODIFIERTYPES = {};
+local CYP_WOR_CACHE_CULTUREBOMB_WILDCARD_MODIFIERTYPES = {};
+local CYP_WOR_CACHE_CULTUREBOMB_CONVERT_MODIFIERTYPES = {};
+for kDynamicModifier in GameInfo.DynamicModifiers() do
+  if kDynamicModifier.EffectType == "EFFECT_ADD_CULTURE_BOMB_TRIGGER" then
+    CYP_WOR_CACHE_CULTUREBOMB_MODIFIERTYPES[kDynamicModifier.ModifierType] = true;
+  end
+  if kDynamicModifier.EffectType == "EFFECT_ADJUST_ALL_DISTRICTS_CULTURE_BOMB" then
+    CYP_WOR_CACHE_CULTUREBOMB_WILDCARD_MODIFIERTYPES[kDynamicModifier.ModifierType] = true;
+  end
+  if kDynamicModifier.EffectType == "EFFECT_ADJUST_CULTURE_BOMB_CONVERTS_CITY" then
+    CYP_WOR_CACHE_CULTUREBOMB_CONVERT_MODIFIERTYPES[kDynamicModifier.ModifierType] = true;
+  end
+end
 -- Event cache (to prevent double execution)
 local m_CypWorDistrictEventCache = {};
+-- Culture bomb modifier cache
+local m_CypWorCultureBombModifierCache = {};
+local m_CypWorCultureBombConvertModifierCache = {};
 
 
 
@@ -47,8 +102,7 @@ function CypWorCheckRailroadBomb( iPlayer : number, iCity : number, iCypWorPlot 
   local iX = pCypWorPlot:GetX();
   local iY = pCypWorPlot:GetY();
   -- Get railroad index
-  local kRailroad = GameInfo.Routes['ROUTE_RAILROAD'];
-  if kRailroad == nil then return end
+  if CYP_WOR_GAMEINFO_ROUTES_RAILROAD == nil then return end
   -- Get surrounding tiles
   local tRangePlots = Map.GetNeighborPlots(iX, iY, 1);
   for _, pPlot in ipairs(tRangePlots) do
@@ -59,7 +113,7 @@ function CypWorCheckRailroadBomb( iPlayer : number, iCity : number, iCypWorPlot 
     and not pPlot:IsWater()
     and not pPlot:IsNaturalWonder()
     then
-      RouteBuilder.SetRouteType(pPlot, kRailroad.Index);
+      RouteBuilder.SetRouteType(pPlot, CYP_WOR_GAMEINFO_ROUTES_RAILROAD.Index);
     end
   end
 end
@@ -110,7 +164,7 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
           -- Remove unique and one-per-city improvements
           local iImprovement = pPlot:GetImprovementType();
           if iImprovement ~= -1 then
-            local kImprovement = GameInfo.Improvements[iImprovement];
+            local kImprovement = CYP_WOR_GAMEINFO_IMPROVEMENTS[iImprovement];
             if kImprovement ~= nil and (kImprovement.OnePerCity or kImprovement.TraitType) then
               ImprovementBuilder.SetImprovementType(pPlot, -1, NO_PLAYER);   
             end
@@ -138,73 +192,115 @@ function CypWorCbCultureBombOuterRing( iX : number, iY : number, iPlayer : numbe
 end
 
 -- ---------------------------------------------------------------------------
--- CypWorCbDetermineCultureBombModifierTypes
--- ---------------------------------------------------------------------------
-function CypWorCbDetermineCultureBombModifierTypes()
-  for kDynamicModifier in GameInfo.DynamicModifiers() do
-    if kDynamicModifier.EffectType == "EFFECT_ADD_CULTURE_BOMB_TRIGGER" then
-      m_CypWorCultureBombModifierTypes[kDynamicModifier.ModifierType] = true;
-    end
-    if kDynamicModifier.EffectType == "EFFECT_ADJUST_ALL_DISTRICTS_CULTURE_BOMB" then
-      m_CypWorWildcardCultureBombModifierTypes[kDynamicModifier.ModifierType] = true;
-    end
-    if kDynamicModifier.EffectType == "EFFECT_ADJUST_CULTURE_BOMB_CONVERTS_CITY" then
-      m_CypWorCultureBombConvertsModifierTypes[kDynamicModifier.ModifierType] = true;
-    end
-    
-  end
-end
-
--- ---------------------------------------------------------------------------
 -- CypWorCbHasActiveCultureBombConvertModifier
 -- ---------------------------------------------------------------------------
 function CypWorCbHasActiveCultureBombConvertModifier( iPlayer : number )
-  for i, iModifier in ipairs(GameEffects.GetModifiers()) do
-    if CypWorIsModifierActive(iModifier, iPlayer) then
-      local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
-      local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
-      local sModifierType = pModifier.ModifierType;
-      if m_CypWorCultureBombConvertsModifierTypes[sModifierType] then return true end
-    end
+  -- Update cache
+  if m_CypWorCultureBombConvertModifierCache == nil then
+    m_CypWorCultureBombConvertModifierCache = {};
   end
-  return false;
+  if m_CypWorCultureBombConvertModifierCache[iPlayer] == nil then
+    for i, iModifier in ipairs(GameEffects.GetModifiers()) do
+      if CypWorIsModifierActive(iModifier, iPlayer) then
+        local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
+        local pModifier = CYP_WOR_GAMEINFO_MODIFIERS[tModifierDefinition.Id];
+        local sModifierType = pModifier.ModifierType;
+        if CYP_WOR_CACHE_CULTUREBOMB_CONVERT_MODIFIERTYPES[sModifierType] then 
+          m_CypWorCultureBombConvertModifierCache[iPlayer] = true;
+          break;
+        end
+      end
+    end
+    m_CypWorCultureBombConvertModifierCache[iPlayer] = false;
+  end
+  -- Check if active
+  return m_CypWorCultureBombConvertModifierCache[iPlayer];
 end
 
 -- ---------------------------------------------------------------------------
 -- CypWorCbHasActiveCultureBombModifier
+-- Returns:
+--  0: no culture bomb
+--  1: culture bomb unowned territory
+--  2: culture bomb owned territory 
 -- ---------------------------------------------------------------------------
 function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncludeWildcardModifierTypes, iPlayer : number )
-  for i, iModifier in ipairs(GameEffects.GetModifiers()) do
-    if CypWorIsModifierActive(iModifier, iPlayer) then
-      local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
-      local pModifier = GameInfo.Modifiers[tModifierDefinition.Id];
-      local sModifierType = pModifier.ModifierType;
-      -- Check modifier type
-      local bIsWildcard = bIncludeWildcardModifierTypes and m_CypWorWildcardCultureBombModifierTypes[sModifierType] == true;
-      local bIsSpecific = m_CypWorCultureBombModifierTypes[sModifierType] == true;
-      if bIsWildcard or bIsSpecific then
-        -- Check arguments
-        local sValueObjectType = nil;
-        local bCaptureOwnedTerritory = true;
-        for sKey, sValue in pairs(tModifierDefinition.Arguments) do
-          if sKey == "CaptureOwnedTerritory" then
-            bCaptureOwnedTerritory = sValue == 1 or sValue == "1" or sValue == true;
+  -- Update cache
+  if m_CypWorCultureBombModifierCache == nil then
+    m_CypWorCultureBombModifierCache = {};
+  end
+  if m_CypWorCultureBombModifierCache[iPlayer] == nil then
+    m_CypWorCultureBombModifierCache[iPlayer] = {};
+    for sObjectTypeArgumentName,_ in ipairs(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES) do
+      m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeArgumentName] = {};
+    end
+    m_CypWorCultureBombModifierCache[iPlayer][CYP_WOR_CULTUREBOMB_MODIFIER_WILDCARD] = false;
+    -- Determine active modifiers
+    for _, iModifier in ipairs(GameEffects.GetModifiers()) do
+      -- Note:  We assume no culture bomb modifier has a reuirement set.
+      --        That's why it is okay to only check it when upda.ting 
+      --        the cache.
+      if CypWorIsModifierActive(iModifier, iPlayer) then.
+        -- Collect info
+        local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
+        local pModifier = CYP_WOR_GAMEINFO_MODIFIERS[tModifierDefinition.Id];
+        local sModifierType = pModifier.ModifierType;
+        -- Wildcard type
+        if CYP_WOR_CACHE_CULTUREBOMB_WILDCARD_MODIFIERTYPES[sModifierType] == true then
+          m_CypWorCultureBombModifierCache[iPlayer][CYP_WOR_CULTUREBOMB_MODIFIER_WILDCARD] = true;
+        -- Specific type
+        elseif CYP_WOR_CACHE_CULTUREBOMB_MODIFIERTYPES[sModifierType] == true then
+          -- Check arguments
+          local sObjectTypeKey = nil;
+          local sObjectTypeValue = nil;
+          local bCaptureOwnedTerritory = true;
+          for sKey, sValue in pairs(tModifierDefinition.Arguments) do
+            if sKey == "CaptureOwnedTerritory" then
+              bCaptureOwnedTerritory = sValue == 1 or sValue == "1" or sValue == true;
+            end
+            if CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES[sKey] == true then
+              sObjectTypeKey = sKey;
+              sObjectTypeValue = sValue;
+            end
           end
-          if sKey == sArgumentName then
-            sValueObjectType = sValue;
-          end
-        end
-        if bIsWildcard or sValueObjectType == sObjectType then
-          if bCaptureOwnedTerritory == true then
-            return 2;
-          else
-            return 1;
+          if sObjectTypeKey ~= nil then
+            m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue] = bCaptureOwnedTerritory;
+            -- example                          1      DistrictType   DISTRICT_HOLY_SITE      true
           end
         end
       end
     end
   end
-  return 0;
+  
+  -- Check district wildcard
+  if sArgumentName == CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_DISTRICT 
+  and m_CypWorCultureBombModifierCache[iPlayer][CYP_WOR_CULTUREBOMB_MODIFIER_WILDCARD] == true
+  then return 1 end -- District wildcard never takes owned territory
+  
+  -- Check specific object culture bomb
+  if m_CypWorCultureBombModifierCache[iPlayer][sArgumentName][sObjectType] == nil then
+    return 0;
+  elseif m_CypWorCultureBombModifierCache[iPlayer][sArgumentName][sObjectType] == false then
+    return 1;
+  else
+    return 2;
+  end
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorCbClearCultureBombModifierCache
+-- ---------------------------------------------------------------------------
+function CypWorCbClearCultureBombModifierCache( iPlayer : number )
+  -- Culture bomb modifier cache
+  if m_CypWorCultureBombModifierCache == nil then
+    m_CypWorCultureBombModifierCache = {};
+  end
+  m_CypWorCultureBombModifierCache[iPlayer] = nil;
+  -- Culture bomb convert modifier cache
+  if m_CypWorCultureBombConvertModifierCache == nil then
+    m_CypWorCultureBombConvertModifierCache = {};
+  end
+  m_CypWorCultureBombConvertModifierCache[iPlayer] = nil;
 end
 
 
@@ -226,7 +322,7 @@ local function CypWorCbOnImprovementAddedToMap( iX : number, iY : number, iImpro
   -- Check if city has district
   if not CypWorDistrictExists(pCity) then return end
   -- Determine improvement
-  local kImprovement = GameInfo.Improvements[iImprovement];
+  local kImprovement = CYP_WOR_GAMEINFO_IMPROVEMENTS[iImprovement];
   local sObjectType = kImprovement.ImprovementType;
   -- Check if has active culture bomb modifier
   local iCultureBombType = CypWorCbHasActiveCultureBombModifier("ImprovementType", sObjectType, false, iPlayer);
@@ -266,7 +362,7 @@ local function CypWorCbOnDistrictBuildProgressChanged(
   if m_CypWorDistrictEventCache[iDistrict] == iTurn then return end
   m_CypWorDistrictEventCache[iDistrict] = iTurn;
   -- Get district
-  local kDistrict = GameInfo.Districts[iDistrictType];
+  local kDistrict = CYP_WOR_GAMEINFO_DISTRICTS[iDistrictType];
   if kDistrict == nil then return end
   local sObjectType = kDistrict.DistrictType;
   -- Check if has active culture bomb modifier
@@ -296,7 +392,7 @@ local function CypWorCbOnBuildingConstructed( iPlayer : number, iCity : number, 
   -- Check if city has district
   if not CypWorDistrictExists(pCity) then return end
   -- Get Building
-  local kBuilding = GameInfo.Buildings[iBuilding];
+  local kBuilding = CYP_WOR_GAMEINFO_BUILDINGS[iBuilding];
   if kBuilding == nil then return end
   local sObjectType = kBuilding.BuildingType;
   -- Ignore hidden buildings
@@ -319,6 +415,29 @@ local function CypWorCbOnBuildingConstructed( iPlayer : number, iCity : number, 
   CypWorCbCultureBombOuterRing(iX, iY, iPlayer, iCity, iMaxCultureBombRange, bCaptureOwnedTerritory, bConvertReligion);
 end
 
+-- ---------------------------------------------------------------------------
+-- CypWorCbOnBeliefAdded
+-- ---------------------------------------------------------------------------
+local function CypWorCbOnBeliefAdded( iPlayer : number )
+  CypWorCbClearCultureBombModifierCache(iPlayer);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorCbOnUnitGreatPersonActivated
+-- ---------------------------------------------------------------------------
+local function CypWorCbOnUnitGreatPersonActivated( iPlayer : number )
+  CypWorCbClearCultureBombModifierCache(iPlayer);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorCbOnWorldCongressFinished
+-- ---------------------------------------------------------------------------
+local function CypWorCbOnWorldCongressFinished()
+	for _, iPlayer in pairs(PlayerManager.GetWasEverAliveIDs()) do
+    CypWorCbClearCultureBombModifierCache(iPlayer);
+  end
+end
+
 
 
 -- ===========================================================================
@@ -333,6 +452,10 @@ local function CypWorCbLateInitialize()
   Events.ImprovementAddedToMap.Add(         CypWorCbOnImprovementAddedToMap );
   Events.DistrictBuildProgressChanged.Add(  CypWorCbOnDistrictBuildProgressChanged);
   GameEvents.BuildingConstructed.Add(       CypWorCbOnBuildingConstructed);
+  -- Clear cache events
+  Events.BeliefAdded.Add(                   CypWorCbOnBeliefAdded );
+  Events.UnitGreatPersonActivated.Add(      CypWorCbOnUnitGreatPersonActivated );
+  Events.WorldCongressFinished.Add(         CypWorCbOnWorldCongressFinished );
   -- Log the initialization
   print("CypWor_CultureBombs.lua initialized!");
 end
@@ -341,8 +464,6 @@ end
 -- CypWorCbMain
 -- ---------------------------------------------------------------------------
 local function CypWorCbMain()
-  -- Determine culture bomb modifiers
-  CypWorCbDetermineCultureBombModifierTypes();
   -- LateInititalize subscription
   Events.LoadScreenClose.Add(CypWorCbLateInitialize);
 end

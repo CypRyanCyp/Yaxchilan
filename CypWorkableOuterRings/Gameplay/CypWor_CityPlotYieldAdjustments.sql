@@ -24,6 +24,10 @@ INSERT OR IGNORE INTO "Units_XP2"
 INSERT INTO "GreatPersonClasses" 
 ("GreatPersonClassType",              "Name", "UnitType",                       "DistrictType",         "MaxPlayerInstances", "PseudoYieldType",          "IconString",           "ActionIcon",                         "AvailableInTimeline",  "GenerateDuplicateIndividuals") VALUES 
 ('GREAT_PERSON_CLASS_CYP_WOR',        '-',    'UNIT_CYP_WOR_GREAT_DUMMY',       'DISTRICT_CITY_CENTER', NULL,                 'PSEUDOYIELD_GPP_GENERAL',  '[ICON_GreatGeneral]', 'ICON_UNITOPERATION_GENERAL_ACTION',  '0',                    '1');
+-- ExcludedGreatPersonClasses
+INSERT INTO "ExcludedGreatPersonClasses" 
+("GreatPersonClassType",        "TraitType") VALUES 
+('GREAT_PERSON_CLASS_CYP_WOR',  'TRAIT_LEADER_MAJOR_CIV');
 -- GreatPersonIndividuals
 INSERT INTO "GreatPersonIndividuals" 
 ("GreatPersonIndividualType",                           "Name", "GreatPersonClassType",             "EraType",    "ActionCharges",  "ActionRequiresOwnedTile",  "ActionRequiresAdjacentOwnedTile",  "Gender") VALUES 
