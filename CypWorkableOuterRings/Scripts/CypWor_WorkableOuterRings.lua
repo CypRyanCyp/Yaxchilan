@@ -81,6 +81,8 @@ local m_CypWorCachedCityProperties = {};
 local m_CypWorCityChangedPlotYields = {};
 -- Currently updating cities
 local m_CypWorCityIsUpdatingSpecialists = {};
+-- Currently changing plot ownership
+local m_CypWorAcquiringPlots = {};
 
 
 
@@ -95,6 +97,9 @@ function CypWorSetCityProperty( pCity, xKey, xValue )
   -- Set value
   pCity:SetProperty(xKey, xValue);
   -- Update cache
+  if m_CypWorCachedCityProperties[pCity:GetID()] == nil then
+    m_CypWorCachedCityProperties[pCity:GetID()] = {};
+  end
   m_CypWorCachedCityProperties[pCity:GetID()][xKey] = xValue;
 end
 
@@ -123,6 +128,9 @@ function CypWorSetPlotProperty( pPlot, xKey, xValue )
   -- Set value
   pPlot:SetProperty(xKey, xValue);
   -- Update cache
+  if m_CypWorCachedPlotProperties[pPlot:GetIndex()] == nil then
+    m_CypWorCachedPlotProperties[pPlot:GetIndex()] = {};
+  end
   m_CypWorCachedPlotProperties[pPlot:GetIndex()][xKey] = xValue;
 end
 
@@ -197,9 +205,10 @@ function CypWorUpdatePlotYieldCache( iPlot : number, bForce )
   -- Check cache
   if m_CypWorCachedPlotYields[iPlot] ~= nil then return end
   -- Update cache
+  m_CypWorCachedPlotYields[iPlot] = {};
   local pPlot = Map.GetPlotByIndex(iPlot);
   if pPlot == nil then return end
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     m_CypWorCachedPlotYields[iPlot][iYield] = pPlot:GetYield(iYield);
   end
 end
@@ -215,7 +224,7 @@ function CypWorDeterminePlotHasAnyYield(pPlot)
   -- Update cache
   CypWorUpdatePlotYieldCache(iPlot);
   -- Check if has any yields
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     if m_CypWorCachedPlotYields[iPlot][iYield] > 0 then return true end
   end
   return false
@@ -331,7 +340,7 @@ function CypWorDeterminePlotScore( pPlot, tYieldMultipliers :table )
   CypWorUpdatePlotYieldCache(iPlot);
   -- Determine score
   local iScore = 0;
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     iScore = iScore + m_CypWorCachedPlotYields[iPlot][iYield] * tYieldMultipliers[iYield];
   end
   return iScore;
@@ -363,6 +372,9 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlot : number, iCypWorWorkerCount : number, bForceFocusRefresh )
   
+  
+  print("CypWorRefreshWorkerYields", "iPlayer", iPlayer, "iCity", iCity, "iCypWorWorkerCount", iCypWorWorkerCount, "bForceFocusRefresh", bForceFocusRefresh);
+  
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
@@ -379,7 +391,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
   
   -- Prepare yield sum
   local tYieldSums = {};
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     tYieldSums[iYield] = 0;
   end
   
@@ -398,7 +410,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
     -- Count yield sum and assigned
     if xPlotData.bIsWorked then 
       iAssignedDistrictWorkerCount = iAssignedDistrictWorkerCount + 1;
-      for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+      for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
         tYieldSums[iYield] = tYieldSums[iYield] + m_CypWorCachedPlotYields[xOuterRingPlotInfo.iPlot][iYield];
       end
     end
@@ -407,7 +419,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
   -- Store properties
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_VALUES, tYieldSums);
   -- Compensate ingame specialist yields and set property
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     tYieldSums[iYield] = tYieldSums[iYield] - (iCypWorWorkerCount * CYP_WOR_SPECIALIST_COMPENSATION_YIELD_AMOUNT);
   end
   CypWorSetPlotProperty(pCityPlot, CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, tYieldSums);
@@ -415,7 +427,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
 
   -- Check hash (determines if desired yields already applied)
   local sCityOuterRingYieldHash = '|';
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     sCityOuterRingYieldHash = sCityOuterRingYieldHash .. tYieldSums[iYield] .. '|';
   end
   local sStoredHash = CypWorGetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH);
@@ -465,7 +477,7 @@ function CypWorDetermineAutoAssignedOuterRingWorkers( pCity, iCypWorPlot : numbe
   -- Determine yield multipliers (depends on city yield favor)
   local pCitizens = pCity:GetCitizens();
   local tYieldMultipliers = {};
-  for _,iYield ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     tYieldMultipliers[iYield] = CypWorCitizenYieldFavorMultiplier(pCitizens, iYield);
   end
   
@@ -586,6 +598,8 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
   -- Validate city has WOR district
   if not CypWorDistrictExists(pCity) then return end
   local iCypWorPlot = CypWorDistrictPlotId(pCity);
+
+  print("CypWorRefreshCityWorWorkerSlots", "iPlayer", iPlayer, "iCity", iCity, "bForceFocusRefresh", bForceFocusRefresh);
   
   -- Prepare
   local iOuterRingTileSpecialistSlots = 0;
@@ -685,7 +699,8 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorOnMapYieldsChanged
 -- ---------------------------------------------------------------------------
-local function CypWorOnMapYieldsChanged( iPlayer : number)
+local function CypWorOnMapYieldsChanged( iPlayer : number )
+  print("CypWorOnMapYieldsChanged", "iPlayer", iPlayer);
   if iPlayer == nil then iPlayer = -1 end
   for iCity, iCityOwnerPlayer in pairs(m_CypWorCityChangedPlotYields) do
     if iCityOwnerPlayer ~= nil then
@@ -738,6 +753,16 @@ end
 -- New tiles can shift inner/outer ring worker distribution.
 -- ---------------------------------------------------------------------------
 local function CypWorOnCityTileOwnershipChanged(iPlayer : number, iCity : number, iX : number, iY : number)
+  -- Get plot
+  local pPlot = Map.GetPlot(iX, iY);
+  if pPlot == nil then return end
+  local iPlot = pPlot:GetIndex();
+  -- Check not currently changing ownership
+  if m_CypWorAcquiringPlots[iPlot] then 
+    m_CypWorAcquiringPlots[iPlot] = nil;
+    return;
+  end
+  -- Update
   CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
 end
 
@@ -819,6 +844,7 @@ local function CypWorOnCityWorkerChanged( iPlayer : number, iCity : number, iX :
   -- Validate not currently updating specialists
   if m_CypWorCityIsUpdatingSpecialists[iCity] then return end
   -- Refresh yields
+  print("CypWorOnCityWorkerChanged");
   CypWorRefreshWorkerYields(iPlayer, iCity, iCypWorPlot, nil, false);
 end
 
@@ -901,6 +927,7 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > iPurchaseDst then return end
   -- Set plot city owner
+  m_CypWorAcquiringPlots[iPlot] = true;
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Acquire plot (update modifiers)
   CypWorAcquirePlot(iPlayer, pPlot);
@@ -908,8 +935,6 @@ local function CypWorPurchasePlot( iPlayer : number, tParameters : table )
   if iGoldCost > 0 then
     pTreasury:ChangeGoldBalance(-iGoldCost);
   end
-  -- Update info
-  CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
 end
 
 -- ---------------------------------------------------------------------------
@@ -931,11 +956,10 @@ local function CypWorSwapTile( iPlayer : number, tParameters : table )
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   if iDistance < CYP_WOR_DST_MIN or iDistance > CYP_WOR_DST_MAX then return end
   -- Set plot city owner
+  m_CypWorAcquiringPlots[iPlot] = true;
   WorldBuilder.CityManager():SetPlotOwner(pPlot:GetX(), pPlot:GetY(), iPlayer, iCity);
   -- Acquire plot (update modifiers)
   CypWorAcquirePlot(iPlayer, pPlot);
-  -- Update info
-  CypWorOnCityTileOwnershipChanged(iPlayer, iCity, pPlot:GetX(), pPlot:GetY());
 end
 
 -- ---------------------------------------------------------------------------
@@ -994,7 +1018,7 @@ local function CypWorLateInitialize()
   -- Event and GameEvent subscriptions
   Events.PlotYieldChanged.Add(                          CypWorOnPlotYieldChanged);
   Events.PlayerTurnActivated.Add(                       CypWorOnPlayerTurnActivated);
-	Events.MapYieldsChanged.Add(                          CypWorOnMapYieldsChanged);            -- plots + score + slots + yields
+	Events.MapYieldsChanged.Add(                          CypWorOnMapYieldsChanged);              -- plots + score + slots + yields
   Events.CityTileOwnershipChanged.Add(                  CypWorOnCityTileOwnershipChanged);      -- plots + score + slots + yields
   Events.DistrictBuildProgressChanged.Add(              CypWorOnDistrictBuildProgressChanged);  -- plots + score + slots + yields
   Events.BuildingAddedToMap.Add(                        CypWorOnBuildingAddedToMap);            -- plots + score + slots + yields

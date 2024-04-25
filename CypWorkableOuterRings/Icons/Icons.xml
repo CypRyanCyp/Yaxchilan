@@ -23,5 +23,7 @@
     <Row Name="DISTRICT_CYP_WOR"                        Atlas="ICON_ATLAS_CYP_WOR_DISTRICT"   Index="0"/>
     <!-- Buildings -->
     <Row Name="ICON_BUILDING_CYP_WOR_LOGISTICS_CENTER"  Atlas="ICON_ATLAS_CYP_WOR_BUILDINGS"  Index="0"/>
+    <!-- Units -->
+    <Row Name="ICON_UNIT_CYP_WOR_GREAT_DUMMY"           Atlas="ICON_ATLAS_UNITS"              Index="2"/>
   </IconDefinitions>
 </GameData>
