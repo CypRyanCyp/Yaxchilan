@@ -115,12 +115,12 @@ local function CypWorModifyDataCityCenterYields(data)
   -- Add amount to negative compensation yield
   for dYield in GameInfo.Yields() do
     -- Get applied amount
+    local iYield = dYield.Index;
     local sYieldType = dYield.YieldType;
-    local iYieldAmount = pPlot:GetYield(dYield.Index);
-    --local iYieldAmount = data.Yields[sYieldType];
+    local iYieldAmount = pPlot:GetYield(iYield);
     if iYieldAmount == nil then iYieldAmount = 0 end
     -- Get compensation amount
-    local iYieldCompensationAmt:number = tYieldSums[sYieldType];
+    local iYieldCompensationAmt:number = tYieldSums[iYield];
     if iYieldCompensationAmt == nil then iYieldCompensationAmt = 0 end
     -- Combine
     iYieldAmount = iYieldAmount - iYieldCompensationAmt;

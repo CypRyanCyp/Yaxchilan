@@ -5,6 +5,17 @@
 
 
 -- ===========================================================================
+-- CACHES
+-- ===========================================================================
+-- Yields
+local CYP_WOR_GAMEINFO_YIELD_INDEXES = {};
+for pYield in GameInfo.Yields() do
+  table.insert(CYP_WOR_GAMEINFO_YIELD_INDEXES, pYield.Index);
+end
+
+
+
+-- ===========================================================================
 -- EXPOSED MEMBERS
 -- ===========================================================================
 
@@ -39,10 +50,17 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorCityGetPlotYields
 -- ---------------------------------------------------------------------------
-function CypWorCityGetPlotYields( iPlot : number, iYieldType : number )
+function CypWorCityGetPlotYields( iPlot : number )
   local pPlot = Map.GetPlotByIndex(iPlot);
-  if pPlot == nil then return 0 end
-  return pPlot:GetYield(iYieldType);
+  local tYields = {};
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    if pPlot == nil then
+      tYields[iYield] = 0;
+    else
+      tYields[iYield] = pPlot:GetYield(iYield);
+    end
+  end
+  return tYields;
 end
 
 

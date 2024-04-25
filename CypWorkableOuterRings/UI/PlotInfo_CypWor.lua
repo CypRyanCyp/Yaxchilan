@@ -164,6 +164,7 @@ function CypWorOnClickOuterRingCitizen( iPlayer : number, iCity : number, iPlot 
   tParameters.iPlot = iPlot;
   tParameters.OnStart = "CypWor_CC_TogglePlotLock";
   UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+  -- Return
   return true;
 end
 
@@ -184,7 +185,7 @@ function CypWorPlotInfoGetPlotYieldsWithWorkerCompensations( iPlot : number, yie
     -- Get plot yields
 		local yieldAmt:number = pPlot:GetYield(row.Index);
     -- Apply plot bonuses
-    local iYieldCompensationAmt:number = tYieldSums[row.YieldType];
+    local iYieldCompensationAmt:number = tYieldSums[row.Index];
     if iYieldCompensationAmt == nil then iYieldCompensationAmt = 0 end
     yieldAmt = yieldAmt - iYieldCompensationAmt;
     -- Determine info
@@ -797,7 +798,14 @@ function OnClickCitizen( iPlot : number )
   local bCanToggleCitizenPlot = CypWorCanToggleCitizenPlot(iPlayer, iCity, iPlot, true);
   if not bCanToggleCitizenPlot then return false end
   -- Call original
-	return CypWorOriginal_OnClickCitizen(iPlot);
+	local bResult = CypWorOriginal_OnClickCitizen(iPlot);
+  -- Call to clear plot lock cache
+  local tParameters = {};
+  tParameters.iCity = iCity;
+  tParameters.OnStart = "CypWor_CC_ClearPlotLockCache";
+  UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+  -- Return
+  return bResult;
 end
 
 -- ---------------------------------------------------------------------------
