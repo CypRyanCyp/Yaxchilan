@@ -51,7 +51,7 @@ end
 -- Modifiers
 local CYP_WOR_GAMEINFO_MODIFIERS = {};
 for tItem in GameInfo.Modifiers() do
-  CYP_WOR_GAMEINFO_MODIFIERS[tItem.Index] = tItem;
+  CYP_WOR_GAMEINFO_MODIFIERS[tItem.ModifierId] = tItem;
 end
 -- Railroad
 local CYP_WOR_GAMEINFO_ROUTES_RAILROAD = GameInfo.Routes['ROUTE_RAILROAD'];
@@ -231,7 +231,7 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
   end
   if m_CypWorCultureBombModifierCache[iPlayer] == nil then
     m_CypWorCultureBombModifierCache[iPlayer] = {};
-    for sObjectTypeArgumentName,_ in ipairs(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES) do
+    for sObjectTypeArgumentName,_ in pairs(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPES) do
       m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeArgumentName] = {};
     end
     m_CypWorCultureBombModifierCache[iPlayer][CYP_WOR_CULTUREBOMB_MODIFIER_WILDCARD] = false;
@@ -240,7 +240,7 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
       -- Note:  We assume no culture bomb modifier has a reuirement set.
       --        That's why it is okay to only check it when upda.ting 
       --        the cache.
-      if CypWorIsModifierActive(iModifier, iPlayer) then.
+      if CypWorIsModifierActive(iModifier, iPlayer) then
         -- Collect info
         local tModifierDefinition = GameEffects.GetModifierDefinition(iModifier);
         local pModifier = CYP_WOR_GAMEINFO_MODIFIERS[tModifierDefinition.Id];
@@ -264,6 +264,10 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
             end
           end
           if sObjectTypeKey ~= nil then
+            print("m_CypWorCultureBombModifierCache", "iPlayer", iPlayer, "sObjectTypeKey", sObjectTypeKey, "sObjectTypeValue", sObjectTypeValue, "bCaptureOwnedTerritory", bCaptureOwnedTerritory);
+            print("m_CypWorCultureBombModifierCache[iPlayer]", m_CypWorCultureBombModifierCache[iPlayer]);
+            print("m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey]", m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey]);
+            print("m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue]", m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue]);
             m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue] = bCaptureOwnedTerritory;
             -- example                          1      DistrictType   DISTRICT_HOLY_SITE      true
           end
@@ -325,7 +329,7 @@ local function CypWorCbOnImprovementAddedToMap( iX : number, iY : number, iImpro
   local kImprovement = CYP_WOR_GAMEINFO_IMPROVEMENTS[iImprovement];
   local sObjectType = kImprovement.ImprovementType;
   -- Check if has active culture bomb modifier
-  local iCultureBombType = CypWorCbHasActiveCultureBombModifier("ImprovementType", sObjectType, false, iPlayer);
+  local iCultureBombType = CypWorCbHasActiveCultureBombModifier(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_IMPROVEMENT, sObjectType, false, iPlayer);
   if iCultureBombType == 0 then return end
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
@@ -366,7 +370,7 @@ local function CypWorCbOnDistrictBuildProgressChanged(
   if kDistrict == nil then return end
   local sObjectType = kDistrict.DistrictType;
   -- Check if has active culture bomb modifier
-  local iCultureBombType = CypWorCbHasActiveCultureBombModifier("DistrictType", sObjectType, true, iPlayer);
+  local iCultureBombType = CypWorCbHasActiveCultureBombModifier(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_DISTRICT, sObjectType, true, iPlayer);
   if iCultureBombType == 0 then return end
   -- Culture bomb
   local bCaptureOwnedTerritory = iCultureBombType == 2;
@@ -398,7 +402,7 @@ local function CypWorCbOnBuildingConstructed( iPlayer : number, iCity : number, 
   -- Ignore hidden buildings
   if CypStringStartsWith(sObjectType, CYP_WOR_BUILDING_INTERNAL_TYPE_PREFIX) then return end
   -- Check if has active culture bomb modifier
-  local iCultureBombType = CypWorCbHasActiveCultureBombModifier("BuildingType", sObjectType, false, iPlayer);
+  local iCultureBombType = CypWorCbHasActiveCultureBombModifier(CYP_WOR_CULTUREBOMB_MODIFIER_OBJECT_TYPE_BUILDING, sObjectType, false, iPlayer);
   if iCultureBombType == 0 then return end
   -- Get plot
   local iPlot = pCity:GetBuildings():GetBuildingLocation(iBuilding);

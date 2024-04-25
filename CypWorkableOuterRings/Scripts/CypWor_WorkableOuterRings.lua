@@ -205,29 +205,31 @@ function CypWorUpdatePlotYieldCache( iPlot : number, bForce )
   -- Check cache
   if m_CypWorCachedPlotYields[iPlot] ~= nil then return end
   -- Update cache
-  m_CypWorCachedPlotYields[iPlot] = {};
-  local pPlot = Map.GetPlotByIndex(iPlot);
-  if pPlot == nil then return end
-  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
-    m_CypWorCachedPlotYields[iPlot][iYield] = pPlot:GetYield(iYield);
-  end
+  m_CypWorCachedPlotYields[iPlot] = ExposedMembers.CypWor.GetPlotYields(iPlot);
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetPlotYield
+-- ---------------------------------------------------------------------------
+function CypWorGetPlotYield( iPlot, iYield : number )
+  -- Update cache
+  CypWorUpdatePlotYieldCache(iPlot);
+  -- Check if has any yields
+  return m_CypWorCachedPlotYields[iPlot][iYield];
 end
 
 -- ---------------------------------------------------------------------------
 -- CypWorDeterminePlotHasAnyYield
 -- Determine if this plot has any yield.
 -- ---------------------------------------------------------------------------
-function CypWorDeterminePlotHasAnyYield(pPlot)
-  -- Get plot
-  if pPlot == nil then return false end
-  local iPlot = pPlot:GetIndex();
+function CypWorDeterminePlotHasAnyYield( iPlot )
   -- Update cache
   CypWorUpdatePlotYieldCache(iPlot);
   -- Check if has any yields
   for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
     if m_CypWorCachedPlotYields[iPlot][iYield] > 0 then return true end
   end
-  return false
+  return false;
 end
 
 -- ---------------------------------------------------------------------------
@@ -249,7 +251,7 @@ function CypWorPlotIsWorkable(pPlot)
     if pFeature.DangerValue ~= nil and pFeature.DangerValue > 0 then return false end
   end
   -- Check has any yields
-  if not CypWorDeterminePlotHasAnyYield(pPlot) then return false end
+  if not CypWorDeterminePlotHasAnyYield(pPlot:GetIndex()) then return false end
   -- Check disasters
   if CypWorHasXp2() and (GameClimate.GetActiveDroughtAtPlot(pPlot) ~= nil 
   or GameClimate.GetActiveStormAtPlot(pPlot) ~= nil) then return false end
@@ -411,7 +413,7 @@ function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlo
     if xPlotData.bIsWorked then 
       iAssignedDistrictWorkerCount = iAssignedDistrictWorkerCount + 1;
       for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
-        tYieldSums[iYield] = tYieldSums[iYield] + m_CypWorCachedPlotYields[xOuterRingPlotInfo.iPlot][iYield];
+        tYieldSums[iYield] = tYieldSums[iYield] + CypWorGetPlotYield(xOuterRingPlotInfo.iPlot, iYield);
       end
     end
   end
@@ -745,6 +747,7 @@ end
 -- ---------------------------------------------------------------------------
 local function CypWorOnPlayerTurnActivated( iPlayer : number )
   -- Update all changed yields on any turn activation
+  print("CypWorOnPlayerTurnActivated", "iPlayer", iPlayer);
   CypWorOnMapYieldsChanged(iPlayer);
 end
 

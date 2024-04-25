@@ -5,6 +5,17 @@
 
 
 -- ===========================================================================
+-- CACHES
+-- ===========================================================================
+-- Yields
+local CYP_WOR_GAMEINFO_YIELD_INDEXES = {};
+for pYield in GameInfo.Yields() do
+  table.insert(CYP_WOR_GAMEINFO_YIELD_INDEXES, pYield.Index);
+end
+
+
+
+-- ===========================================================================
 -- EXPOSED MEMBERS
 -- ===========================================================================
 
@@ -36,6 +47,22 @@ function CypWorCityGetLockedPlots( iPlayer : number, iCity : number )
   return tCityLockedPlots, iCityLockedCount;
 end
 
+-- ---------------------------------------------------------------------------
+-- CypWorCityGetPlotYields
+-- ---------------------------------------------------------------------------
+function CypWorCityGetPlotYields( iPlot : number )
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  local tYields = {};
+  for _,iYield in ipairs(CYP_WOR_GAMEINFO_YIELD_INDEXES) do
+    if pPlot == nil then
+      tYields[iYield] = 0;
+    else
+      tYields[iYield] = pPlot:GetYield(iYield);
+    end
+  end
+  return tYields;
+end
+
 
 
 -- ===========================================================================
@@ -49,6 +76,7 @@ local function CypWorExposedMembersInitialize()
   -- ExposedMembers
   if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
   ExposedMembers.CypWor.CityGetLockedPlots = CypWorCityGetLockedPlots;
+  ExposedMembers.CypWor.GetPlotYields = CypWorCityGetPlotYields;
   -- Initialized
   print("CypWor_ExposedMembers.lua initialized!");
 end
