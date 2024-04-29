@@ -188,6 +188,10 @@
     </Properties>
     <File>Text/CypWor_Text.sql</File>
   </UpdateText>
+  <!-- Database / Configuration -->
+  <UpdateDatabase id="Configuration">
+    <File>Configuration/CypWor_Config_Radius.xml</File>
+  </UpdateDatabase>
 </FrontEndActions>]]></FrontEndActionData>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
@@ -217,6 +221,10 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="ArtDefs\StrategicView.artdef">
+      <SubType>Content</SubType>
+    </Content>
+    <!-- Configuration -->
+    <Content Include="Configuration\CypWor_Config_Radius.xml">
       <SubType>Content</SubType>
     </Content>
     <!-- Gameplay -->

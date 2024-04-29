@@ -1,0 +1,18 @@
+<GameData>
+  <Parameters>
+    <Row  ParameterId="CypWorRadius" 
+          Name="LOC_CYP_WOR_CONFIG_RADIUS_NAME" 
+          Description="LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION" 
+          Domain="CypWorRadius" 
+          DefaultValue="5" 
+          ConfigurationGroup="Game" 
+          ConfigurationId="CYP_WOR_CONFIG_RADIUS" 
+          GroupId="AdvancedOptions" 
+          SortIndex="671"/>
+  </Parameters>
+  <DomainRanges>
+    <Row  Domain="CypWorRadius" 
+          MinimumValue="5" 
+          MaximumValue="10"/>
+	</DomainRanges>
+</GameData>
