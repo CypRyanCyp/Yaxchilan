@@ -264,10 +264,6 @@ function CypWorCbHasActiveCultureBombModifier( sArgumentName, sObjectType, bIncl
             end
           end
           if sObjectTypeKey ~= nil then
-            print("m_CypWorCultureBombModifierCache", "iPlayer", iPlayer, "sObjectTypeKey", sObjectTypeKey, "sObjectTypeValue", sObjectTypeValue, "bCaptureOwnedTerritory", bCaptureOwnedTerritory);
-            print("m_CypWorCultureBombModifierCache[iPlayer]", m_CypWorCultureBombModifierCache[iPlayer]);
-            print("m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey]", m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey]);
-            print("m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue]", m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue]);
             m_CypWorCultureBombModifierCache[iPlayer][sObjectTypeKey][sObjectTypeValue] = bCaptureOwnedTerritory;
             -- example                          1      DistrictType   DISTRICT_HOLY_SITE      true
           end

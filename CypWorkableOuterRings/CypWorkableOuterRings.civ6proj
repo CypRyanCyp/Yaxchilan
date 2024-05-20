@@ -39,6 +39,20 @@
       <Value>1</Value>
     </ConfigurationValueMatches>
   </Criteria>
+  <Criteria id="CYP_WOR_CONFIG_WORKABLE_RADIUS_6">
+    <ConfigurationValueMatches>
+      <ConfigurationId>CYP_WOR_CONFIG_RADIUS</ConfigurationId>
+      <Group>Game</Group>
+      <Value>6</Value>
+    </ConfigurationValueMatches>
+  </Criteria>
+  <Criteria id="CYP_WOR_CONFIG_WORKABLE_RADIUS_7">
+    <ConfigurationValueMatches>
+      <ConfigurationId>CYP_WOR_CONFIG_RADIUS</ConfigurationId>
+      <Group>Game</Group>
+      <Value>7</Value>
+    </ConfigurationValueMatches>
+  </Criteria>
 </ActionCriteria>]]></ActionCriteriaData>
     <InGameActionData><![CDATA[
 <InGameActions>
@@ -80,6 +94,20 @@
     </Properties>
     <Criteria>GAMEMODE_SECRET_SOCIETIES</Criteria>
     <File>Text/CypWor_Text_ModeSecretSocieties.sql</File>
+  </UpdateText>
+  <UpdateText id="Text_Radius_6">
+    <Properties>
+      <LoadOrder>1000</LoadOrder>
+    </Properties>
+    <Criteria>CYP_WOR_CONFIG_WORKABLE_RADIUS_6</Criteria>
+    <File>Text/CypWor_Text_Radius_6.sql</File>
+  </UpdateText>
+  <UpdateText id="Text_Radius_7">
+    <Properties>
+      <LoadOrder>1000</LoadOrder>
+    </Properties>
+    <Criteria>CYP_WOR_CONFIG_WORKABLE_RADIUS_7</Criteria>
+    <File>Text/CypWor_Text_Radius_7.sql</File>
   </UpdateText>
   <!-- Import -->
   <ImportFiles id="Import_Script">
@@ -287,6 +315,12 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Text\CypWor_Text_ModeSecretSocieties.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text_Radius_6.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Text\CypWor_Text_Radius_7.sql">
       <SubType>Content</SubType>
     </Content>
     <!-- Scripts -->

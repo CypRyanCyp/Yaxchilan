@@ -13,6 +13,6 @@
   <DomainRanges>
     <Row  Domain="CypWorRadius" 
           MinimumValue="5" 
-          MaximumValue="10"/>
+          MaximumValue="7"/>
 	</DomainRanges>
 </GameData>

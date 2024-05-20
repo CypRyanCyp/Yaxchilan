@@ -374,9 +374,6 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorRefreshWorkerYields( iPlayer : number, iCity : number, iCypWorPlot : number, iCypWorWorkerCount : number, bForceFocusRefresh )
   
-  
-  print("CypWorRefreshWorkerYields", "iPlayer", iPlayer, "iCity", iCity, "iCypWorWorkerCount", iCypWorWorkerCount, "bForceFocusRefresh", bForceFocusRefresh);
-  
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
@@ -600,8 +597,6 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
   -- Validate city has WOR district
   if not CypWorDistrictExists(pCity) then return end
   local iCypWorPlot = CypWorDistrictPlotId(pCity);
-
-  print("CypWorRefreshCityWorWorkerSlots", "iPlayer", iPlayer, "iCity", iCity, "bForceFocusRefresh", bForceFocusRefresh);
   
   -- Prepare
   local iOuterRingTileSpecialistSlots = 0;
@@ -702,7 +697,6 @@ end
 -- CypWorOnMapYieldsChanged
 -- ---------------------------------------------------------------------------
 local function CypWorOnMapYieldsChanged( iPlayer : number )
-  print("CypWorOnMapYieldsChanged", "iPlayer", iPlayer);
   if iPlayer == nil then iPlayer = -1 end
   for iCity, iCityOwnerPlayer in pairs(m_CypWorCityChangedPlotYields) do
     if iCityOwnerPlayer ~= nil then
@@ -747,7 +741,6 @@ end
 -- ---------------------------------------------------------------------------
 local function CypWorOnPlayerTurnActivated( iPlayer : number )
   -- Update all changed yields on any turn activation
-  print("CypWorOnPlayerTurnActivated", "iPlayer", iPlayer);
   CypWorOnMapYieldsChanged(iPlayer);
 end
 
@@ -847,7 +840,6 @@ local function CypWorOnCityWorkerChanged( iPlayer : number, iCity : number, iX :
   -- Validate not currently updating specialists
   if m_CypWorCityIsUpdatingSpecialists[iCity] then return end
   -- Refresh yields
-  print("CypWorOnCityWorkerChanged");
   CypWorRefreshWorkerYields(iPlayer, iCity, iCypWorPlot, nil, false);
 end
 
