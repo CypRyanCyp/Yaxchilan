@@ -120,7 +120,7 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('ja_JP',       'LOC_DISTRICT_CYP_WOR_GOLD', '隣接する港区域により [ICON_Gold] ゴールド+{1_num}。'),
 ('zh_Hant_HK',  'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] 金幣來自相鄰港口區域。'),
 ('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] 金币来自相邻港口。'),
--- Building - Customs House
+-- Building - Logistics Center
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistics Center"),
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city.[NEWLINE]" || 
                                                                       "Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.[NEWLINE]" || 
@@ -192,3 +192,29 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('ja_JP',       'LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1', "物流という概念は、古来より都市の成長と管理に不可欠なものであった。物流センターは、都市計画と資源管理における何世紀にもわたる知識と経験の集大成である。それは、単に拡大するだけでなく、効率的な物流と計画によって成長を効果的に管理しながら維持する文明の能力を象徴している。"),
 ('zh_Hant_HK',  'LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1', "自古以來，物流的概念就與城市的發展和管理密不可分。物流中心是數世紀以來城市規劃和資源管理知識與經驗的結晶。它不僅象徵文明的擴張能力，還象徵通過高效的物流和規劃來有效管理和維持發展勢頭。"),
 ('zh_Hans_CN',  'LOC_PEDIA_BUILDINGS_PAGE_BUILDING_CYP_WOR_LOGISTICS_CENTER_CHAPTER_HISTORY_PARA_1', "自古以来，物流的概念就与城市的发展和管理密不可分。物流中心是数世纪以来城市规划和资源管理知识与经验的结晶。它不仅象徵文明的扩张能力，还象徵通过高效的物流和规划来有效管理和维持发展势头。");
+
+--------------------------------------------------------------
+-- Configuration
+--------------------------------------------------------------
+-- LocalizedText
+INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
+-- Radius - Name
+('en_US',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Maximum radius of workable tiles"),
+('de_DE',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Maximaler Radius für bearbeitbare Geländefelder"),
+('fr_FR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Rayon maximal des carreaux utilisables"),
+('pt_BR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raio máximo dos ladrilhos trabalháveis"),
+('es_ES',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Radio máximo de las baldosas trabajables"),
+('it_IT',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raggio massimo delle piastrelle lavorabili"),
+('ja_JP',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "作業可能なタイルの最大半径"),
+('zh_Hant_HK',  'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "可加工瓷砖的最大半径"),
+('zh_Hans_CN',  'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "可加工瓷砖的最大半径"),
+-- Radius - Description
+('en_US',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Specify the maximum radius of tiles that can be worked after building the [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] and [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]."),
+('de_DE',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Geben Sie den maximalen Radius der Geländefelder an, die nach dem Bau der [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] und des [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR] bearbeitet werden können."),
+('fr_FR',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Indiquer le rayon maximal des tuiles qui peuvent être travaillées après la construction du [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] et du [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]."),
+('pt_BR',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Especifique o raio máximo de ladrilhos que podem ser trabalhados após a construção do [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] e [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]."),
+('es_ES',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Especifica el radio máximo de baldosas que se pueden trabajar después de construir el [COLOR_VERDE]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] y el [COLOR_VERDE]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]."),
+('it_IT',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "Specifica il raggio massimo delle tessere che possono essere lavorate dopo aver costruito il [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] e [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]."),
+('ja_JP',       'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR]と[COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR]を構築した後に作業できるタイルの最大半径を指定します。"),
+('zh_Hant_HK',  'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "指定建造 [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] 和 [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR] 后可以工作的最大瓷砖半径。"),
+('zh_Hans_CN',  'LOC_CYP_WOR_CONFIG_RADIUS_DESCRIPTION',  "指定建造 [COLOR_GREEN]{LOC_DISTRICT_CYP_WOR_NAME}[ENDCOLOR] 和 [COLOR_GREEN]{LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME}[ENDCOLOR] 后可以工作的最大瓷砖半径。");
