@@ -121,6 +121,9 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 ('zh_Hant_HK',  'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] 金幣來自相鄰港口區域。'),
 ('zh_Hans_CN',  'LOC_DISTRICT_CYP_WOR_GOLD', '+{1_num} [ICON_Gold] 金币来自相邻港口。'),
 -- Building - Logistics Center
+
+TODO - fix outer ring radius description
+
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_NAME',         "Logistics Center"),
 ('en_US',       'LOC_BUILDING_CYP_WOR_LOGISTICS_CENTER_DESCRIPTION',  "Citizens can work tiles in the fifth ring of this city.[NEWLINE]" || 
                                                                       "Tiles in the fifth ring of this city can be purchased by [ICON_GOLD] Gold.[NEWLINE]" || 
@@ -199,12 +202,12 @@ INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 -- LocalizedText
 INSERT INTO "LocalizedText" ("Language", "Tag", "Text") VALUES
 -- Radius - Name
-('en_US',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Maximum radius of workable tiles"),
-('de_DE',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Maximaler Radius für bearbeitbare Geländefelder"),
-('fr_FR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Rayon maximal des carreaux utilisables"),
-('pt_BR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raio máximo dos ladrilhos trabalháveis"),
-('es_ES',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Radio máximo de las baldosas trabajables"),
-('it_IT',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raggio massimo delle piastrelle lavorabili"),
+('en_US',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Workable Tile Radius"),
+('de_DE',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Bearbeitbarer Radius"),
+('fr_FR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Rayon d'action"),
+('pt_BR',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raio de trabalho"),
+('es_ES',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Radio de acción"),
+('it_IT',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "Raggio di lavoro"),
 ('ja_JP',       'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "作業可能なタイルの最大半径"),
 ('zh_Hant_HK',  'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "可加工瓷砖的最大半径"),
 ('zh_Hans_CN',  'LOC_CYP_WOR_CONFIG_RADIUS_NAME',         "可加工瓷砖的最大半径"),

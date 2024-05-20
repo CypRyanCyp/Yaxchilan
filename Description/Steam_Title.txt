@@ -8,13 +8,13 @@ CypRyan's Working Outer Rings
 ヤシュチラン - 4/5タイル開発
 
 --- Changelog ---
-[b]v8.0[/b] (2024-04-25)[list][/list]
+[b]v9.0[/b] (2024-05-20)[list][/list]
 
 [b]English[/b]
-[list][*][b]Modification[/b]: [b]Performance[/b] improvement (caching).[/list]
+[list][*][b]Setup[/b]: Allow [b]Configuration[/b] of [b]Workable Tile Radius[/b].[/list]
 
 [b]中文[/b]
-[list][*][b]修改[/b]: 性能[/b]改进（缓存）。[/list]
+[list][*][b]设置[/b]: 允许配置可工作瓷砖半径。[/list]
 
 [b]ジャパニッシュ[/b]
-[list][*][b]修正[/b]: パフォーマンス[/b]の向上（キャッシュ）。[/list]
+[list][*][b]設定[/b]: 作業可能なタイル半径の設定を許可する。[/list]
