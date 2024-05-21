@@ -8,13 +8,13 @@ CypRyan's Working Outer Rings
 ヤシュチラン - 4/5タイル開発
 
 --- Changelog ---
-[b]v9.0[/b] (2024-05-20)[list][/list]
+[b]v10.0[/b] (2024-05-21)[list][/list]
 
 [b]English[/b]
-[list][*][b]Setup[/b]: Allow [b]Configuration[/b] of [b]Workable Tile Radius[/b].[/list]
+[list][*][b]Bug[/b]: Fix wrong [b]city center yields[/b] after [b]capturing a city[/b].[/list]
 
 [b]中文[/b]
-[list][*][b]设置[/b]: 允许配置可工作瓷砖半径。[/list]
+[list][*][b]错误[/b]: 修复占领城市后错误的城市中心收益率[/list]
 
 [b]ジャパニッシュ[/b]
-[list][*][b]設定[/b]: 作業可能なタイル半径の設定を許可する。[/list]
+[list][*][b]バグ[/b]: 都市をキャプチャした後、間違った都市中心部の歩留まりを修正。[/list]
