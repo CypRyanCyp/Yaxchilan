@@ -672,10 +672,12 @@ end
 -- CypWorCleanupProperties
 -- ---------------------------------------------------------------------------
 function CypWorCleanupProperties( iPlayer : number, iCity : number )
+  
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
   local pCityPlot = pCity:GetPlot();
+  
   -- Clear properties
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
@@ -684,6 +686,7 @@ function CypWorCleanupProperties( iPlayer : number, iCity : number )
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH, nil);
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_VALUES, nil);
   pCityPlot:SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
+  
   -- Clear caches
   m_CypWorCachedCityLockedPlots[iCity] = nil;
   
