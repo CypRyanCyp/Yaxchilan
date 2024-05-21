@@ -116,7 +116,7 @@ function CypWorHasXp2()
 end
 
 -- ---------------------------------------------------------------------------
--- CypWorDistrictExists
+-- CypStringStartsWith
 -- ---------------------------------------------------------------------------
 function CypStringStartsWith(a, b)
   return string.sub(a, 1, string.len(b)) == b;
@@ -129,7 +129,6 @@ function CypWorDistrictExists( pCity )
   if not pCity:GetDistricts():HasDistrict(CYP_WOR_DISTRICT_ID) then return false end
   local pDistrict = pCity:GetDistricts():GetDistrict(CYP_WOR_DISTRICT_ID);
   return pDistrict:IsComplete();
-  
 end
 
 -- ---------------------------------------------------------------------------

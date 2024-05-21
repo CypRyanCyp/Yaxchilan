@@ -672,9 +672,12 @@ end
 -- CypWorCleanupProperties
 -- ---------------------------------------------------------------------------
 function CypWorCleanupProperties( iPlayer : number, iCity : number )
+  
   -- Get city
   local pCity = CityManager.GetCity(iPlayer, iCity);
   if pCity == nil then return end
+  local pCityPlot = pCity:GetPlot();
+  
   -- Clear properties
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_WORKABLE_OUTER_RING_TILES, nil);
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_SPECIALIST_SLOT_COUNT, nil);
@@ -682,9 +685,35 @@ function CypWorCleanupProperties( iPlayer : number, iCity : number )
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA, nil);
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_HASH, nil);
   CypWorSetCityProperty(pCity, CYP_WOR_PROPERTY_YIELD_VALUES, nil);
-  pCity:GetPlot():SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
+  pCityPlot:SetProperty(CYP_WOR_PROPERTY_YIELDS_WITH_COMPENSATIONS, nil);
+  
   -- Clear caches
   m_CypWorCachedCityLockedPlots[iCity] = nil;
+  
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return end
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
+  -- Clear workers
+  CypWorCreateDummyBuildingWithBinaryConvertedValue(
+      0, 
+      CYP_WOR_WORKERS_BINARY_DIGITS, 
+      CYP_WOR_BUILDING_INTERNAL_WORKERS_TYPE_PREFIX,
+      pCity,
+      iCypWorPlot);
+        
+  -- Clear city center yields
+  for iYield, iYieldAmount in pairs(tYieldSums) do
+    -- Get yield type
+    local sYieldType = CYP_WOR_GAMEINFO_YIELD_TYPES[iYield];
+    -- Handle negative yield part
+    local sNegativeYieldPropertyName = CYP_WOR_PROPERTY_YIELD_MALUS_PREFIX .. sYieldType;
+    pCityPlot:SetProperty(sNegativeYieldPropertyName, nil);
+    CypWorApplyPropertiesToPlotWithBinaryConvertedValue(
+        0, 
+        CYP_WOR_YIELD_BINARY_DIGITS, 
+        CYP_WOR_PROPERTY_YIELD_BONUS_PREFIX .. sYieldType .. "_",
+        pCityPlot);
+  end
 end
 
 
@@ -847,6 +876,7 @@ end
 -- CypWorOnCityTransfered
 -- ---------------------------------------------------------------------------
 local function CypWorOnCityTransfered( iPlayer : number, iCity : number, iOldPlayer : number, xTransferType )
+  CypWorCleanupProperties(iOldPlayer, iCity);
   CypWorCleanupProperties(iPlayer, iCity);
   CypWorRefreshCityWorWorkerSlots(iPlayer, iCity, false);
 end
