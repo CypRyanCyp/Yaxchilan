@@ -29,8 +29,19 @@
 [i]必要：開拓地の町[/i]。[/quote]
 
 
-[h1]マニュアルダウンロード[/h1]
-[url=https://discord.gg/PnWGUXphBF][b]ディスコード[/b][/url] 最新リリースを手動でダウンロードする。
+[h1]これは、「既知の問題と貢献方法」 に関するものです。[/h1]
+[list][*]外側のリングのタイルは、現在回転する風車などのアニメーションが欠けています。もしあなたが改善型3Dモデリングの経験を持っていて、貢献したい場合は、ぜひご連絡ください。
+[*]購入、交換、または文化爆弾によって獲得した外周リングの山タイルは、ゲームがリロードされるまで修正（例：インカの生産）が適用されません。[/list]
+バグの報告や機能の提案はこちらからお願いします：
+[list][*][url=https://discord.gg/V95RKabXDZ][b]ディスコード[/b][/url] (お好み)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]バグ報告ディスカッション[/url][/list]
+
+
+[h1]代替案（バグが発生し続ける場合）[/h1]
+この実装は非常にスクリプトが重い。最近の私の多忙なスケジュールを考えると、これらの問題に迅速に対処する時間がないかもしれません。
+しかし、[url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]によって第4リングを動作させることができる別の改造があります： [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url].
+これは実装が優れており、バグも発生しないはずです。この代わりに試してみてください！
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
 
 
 [h1]関連MOD[/h1]
@@ -41,16 +52,8 @@
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
 
-[h1]これは、「既知の問題と貢献方法」 に関するものです。[/h1]
-[list][*]外側のリングのタイルは、現在回転する風車などのアニメーションが欠けています。もしあなたが改善型3Dモデリングの経験を持っていて、貢献したい場合は、ぜひご連絡ください。
-[*]購入、交換、または文化爆弾によって獲得した外周リングの山タイルは、ゲームがリロードされるまで修正（例：インカの生産）が適用されません。
-[*]ロシア語、ポーランド語、および韓国語に翻訳することも検討しています。[/list]
-
-
-[h1]バグと機能[/h1]
-バグの報告や機能の提案はこちらからお願いします：
-[list][*][url=https://discord.gg/V95RKabXDZ][b]ディスコード[/b][/url] (お好み)
-[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]バグ報告ディスカッション[/url][/list]
+[h1]マニュアルダウンロード[/h1]
+[url=https://discord.gg/PnWGUXphBF][b]ディスコード[/b][/url] 最新リリースを手動でダウンロードする。
 
 
 [h1]言語[/h1]

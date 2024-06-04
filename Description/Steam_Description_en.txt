@@ -29,8 +29,19 @@ Railroad bombs adjacent owned tiles if the technology Steam Power is researched 
 [i]Requires: Frontier Town Quarter[/i][/quote]
 
 
-[h1]Manual Download[/h1]
-Hop over to [url=https://discord.gg/PnWGUXphBF][b]Discord[/b][/url] to manually download the latest release.
+[h1]Known Issues & How To Contribute?[/h1]
+[list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
+[*]Mountain tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Inca production) until reloading the game.[/list]
+Please report bugs or suggest features here:
+[list][*][url=https://discord.gg/yWdsz24Hx8][b]Discord[/b][/url] (prefered)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url][/list]
+
+
+[h1]Alternative (if you keep experiencing bugs)[/h1]
+This implementation is very script heavy. Given my busy schedule these days, I may not have the time to address these issues promptly
+However, there is another mod that allows working the 4th ring by [url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]: [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url].
+It is superior in its implementation and should not cause bugs. Give it a try instead of this one!
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
 
 
 [h1]Related Mods[/h1]
@@ -42,16 +53,8 @@ Also, check out [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
 
-[h1]Known Issues & How To Contribute?[/h1]
-[list][*]Worked tiles in the outer rings currently lack animations, such as spinning windmills. If you have experience with [b]improvement 3D modding[/b] and would like to contribute, please get in touch with us.
-[*]Mountain tiles in outer rings acquired through purchase, swapping, or culture bombs won’t apply modifiers (such as Inca production) until reloading the game.
-[*]Translation to Russian, Polish, and Korean.[/list]
-
-
-[h1]Bugs & Features[/h1]
-Please report bugs or suggest features here:
-[list][*][url=https://discord.gg/yWdsz24Hx8][b]Discord[/b][/url] (prefered)
-[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url][/list]
+[h1]Manual Download[/h1]
+Hop over to [url=https://discord.gg/PnWGUXphBF][b]Discord[/b][/url] to manually download the latest release.
 
 
 [h1]Languages[/h1]

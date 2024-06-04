@@ -30,8 +30,19 @@
 [i]需求：拓荒驻地[/i][/quote]
 
 
-[h1]手册下载[/h1]
-请登录 [url=https://discord.gg/PnWGUXphBF][b]纪和声[/b][/url] 手动下载最新版本。
+[h1]已知问题和如何贡献？[/h1]
+[list][*]外环工作瓦片动画：目前，外环中的工作瓦片缺乏动画效果，例如旋转的风车。如果您具有改进3D模型的经验，并且愿意为此做出贡献，请与我们联系。
+[*]外圈山形牌的修改器延迟：通过购买、交换或文化炸弹获得的外圈牌在重新加载游戏（例如印加生产）之前不会应用修改器。[/list]
+请在此报告错误或建议功能：
+[list][*][url=https://discord.gg/44m2uSTwcU][b]不和[/b][/url] (首选)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url][/list]
+
+
+[h1]替代方案（如果您持续遇到问题)[/h1]
+这个项目的脚本工作量非常大。鉴于我最近工作繁忙，可能没有时间及时处理这些问题。
+不过，[url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]提供了另一个可以使用第四环的修改程序： [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url]。
+它在实现方面更胜一筹，应该不会引起错误。请试试它而不是这个！
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
 
 
 [h1]关联MOD[/h1]
@@ -43,16 +54,8 @@
 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
 
 
-[h1]已知问题和如何贡献？[/h1]
-[list][*]外环工作瓦片动画：目前，外环中的工作瓦片缺乏动画效果，例如旋转的风车。如果您具有改进3D模型的经验，并且愿意为此做出贡献，请与我们联系。
-[*]外圈山形牌的修改器延迟：通过购买、交换或文化炸弹获得的外圈牌在重新加载游戏（例如印加生产）之前不会应用修改器。
-[*]俄语、波兰语和韩语翻译。[/list]
-
-
-[h1]错误和功能[/h1]
-请在此报告错误或建议功能：
-[list][*][url=https://discord.gg/44m2uSTwcU][b]不和[/b][/url] (首选)
-[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url][/list]
+[h1]手册下载[/h1]
+请登录 [url=https://discord.gg/PnWGUXphBF][b]纪和声[/b][/url] 手动下载最新版本。
 
 
 [h1]语言[/h1]
