@@ -529,9 +529,11 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorPlotInfoGetPlotGoldCost
 -- ---------------------------------------------------------------------------
-function CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot)
+function CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, iSpeedCostMultiplier, pCity, pPlot)
+  -- Cost due to distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   local iGoldCost = iDistance * iGoldCostPerDistance;
+  -- Terrain modifiers
   for iModifierId, tArgs in pairs(tTerrainModifierScalings) do
     local iTerrainType = tArgs['TerrainTypeId'];
     local iMultiplier = tArgs['Multiplier'];
@@ -541,6 +543,9 @@ function CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierSca
       end
     end
   end
+  -- Game speed scaling
+  iGoldCost = iGoldCost * iSpeedCostMultiplier / 100;
+  -- Rounding
   return math.floor(iGoldCost);
 end
 
@@ -579,6 +584,7 @@ function CypWorPlotInfoShowOuterRingPurchases()
   -- Get player info
 	local iPlayerGold	:number = pPlayer:GetTreasury():GetGoldBalance();
   local iGoldCostPerDistance, tTerrainModifierScalings = CypWorPlotInfoGetGoldCostInfo(pPlayer);
+  local iSpeedCostMultiplier = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier;
   
   -- Get unowned plots in outer rings
   local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, CYP_WOR_DST_MIN, iPurchaseDst);
@@ -608,7 +614,7 @@ function CypWorPlotInfoShowOuterRingPurchases()
     local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
     if pInstance ~= nil then
       -- Gold cost
-      local iGoldCost = CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, pCity, pPlot);
+      local iGoldCost = CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, iSpeedCostMultiplier, pCity, pPlot);
       pInstance.PurchaseButton:SetText(tostring(iGoldCost));
       -- Button
       AutoSizeGridButton(pInstance.PurchaseButton,51,30,25,"H");
