@@ -37,13 +37,6 @@ Please report bugs or suggest features here:
 [*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]Bug Reports Discussion[/url][/list]
 
 
-[h1]Alternative (if you keep experiencing bugs)[/h1]
-This implementation is very script heavy. Given my busy schedule these days, I may not have the time to address these issues promptly
-However, there is another mod that allows working the 4th ring by [url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]: [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url].
-It is superior in its implementation and should not cause bugs. Give it a try instead of this one!
-[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
-
-
 [h1]Related Mods[/h1]
 This mod is based on the [b]Neighborhood Tall Extension[/b] from [url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url].
 If you combine these mods the [b]Neighborhood Tall Extension[/b] will be removed and the [b]Frontier Town Quarter[/b] district remains.

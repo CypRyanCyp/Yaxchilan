@@ -37,13 +37,6 @@
 [*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247613261216807]バグ報告ディスカッション[/url][/list]
 
 
-[h1]代替案（バグが発生し続ける場合）[/h1]
-この実装は非常にスクリプトが重い。最近の私の多忙なスケジュールを考えると、これらの問題に迅速に対処する時間がないかもしれません。
-しかし、[url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]によって第4リングを動作させることができる別の改造があります： [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url].
-これは実装が優れており、バグも発生しないはずです。この代わりに試してみてください！
-[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
-
-
 [h1]関連MOD[/h1]
 このMODは[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url]の[b]Neighborhood Tall Extension[/b]を元にしています。
 これらのMODを組み合わせると、[b]Neighborhood Tall Extension[/b]が無效、[b]開拓地の町[/b]が有效。

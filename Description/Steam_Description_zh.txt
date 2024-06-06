@@ -38,13 +38,6 @@
 [*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url][/list]
 
 
-[h1]替代方案（如果您持续遇到问题)[/h1]
-这个项目的脚本工作量非常大。鉴于我最近工作繁忙，可能没有时间及时处理这些问题。
-不过，[url=steamcommunity.com/id/PhantomJ_M][b]PhantomJ_M[/b][/url]提供了另一个可以使用第四环的修改程序： [url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][b]Workable 4th Ring[/b][/url]。
-它在实现方面更胜一筹，应该不会引起错误。请试试它而不是这个！
-[url=steamcommunity.com/sharedfiles/filedetails/?id=3220078106][img]https://i.ibb.co/1vCVW9q/Workable4th-Ring.png[/img][/url]
-
-
 [h1]关联MOD[/h1]
 此模组基于[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url]的[b]Neighborhood Tall Expansion[/b]。
 当同时启用时，[b]Neighborhood Expansion[/b]将失效，[b]拓荒驻地[/b]继续有效。
