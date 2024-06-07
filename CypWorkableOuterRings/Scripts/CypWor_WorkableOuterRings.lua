@@ -662,6 +662,9 @@ function CypWorRefreshCityWorWorkerSlots( iPlayer : number, iCity : number, bFor
         pCity,
         iCypWorPlot);
     m_CypWorCityIsUpdatingSpecialists[iCity] = false;
+    -- Ensure existence internal specialist yield building
+    if not pCity:GetBuildings():HasBuilding(CYP_WOR_BUILDING_ID) then
+      pCity:GetBuildQueue():CreateIncompleteBuilding(CYP_WOR_BUILDING_ID, iCypWorPlot, 100);
   end
   
   -- Update yields
