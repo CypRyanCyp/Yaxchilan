@@ -755,6 +755,10 @@ local function CypWorOnPlotYieldChanged(iX : number, iY : number)
   if iX == pCity:GetX() and iY == pCity:GetY() then return end
   -- Validate city has WOR district
   if not CypWorDistrictExists(pCity) then return end
+  -- Ignore WOR district
+  local iCypWorPlot = CypWorDistrictPlotId(pCity);
+  local pCypWorPlot = Map.GetPlotByIndex(iCypWorPlot);
+  if iX == pCypWorPlot:GetX() and iY == pCypWorPlot:GetY() then return end
   -- Get plot
   local pPlot = Map.GetPlot(iX, iY);
   if pPlot == nil then return end
