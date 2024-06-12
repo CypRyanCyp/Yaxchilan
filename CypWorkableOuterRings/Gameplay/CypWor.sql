@@ -119,6 +119,9 @@ INSERT INTO "Types" ("Type", "Kind") VALUES
 -- Buildings
 INSERT INTO "Buildings" ("BuildingType", "Name", "Cost", "PrereqDistrict", "Description", "CitizenSlots", "InternalOnly", "TraitType")  VALUES
 ('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 'LOC_BUILDING_CYP_WOR_NAME', 0, 'DISTRICT_CYP_WOR', 'LOC_BUILDING_CYP_WOR_DESCRIPTION', 0, 1, 'TRAIT_CYP_WOR_DUMMY');
+-- Buildings_XP2
+INSERT OR IGNORE INTO "Buildings_XP2" ("BuildingType", "Pillage") VALUES 
+('BUILDING_CYP_WOR_INTERNAL_SPECIALISTS', 0);
 -- Building_CitizenYieldChanges
 INSERT INTO "Building_CitizenYieldChanges" ("BuildingType", "YieldType", "YieldChange")
 SELECT  'BUILDING_CYP_WOR_INTERNAL_SPECIALISTS' "BuildingType",
@@ -277,6 +280,12 @@ SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit  "BuildingType",
         bd.DecimalValue                                         "CitizenSlots",
         1                                                       "InternalOnly",
         'TRAIT_CYP_WOR_DUMMY'                                   "TraitType"
+FROM "CypWorTmpBinaryDigits" bd
+WHERE bd.BinaryDigit <= 7;
+-- Buildings_XP2
+INSERT OR IGNORE INTO "Buildings_XP2" ("BuildingType", "Pillage")
+SELECT  'BUILDING_CYP_WOR_INTERNAL_WORKERS_' || bd.BinaryDigit  "BuildingType", 
+        0                                                       "Pillage"
 FROM "CypWorTmpBinaryDigits" bd
 WHERE bd.BinaryDigit <= 7;
 -- CypWtUiInvisibleBuildings

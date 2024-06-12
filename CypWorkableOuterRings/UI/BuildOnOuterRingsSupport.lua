@@ -117,37 +117,52 @@ CypWorOriginal_CityManager_RequestOperation = CityManager.RequestOperation;
 -- CityManager.RequestOperation
 -- ---------------------------------------------------------------------------
 CityManager.RequestOperation = function( pCity, xCityOperationType, tParameters : table )
-  -- Allow building on outer rings
-  if xCityOperationType == CityOperationTypes.BUILD then
-    -- Collect data
-    local iX = tParameters[CityOperationTypes.PARAM_X];
-    local iY = tParameters[CityOperationTypes.PARAM_Y];
-    if iX ~= nil and iY ~= nil then
-      local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
-      if iDistance >= CYP_WOR_DST_MIN then
-        -- Collect data
-        local pPlot = Map.GetPlot(iX,iY);
-        local iPlot = pPlot:GetIndex();
-        local iCity = pCity:GetID();
-        local iPlayer = pCity:GetOwner();
-        -- Prepare cross context
-        tParameters.iPlayer = iPlayer;
-        tParameters.iCity = iCity;
-        tParameters.iPlot = iPlot;
-        -- Determine type
-        if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
-          local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
-          local iDistrict = GameInfo.Districts[districtHash].Index;
-          tParameters.iDistrict = iDistrict;
-          tParameters.OnStart = "CypWor_CC_BuildDistrict";
-        elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
-          local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
-          local iBuilding = GameInfo.Buildings[buildingHash].Index;
-          tParameters.iBuilding = iBuilding;
-          tParameters.OnStart = "CypWor_CC_BuildBuilding";
+
+  print("CityManager.RequestOperation", pCity, xCityOperationType, tParameters);
+  for k,v in pairs(tParameters) do
+    print("-", k, v);
+  end
+  
+  -- Don't call recursive
+  if not tParameters.bAlreadyCalled then
+    -- Allow building on outer rings
+    if xCityOperationType == CityOperationTypes.BUILD then
+      print("CityManager.RequestOperation", "CityOperationTypes.BUILD");
+      -- Collect data
+      local iX = tParameters[CityOperationTypes.PARAM_X];
+      local iY = tParameters[CityOperationTypes.PARAM_Y];
+      if iX ~= nil and iY ~= nil then
+        local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
+        if iDistance >= CYP_WOR_DST_MIN then
+        print("CityManager.RequestOperation", "outer-ring");
+          -- Collect data
+          local pPlot = Map.GetPlot(iX,iY);
+          local iPlot = pPlot:GetIndex();
+          local iCity = pCity:GetID();
+          local iPlayer = pCity:GetOwner();
+          -- Prepare cross context
+          tParameters.iPlayer = iPlayer;
+          tParameters.iCity = iCity;
+          tParameters.iPlot = iPlot;
+          tParameters.bAlreadyCalled = true;
+          tParameters.sOperationType = xCityOperationType;
+          -- Determine type
+          if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
+          print("CityManager.RequestOperation", "district");
+            local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
+            local iDistrict = GameInfo.Districts[districtHash].Index;
+            tParameters.iDistrict = iDistrict;
+            tParameters.OnStart = "CypWor_CC_BuildDistrict";
+          elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
+            local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
+            local iBuilding = GameInfo.Buildings[buildingHash].Index;
+            tParameters.iBuilding = iBuilding;
+            tParameters.OnStart = "CypWor_CC_BuildBuilding";
+          end
+          -- Call cross context
+          UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+          print("CityManager.RequestOperation", "requested");
         end
-        -- Call cross context
-        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
       end
     end
   end
@@ -232,7 +247,7 @@ function AddAdjacentPlotBonuses( pPlot : table, sDistrictType : string, pCity : 
   -- TODO CYP
   
   -- Original
-  CypWorOriginal_AddAdjacentPlotBonuses(pPlot, sDistrictType, pCity, tCurrentBonuses);
+  return CypWorOriginal_AddAdjacentPlotBonuses(pPlot, sDistrictType, pCity, tCurrentBonuses);
 end
 
 
@@ -241,10 +256,10 @@ end
 -- ---------------------------------------------------------------------------
 CypWorOriginal_Plot_GetAdjacencyBonusType = getmetatable(Plot).__index.GetAdjacencyBonusType;
 -- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyBonusType = function ( iPlayer : number, iCity : number, eDistrict, pOtherPlot )
+getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, eDistrict, pOtherPlot )
   -- TODO CYP
   -- Original
-  CypWorOriginal_Plot_GetAdjacencyBonusType(iPlayer, iCity, eDistrict, pOtherPlot);
+  CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
 end
 
 
@@ -267,7 +282,7 @@ getmetatable(Plot).__index.CanHaveWonder = function ( self, iBuilding : number, 
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
   if iDistance <= 3 then
-    CypWorOriginal_Plot_CanHaveWonder(iBuilding, iPlayer, iCity);
+    CypWorOriginal_Plot_CanHaveWonder(self, iBuilding, iPlayer, iCity);
   end
   -- Determine for outer rings
   return true; -- TODO CYP
@@ -292,7 +307,7 @@ getmetatable(Plot).__index.CanHaveDistrict = function ( self, iDistrict : number
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
   if iDistance <= 3 then
-    CypWorOriginal_Plot_CanHaveDistrict(iDistrict, iPlayer, iCity);
+    CypWorOriginal_Plot_CanHaveDistrict(self, iDistrict, iPlayer, iCity);
   end
   -- Determine for outer rings
   return true; -- TODO CYP

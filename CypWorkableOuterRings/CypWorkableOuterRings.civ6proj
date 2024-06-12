@@ -119,12 +119,12 @@
   </ImportFiles>
   <ImportFiles id="Import_UI_Replacements">
     <File>UI/Replacements/CitySupport.lua</File>
+    <File>UI/Replacements/StrategicView_MapPlacement.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI">
     <Properties>
       <LoadOrder>100</LoadOrder>
     </Properties>
-    <File>UI/StrategicView_MapPlacement_CypWor.lua</File>
     <File>UI/PlotToolTip_CypWor.lua</File>
     <File>UI/PlotInfo_CypWor.lua</File>
     <File>UI/BuildOnOuterRingsSupport.lua</File>
@@ -175,12 +175,6 @@
     <Properties>
       <LuaContext>PlotInfo</LuaContext>
       <LuaReplace>UI/PlotInfo_CypWor.lua</LuaReplace>
-    </Properties>
-  </ReplaceUIScript>
-  <ReplaceUIScript id="ReplaceUIScript_StrategicView_MapPlacement">
-    <Properties>
-      <LuaContext>StrategicView_MapPlacement</LuaContext>
-      <LuaReplace>UI/StrategicView_MapPlacement_CypWor.lua</LuaReplace>
     </Properties>
   </ReplaceUIScript>
   <ReplaceUIScript id="ReplaceUIScript_PlotInfo_Citizens" criteria="HAS_MOD_SSUA">
@@ -352,6 +346,9 @@
     <Content Include="UI\Replacements\CitySupport.lua">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="UI\Replacements\StrategicView_MapPlacement.lua">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="UI\ThirdParty\SSUA\PlotInfo_Citizens.lua">
       <SubType>Content</SubType>
     </Content>
@@ -377,9 +374,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\PlotToolTip_CypWor.lua">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="UI\StrategicView_MapPlacement_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

@@ -19,18 +19,32 @@
 -- CypWorBuildDistrict
 -- ---------------------------------------------------------------------------
 local function CypWorBuildDistrict( iPlayer : number, tParameters : table )
+  print("CypWorBuildDistrict", "A");
+  for k,v in pairs(tParameters) do
+    print("-", k, v);
+  end
   -- Get params
   local iCity = tParameters.iCity;
   local iDistrict = tParameters.iDistrict;
   local iPlot = tParameters.iPlot;
+  print("CypWorBuildDistrict", "B", iCity, iDistrict, iPlot);
   -- Get player
   local pPlayer = Players[iPlayer];
   if pPlayer == nil then return end
+  print("CypWorBuildDistrict", "C");
   -- Get city
   local pCity = pPlayer:GetCities():FindID(iCity);
   if pCity == nil then return end
+  print("CypWorBuildDistrict", "D");
   -- Place district
-  pCity:GetBuildQueue():CreateIncompleteDistrict(iDistrict, pBuildingPlotIndex, 0);
+  pCity:GetBuildQueue():CreateIncompleteDistrict(iDistrict, iPlot, 0);
+  print("CypWorBuildDistrict", "E");
+  -- Call initial function again to add to queue
+  --LuaEvents.CypWorCityManagerRequestOperation(iPlayer, iCity, tParameters.sOperationType, tParameters);
+  --ExposedMembers.CypWor.CityManagerRequestOperation(iPlayer, iCity, tParameters.sOperationType, tParameters);
+  ReportingEvents.SendLuaEvent("CypWorCityManagerRequestOperation", tParameters);
+  -- TODO cyp - differ between purchase and build
+  print("CypWorBuildDistrict", "F");
 end
 
 -- ---------------------------------------------------------------------------
