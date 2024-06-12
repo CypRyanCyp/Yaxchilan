@@ -295,7 +295,7 @@ function CypWorCreateDummyBuildingWithBinaryConvertedValue(
             iMaxDigits : number, 
             sBuildingTypePrefix, 
             pCity, 
-            pBuildingPlotIndex) 
+            iPlot) 
   -- Hash is handled before thi
   -- Convert base10 to base2 (binary)
   local tValueBinary = CypWorDecimalToBinaryArray(iValue);
@@ -321,7 +321,7 @@ function CypWorCreateDummyBuildingWithBinaryConvertedValue(
           if bBuildingExists then -- Remove building if exists
             pCity:GetBuildings():RemoveBuilding(iBuilding);
           else -- Add building if not exists
-            pCity:GetBuildQueue():CreateIncompleteBuilding(iBuilding, pBuildingPlotIndex, 100);
+            pCity:GetBuildQueue():CreateIncompleteBuilding(iBuilding, iPlot, 100);
           end
         end
       end

@@ -18,6 +18,8 @@ for _, sVersion in ipairs(tBaseFileVersions) do
   include(sVersion);
   if Initialize then break end
 end
+-- Build support for outer rings
+include "BuildOnOuterRingsSupport.lua"
 
 
 
