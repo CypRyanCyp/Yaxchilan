@@ -63,6 +63,17 @@ function CypWorCityGetPlotYields( iPlot : number )
   return tYields;
 end
 
+-- ---------------------------------------------------------------------------
+-- CypWorCityManagerRequestOperation
+-- ---------------------------------------------------------------------------
+function CypWorCityManagerRequestOperation(iPlayer : number, iCity : number, xCityOperationType, tParameters : table )
+  -- Get city
+  local pCity = CityManager.GetCity(iPlayer, iCity);
+  if pCity == nil then return end
+  -- RequestOperation
+  CityManager.RequestOperation(pCity, xCityOperationType, tParameters);
+end
+
 
 
 -- ===========================================================================
@@ -77,6 +88,7 @@ local function CypWorExposedMembersInitialize()
   if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
   ExposedMembers.CypWor.CityGetLockedPlots = CypWorCityGetLockedPlots;
   ExposedMembers.CypWor.GetPlotYields = CypWorCityGetPlotYields;
+  ExposedMembers.CypWor.CityManagerRequestOperation = CypWorCityManagerRequestOperation;
   -- Initialized
   print("CypWor_ExposedMembers.lua initialized!");
 end

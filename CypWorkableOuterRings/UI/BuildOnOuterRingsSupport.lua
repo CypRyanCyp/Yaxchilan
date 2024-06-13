@@ -68,10 +68,33 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
     if iX ~= nil and iY ~= nil then
       local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
       if iDistance >= CYP_WOR_DST_MIN then
-        -- TODO CYP
-        
-        local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
-        local purchaseYield = tParameters[CityCommandTypes.PARAM_YIELD_TYPE];
+        -- Collect data
+        local pPlot = Map.GetPlot(iX,iY);
+        local iPlot = pPlot:GetIndex();
+        local iCity = pCity:GetID();
+        local iPlayer = pCity:GetOwner();
+        local xPurchaseYieldType = tParameters[CityCommandTypes.PARAM_YIELD_TYPE];
+        -- Prepare cross context
+        tParameters.iPlayer = iPlayer;
+        tParameters.iCity = iCity;
+        tParameters.iPlot = iPlot;
+        tParameters.sOperationType = xCityOperationType;
+        tParameters.xPurchaseYieldType = xPurchaseYieldType;
+        -- Determine type
+        if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
+          local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
+          local iDistrict = GameInfo.Districts[districtHash].Index;
+          tParameters.iDistrict = iDistrict;
+          tParameters.OnStart = "CypWor_CC_BuildPlaceInfrastructure";
+        elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
+          local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
+          local iBuilding = GameInfo.Buildings[buildingHash].Index;
+          tParameters.iBuilding = iBuilding;
+          tParameters.OnStart = "CypWor_CC_PurchaseBuilding";
+        end
+        -- Call cross context
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+        return;
       end
     end
   end
@@ -110,51 +133,44 @@ CypWorOriginal_CityManager_RequestOperation = CityManager.RequestOperation;
 -- CityManager.RequestOperation
 -- ---------------------------------------------------------------------------
 CityManager.RequestOperation = function( pCity, xCityOperationType, tParameters : table )
-
-  print("CityManager.RequestOperation", pCity, xCityOperationType, tParameters);
-  for k,v in pairs(tParameters) do
-    print("-", k, v);
-  end
-  
-  -- Don't call recursive
-  if not tParameters[CYP_WOR_PARAM_OUTER_RING_BUILD_ADD_TO_QUEUE] then
-    -- Allow building on outer rings
-    if xCityOperationType == CityOperationTypes.BUILD then
-      print("CityManager.RequestOperation", "CityOperationTypes.BUILD");
-      -- Collect data
-      local iX = tParameters[CityOperationTypes.PARAM_X];
-      local iY = tParameters[CityOperationTypes.PARAM_Y];
-      if iX ~= nil and iY ~= nil then
-        local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
-        if iDistance >= CYP_WOR_DST_MIN then
-        print("CityManager.RequestOperation", "outer-ring");
-          -- Collect data
-          local pPlot = Map.GetPlot(iX,iY);
-          local iPlot = pPlot:GetIndex();
-          local iCity = pCity:GetID();
-          local iPlayer = pCity:GetOwner();
-          -- Prepare cross context
-          tParameters.iPlayer = iPlayer;
-          tParameters.iCity = iCity;
-          tParameters.iPlot = iPlot;
-          tParameters.sOperationType = xCityOperationType;
-          -- Determine type
-          if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
-          print("CityManager.RequestOperation", "district");
-            local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
-            local iDistrict = GameInfo.Districts[districtHash].Index;
-            tParameters.iDistrict = iDistrict;
-            tParameters.OnStart = "CypWor_CC_BuildDistrict";
-          elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
-            local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
-            local iBuilding = GameInfo.Buildings[buildingHash].Index;
-            tParameters.iBuilding = iBuilding;
-            tParameters.OnStart = "CypWor_CC_BuildBuilding";
-          end
-          -- Call cross context
-          UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-          print("CityManager.RequestOperation", "requested");
+  -- Allow building on outer rings
+  if xCityOperationType == CityOperationTypes.BUILD then
+    -- Collect data
+    local iX = tParameters[CityOperationTypes.PARAM_X];
+    local iY = tParameters[CityOperationTypes.PARAM_Y];
+    if iX ~= nil and iY ~= nil then
+      local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
+      if iDistance >= CYP_WOR_DST_MIN then
+        -- Collect data
+        local pPlot = Map.GetPlot(iX,iY);
+        local iPlot = pPlot:GetIndex();
+        local iCity = pCity:GetID();
+        local iPlayer = pCity:GetOwner();
+        -- Prepare cross context
+        local tBuildParameters = {};
+        tBuildParameters.iPlayer = iPlayer;
+        tBuildParameters.iCity = iCity;
+        tBuildParameters.iPlot = iPlot;
+        tBuildParameters.OnStart = "CypWor_CC_BuildPlaceInfrastructure";
+        tBuildParameters.xInsertMode = tParameters[CityOperationTypes.PARAM_INSERT_MODE];
+        tBuildParameters.xQueueDestinationLocation = tParameters[CityOperationTypes.PARAM_QUEUE_DESTINATION_LOCATION];
+        -- Determine type
+        if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
+          tBuildParameters.bIsDistrict = true;
+          local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
+          local iDistrict = GameInfo.Districts[districtHash].Index;
+          tBuildParameters.sDistrictHash = districtHash;
+          tBuildParameters.iDistrict = iDistrict;
+        elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
+          tBuildParameters.bIsDistrict = false;
+          local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
+          local iBuilding = GameInfo.Buildings[buildingHash].Index;
+          tBuildParameters.sBuildingHash = buildingHash;
+          tBuildParameters.iBuilding = iBuilding;
         end
+        -- Call cross context
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tBuildParameters);
+        return;
       end
     end
   end
@@ -261,7 +277,6 @@ end
 CypWorOriginal_Plot_CanHaveWonder = getmetatable(Plot).__index.CanHaveWonder;
 -- ---------------------------------------------------------------------------
 getmetatable(Plot).__index.CanHaveWonder = function ( self, iBuilding : number, iPlayer : number, iCity : number ) 
-  print("CanHaveWonder");
   -- Get plot
   local pPlot = self;
   -- Get player
@@ -286,7 +301,6 @@ end
 CypWorOriginal_Plot_CanHaveDistrict = getmetatable(Plot).__index.CanHaveDistrict;
 -- ---------------------------------------------------------------------------
 getmetatable(Plot).__index.CanHaveDistrict = function ( self, iDistrict : number, iPlayer : number, iCity : number ) 
-  print("CanHaveDistrict");
   -- Get plot
   local pPlot = self;
   -- Get player
