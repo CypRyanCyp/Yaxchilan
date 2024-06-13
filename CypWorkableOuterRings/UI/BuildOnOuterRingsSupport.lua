@@ -13,13 +13,6 @@ include "CypWor_Utility.lua"
 
 
 -- ===========================================================================
--- CONSTANTS
--- ===========================================================================
--- 
-
-
-
--- ===========================================================================
 -- MEMBERS
 -- ===========================================================================
 -- Dummy plot
@@ -124,7 +117,7 @@ CityManager.RequestOperation = function( pCity, xCityOperationType, tParameters 
   end
   
   -- Don't call recursive
-  if not tParameters.bAlreadyCalled then
+  if not tParameters[CYP_WOR_PARAM_OUTER_RING_BUILD_ADD_TO_QUEUE] then
     -- Allow building on outer rings
     if xCityOperationType == CityOperationTypes.BUILD then
       print("CityManager.RequestOperation", "CityOperationTypes.BUILD");
@@ -144,7 +137,6 @@ CityManager.RequestOperation = function( pCity, xCityOperationType, tParameters 
           tParameters.iPlayer = iPlayer;
           tParameters.iCity = iCity;
           tParameters.iPlot = iPlot;
-          tParameters.bAlreadyCalled = true;
           tParameters.sOperationType = xCityOperationType;
           -- Determine type
           if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then

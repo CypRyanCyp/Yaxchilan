@@ -36,14 +36,15 @@ local function CypWorBuildDistrict( iPlayer : number, tParameters : table )
   local pCity = pPlayer:GetCities():FindID(iCity);
   if pCity == nil then return end
   print("CypWorBuildDistrict", "D");
+  -- Get plot
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  if pPlot == nil then return end
+  print("CypWorBuildDistrict", "E");
+  -- Add queue info to plot
+  tParameters.iTurn = Game.GetCurrentGameTurn();
+  pPlot:SetProperty(CYP_WOR_PROPERTY_OUTER_RING_BUILD_ADD_TO_QUEUE, tParameters);
   -- Place district
   pCity:GetBuildQueue():CreateIncompleteDistrict(iDistrict, iPlot, 0);
-  print("CypWorBuildDistrict", "E");
-  -- Call initial function again to add to queue
-  --LuaEvents.CypWorCityManagerRequestOperation(iPlayer, iCity, tParameters.sOperationType, tParameters);
-  --ExposedMembers.CypWor.CityManagerRequestOperation(iPlayer, iCity, tParameters.sOperationType, tParameters);
-  ReportingEvents.SendLuaEvent("CypWorCityManagerRequestOperation", tParameters);
-  -- TODO cyp - differ between purchase and build
   print("CypWorBuildDistrict", "F");
 end
 
