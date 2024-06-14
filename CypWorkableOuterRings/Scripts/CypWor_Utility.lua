@@ -62,6 +62,26 @@ CYP_WOR_PARAM_OUTER_RING_BUILD_ADD_TO_QUEUE = "CYP_WOR_OUTER_RING_BUILD_ADD_TO_Q
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
+-- CypWorPlayerCanPayCost
+-- ---------------------------------------------------------------------------
+function CypWorPlayerCanPayCost( iPlayer : number, xYieldType, iYieldCost : number )
+  -- Get player
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return end
+  -- Get player yield amount
+  local iYieldAmount = 0;
+  if xYieldType == YieldTypes.GOLD then
+    iYieldAmount = math.floor(pPlayer:GetTreasury():GetGoldBalance());
+  elseif xYieldType == YieldTypes.FAITH then
+    iYieldAmount = math.floor(pPlayer:GetReligion():GetFaithBalance());
+  else
+    return false;
+  end
+  -- Validate player can pay cost
+  return iYieldAmount >= iYieldCost;
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorAcquirePlot
 -- ---------------------------------------------------------------------------
 function CypWorAcquirePlot( iPlayer : number, pPlot )
@@ -198,6 +218,42 @@ function CypWorGetRingPlotsByDistanceAndOwner( iX : number, iY : number, iPlayer
   end
   -- Return
   return tPlots;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorGetPurchasableOuterRingPlots
+-- Get purchasable plots in outer ring depending on required buildings.
+-- Only tiles adjacent to already owned tiles of this city are valid.
+-- ---------------------------------------------------------------------------
+function CypWorGetPurchasableOuterRingPlots( pCity )
+  
+  -- Determine purchase distance
+  local iPurchaseDst = CYP_WOR_DST_MIN;
+  if CypWorBuildingAExists(pCity) then 
+    iPurchaseDst = CYP_WOR_DST_MAX;
+  end
+  
+  -- Get unowned plots in outer rings
+  local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, CYP_WOR_DST_MIN, iPurchaseDst);
+  if tUnownedOuterRingPlots == nil or table.count(tUnownedOuterRingPlots) == 0 then return {} end
+  
+  -- Filter unreachable unowned tiles (= tiles that are not adjacent to a tiled already owned by this city)
+  local tReachableUnownedOuterRingPlots = {};
+  for _,pPlot in pairs(tUnownedOuterRingPlots) do
+    local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
+    for _, pNeighborPlot in ipairs(tNeighborPlots) do
+      local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
+      if pWorkingCity ~= nil then 
+        if iCity == pWorkingCity:GetID() and iPlayer == pNeighborPlot:GetOwner() then
+          table.insert(tReachableUnownedOuterRingPlots, pPlot);
+          break;
+        end
+      end
+    end
+  end
+  
+  -- Return
+  return tReachableUnownedOuterRingPlots;
 end
 
 -- ---------------------------------------------------------------------------

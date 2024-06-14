@@ -13,13 +13,6 @@ include "CypWor_Utility.lua"
 
 
 -- ===========================================================================
--- TODOS
--- ===========================================================================
--- Remove yield on purchase
--- Use ProductionPanel.lua : GetBuildInsertMode idea to request command from UI context again to put the new item on correct place in production queue
-
-
--- ===========================================================================
 -- EVENT CALLBACKS
 -- ===========================================================================
 
@@ -56,29 +49,32 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorBuildDistrict
 -- ---------------------------------------------------------------------------
-local function CypWorPurchaseDistrict( iPlayer : number, tParameters : table )
-  print("CypWorPurchaseDistrict", "A");
-  for k,v in pairs(tParameters) do
-    print("-", k, v);
-  end
+local function CypWorPurchaseInfrastructure( iPlayer : number, tParameters : table )
   -- Get params
   local iCity = tParameters.iCity;
-  local iDistrict = tParameters.iDistrict;
   local iPlot = tParameters.iPlot;
-  print("CypWorPurchaseDistrict", "B", iCity, iDistrict, iPlot);
+  local iYieldCost = tParameters.iYieldCost;
+  local xPurchaseYieldType = tParameters.xPurchaseYieldType
   -- Get player
   local pPlayer = Players[iPlayer];
   if pPlayer == nil then return end
-  print("CypWorPurchaseDistrict", "C");
   -- Get city
   local pCity = pPlayer:GetCities():FindID(iCity);
   if pCity == nil then return end
-  print("CypWorPurchaseDistrict", "D");
-  print("CypWorPurchaseDistrict", "E");
-  -- Place district
-  pCity:GetBuildQueue():CreateIncompleteDistrict(iDistrict, iPlot, 100);
-  -- Remove cost
-  -- TODO CYP
+  -- Validate player can pay yields
+  if not CypWorPlayerCanPayCost(iPlayer, xPurchaseYieldType, iYieldCost) then end
+  -- Place infrastructure
+  if tParameters.bIsDistrict then
+    pCity:GetBuildQueue():CreateIncompleteDistrict(tParameters.iDistrict, iPlot, 100);
+  else
+    pCity:GetBuildQueue():CreateIncompleteBuilding(tParameters.iBuilding, iPlot, 100);
+  end
+  -- Remove payment yields from player
+  if xPurchaseYieldType == YieldTypes.GOLD then
+    pPlayer:GetTreasury():ChangeGoldBalance(-iYieldCost);
+  elseif xPurchaseYieldType == YieldTypes.FAITH then
+    pPlayer:GetReligion():ChangeFaithBalance(-iYieldCost);
+  end
 end
 
 

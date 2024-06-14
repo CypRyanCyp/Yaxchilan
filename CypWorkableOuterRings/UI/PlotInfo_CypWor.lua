@@ -269,6 +269,9 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorPlotInfoShowOuterRingCitizens()
   
+  -- TODO CYP - remove this and override CityManager.GetCommandTargets( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
+  -- TODO CYP override CypWorOnClickOuterRingCitizen in original function
+  
   -- Get city
   local pCity :table = UI.GetHeadSelectedCity();
 	if pCity == nil then return end
@@ -577,44 +580,26 @@ function CypWorPlotInfoShowOuterRingPurchases()
   -- Validate city has required building
   if not CypWorDistrictExists(pCity) then return end
   
-  -- Determine purchase distance
-  local iPurchaseDst = CYP_WOR_DST_MIN;
-  if CypWorBuildingAExists(pCity) then 
-    iPurchaseDst = CYP_WOR_DST_MAX;
-  end
-  
   -- Get player info
 	local iPlayerGold	:number = pPlayer:GetTreasury():GetGoldBalance();
   local iGoldCostPerDistance, tTerrainModifierScalings = CypWorPlotInfoGetGoldCostInfo(pPlayer);
   local iSpeedCostMultiplier = GameInfo.GameSpeeds[GameConfiguration.GetGameSpeedType()].CostMultiplier;
   
-  -- Get unowned plots in outer rings
-  local tUnownedOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), -1, nil, CYP_WOR_DST_MIN, iPurchaseDst);
-  if tUnownedOuterRingPlots == nil or table.count(tUnownedOuterRingPlots) == 0 then return end
+  -- Get purchasable outer ring plots
+  local tReachableUnownedOuterRingPlots = CypWorGetPurchasableOuterRingPlots(pCity);
   
-  -- Filter unreachable unowned tiles (= tiles that are not adjacent to a tiled already owned by this city)
-  local tReachableUnownedOuterRingPlots = {};
-  for _,pPlot in pairs(tUnownedOuterRingPlots) do
-    local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
-    for _, pNeighborPlot in ipairs(tNeighborPlots) do
-      local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
-      if pWorkingCity ~= nil then 
-        if iCity == pWorkingCity:GetID() and iPlayer == pNeighborPlot:GetOwner() then
-          table.insert(tReachableUnownedOuterRingPlots, pPlot);
-          break;
-        end
-      end
-    end
-  end
+  -- TODO CYP - maybe this can be removed since the main function finds these already
+  -- TODO CYP - override cityGold:GetPlotPurchaseCost( index );
+  -- TODO CYP - add CypWorPlotInfoOnClickPurchasePlot to original function
   
   -- Show purchase icons
   for _,pPlot in pairs(tReachableUnownedOuterRingPlots) do
     local iPlot = pPlot:GetIndex();
     -- Add to lens hexes
-    table.insert(m_CypWorUiPurchasableCityPlotsLensMask, iPlot);
+    table.insert(m_CypWorUiPurchasableCityPlotsLensMask, iPlot); 
     -- Add icon
     local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
-    if pInstance ~= nil then
+    if pInstance ~= nil then 
       -- Gold cost
       local iGoldCost = CypWorPlotInfoGetPlotGoldCost(iGoldCostPerDistance, tTerrainModifierScalings, iSpeedCostMultiplier, pCity, pPlot);
       pInstance.PurchaseButton:SetText(tostring(iGoldCost));

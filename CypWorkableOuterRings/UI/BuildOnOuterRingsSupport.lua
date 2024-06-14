@@ -24,6 +24,38 @@ local Plot = Map.GetPlot(0,0);
 -- FUNCTIONS (UTILITY)
 -- ===========================================================================
 
+-- ---------------------------------------------------------------------------
+-- CypWorBoorsGetInfrastructureTypeInfo
+-- ---------------------------------------------------------------------------
+local function CypWorBoorsGetInfrastructureTypeInfo( tParameters : table )
+  local bIsDistrict = false;
+  local iInfrastructure = -1;
+  local sInfrastructureHash = nil;
+  if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
+    bIsDistrict = true;
+    local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
+    sInfrastructureHash = districtHash;
+    local iDistrict = GameInfo.Districts[districtHash].Index;
+    iInfrastructure = iDistrict;
+  elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
+    bIsDistrict = false;
+    local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
+    sInfrastructureHash = buildingHash;
+    local iBuilding = GameInfo.Buildings[buildingHash].Index;
+    iInfrastructure = iBuilding;
+  else
+    return nil, -1, -1;
+  end
+  return bIsDistrict, iInfrastructure, sInfrastructureHash;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorBoorsCanBuildInfrastructureOnPlot
+-- ---------------------------------------------------------------------------
+local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInfrastructure : number )
+  return true; -- TODO CYP
+end
+
 
 
 -- ===========================================================================
@@ -44,8 +76,29 @@ CityManager.CanStartCommand = function( pCity, xCityCommandType, tParameters : t
     if iX ~= nil and iY ~= nil then
       local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
       if iDistance >= CYP_WOR_DST_MIN then
-        -- TODO CYP
-        local tResults = {};
+        -- Collect data
+        local pPlot = Map.GetPlot(iX,iY);
+        local iPlot = pPlot:GetIndex();
+        local iCity = pCity:GetID();
+        local iPlayer = pCity:GetOwner();
+        local xPurchaseYieldType = tParameters[CityCommandTypes.PARAM_YIELD_TYPE];
+        -- Determine infrastructure type
+        local bIsDistrict, iInfrastructure, sInfrastructureHash = CypWorBoorsGetInfrastructureTypeInfo(tParameters);
+        if bIsDistrict == nil then 
+          return false, {};
+        end
+        -- Determine cost
+        local iYieldCost = pCity:GetGold():GetPurchaseCost(xPurchaseYieldType, sInfrastructureHash);
+        -- Validate player can pay yields
+        if not CypWorPlayerCanPayCost(iPlayer, xPurchaseYieldType, iYieldCost) then 
+          return false, {};
+        end
+        -- Validate can place infrastructure on this plot
+        if not CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure) then
+          return false, {}; -- TODO CYP - more info?
+        end
+        -- Return
+        local tResults = {}; -- TODO CYP - more info?
         return true, tResults;
       end
     end
@@ -75,25 +128,30 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
         local iPlayer = pCity:GetOwner();
         local xPurchaseYieldType = tParameters[CityCommandTypes.PARAM_YIELD_TYPE];
         -- Prepare cross context
-        tParameters.iPlayer = iPlayer;
-        tParameters.iCity = iCity;
-        tParameters.iPlot = iPlot;
-        tParameters.sOperationType = xCityOperationType;
-        tParameters.xPurchaseYieldType = xPurchaseYieldType;
-        -- Determine type
-        if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
-          local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
-          local iDistrict = GameInfo.Districts[districtHash].Index;
-          tParameters.iDistrict = iDistrict;
-          tParameters.OnStart = "CypWor_CC_BuildPlaceInfrastructure";
-        elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
-          local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
-          local iBuilding = GameInfo.Buildings[buildingHash].Index;
-          tParameters.iBuilding = iBuilding;
-          tParameters.OnStart = "CypWor_CC_PurchaseBuilding";
+        local tBuildParameters = {};
+        tBuildParameters.iPlayer = iPlayer;
+        tBuildParameters.iCity = iCity;
+        tBuildParameters.iPlot = iPlot;
+        tBuildParameters.xPurchaseYieldType = xPurchaseYieldType;
+        tBuildParameters.OnStart = "CypWor_CC_PurchaseInfrastructure";
+        tBuildParameters.xInsertMode = tParameters[CityOperationTypes.PARAM_INSERT_MODE];
+        tBuildParameters.xQueueDestinationLocation = tParameters[CityOperationTypes.PARAM_QUEUE_DESTINATION_LOCATION];
+        -- Determine infrastructure type
+        local bIsDistrict, iInfrastructure, sInfrastructureHash = CypWorBoorsGetInfrastructureTypeInfo(tParameters);
+        if bIsDistrict == nil then return end
+        tBuildParameters.bIsDistrict = bIsDistrict;
+        if bIsDistrict then
+          tBuildParameters.iDistrict = iInfrastructure;
+        else
+          tBuildParameters.iBuilding = iInfrastructure;
         end
+        -- Determine cost
+        local iYieldCost = pCity:GetGold():GetPurchaseCost(xPurchaseYieldType, sInfrastructureHash);
+        tBuildParameters.iYieldCost = iYieldCost;
+        -- Validate player can pay yields
+        if not CypWorPlayerCanPayCost(iPlayer, xPurchaseYieldType, iYieldCost) then return end
         -- Call cross context
-        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tBuildParameters);
         return;
       end
     end
@@ -116,7 +174,20 @@ CityManager.CanStartOperation = function( pCity, xCityOperationType, tParameters
     if iX ~= nil and iY ~= nil then
       local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
       if iDistance >= CYP_WOR_DST_MIN then
-        -- TODO CYP
+        -- Collect data
+        local pPlot = Map.GetPlot(iX,iY);
+        local iPlot = pPlot:GetIndex();
+        local iCity = pCity:GetID();
+        local iPlayer = pCity:GetOwner();
+        -- Determine infrastructure type
+        local bIsDistrict, iInfrastructure, sInfrastructureHash = CypWorBoorsGetInfrastructureTypeInfo(tParameters);
+        if bIsDistrict == nil then 
+          return false, {};
+        end
+        -- Validate can place infrastructure on this plot
+        if not CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure) then
+          return false, {}; -- TODO CYP - more info?
+        end
         local tResults = {};
         tResults[CityOperationResults.SUCCESS_CONDITIONS] = {};
         return true, tResults;
@@ -154,19 +225,16 @@ CityManager.RequestOperation = function( pCity, xCityOperationType, tParameters 
         tBuildParameters.OnStart = "CypWor_CC_BuildPlaceInfrastructure";
         tBuildParameters.xInsertMode = tParameters[CityOperationTypes.PARAM_INSERT_MODE];
         tBuildParameters.xQueueDestinationLocation = tParameters[CityOperationTypes.PARAM_QUEUE_DESTINATION_LOCATION];
-        -- Determine type
-        if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
-          tBuildParameters.bIsDistrict = true;
-          local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
-          local iDistrict = GameInfo.Districts[districtHash].Index;
-          tBuildParameters.sDistrictHash = districtHash;
-          tBuildParameters.iDistrict = iDistrict;
-        elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
-          tBuildParameters.bIsDistrict = false;
-          local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
-          local iBuilding = GameInfo.Buildings[buildingHash].Index;
-          tBuildParameters.sBuildingHash = buildingHash;
-          tBuildParameters.iBuilding = iBuilding;
+        -- Determine infrastructure type
+        local bIsDistrict, iInfrastructure, sInfrastructureHash = CypWorBoorsGetInfrastructureTypeInfo(tParameters);
+        if bIsDistrict == nil then return end
+        tBuildParameters.bIsDistrict = bIsDistrict;
+        if bIsDistrict then
+          tBuildParameters.iDistrict = iInfrastructure;
+          tBuildParameters.sDistrictHash = sInfrastructureHash;
+        else
+          tBuildParameters.iBuilding = iInfrastructure;
+          tBuildParameters.sBuildingHash = sInfrastructureHash;
         end
         -- Call cross context
         UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tBuildParameters);
@@ -194,27 +262,18 @@ CityManager.GetOperationTargets = function( pCity, xOperationType, tParameters :
   if xOperationType == CityOperationTypes.BUILD 
   and tParameters ~= nil
   then
-    -- Districts
-    if tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] ~= nil then
-      local districtHash = tParameters[CityOperationTypes.PARAM_DISTRICT_TYPE];
+    -- Determine infrastructure type
+    local bIsDistrict, iInfrastructure, sInfrastructureHash = CypWorBoorsGetInfrastructureTypeInfo(tParameters);
+    if bIsDistrict ~= nil then 
+      -- Add outer rings plots where infrastructure can be placed
       local tOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), iPlayer, iCity, CYP_WOR_DST_MIN, CYP_WOR_DST_MAX, false);
       for _, pPlot in pairs(tOuterRingPlots) do
-        local iPlot = pPlot:GetIndex();
-        -- TODO CYP - check district
-        table.insert(tResults[CityOperationResults.PLOTS], iPlot);
-      end
-    
-    -- Buildings
-    elseif tParameters[CityOperationTypes.PARAM_BUILDING_TYPE] ~= nil then
-      local buildingHash = tParameters[CityOperationTypes.PARAM_BUILDING_TYPE];
-      local tOuterRingPlots = CypWorGetRingPlotsByDistanceAndOwner(pCity:GetX(), pCity:GetY(), iPlayer, iCity, CYP_WOR_DST_MIN, CYP_WOR_DST_MAX, false);
-      for _, pPlot in pairs(tOuterRingPlots) do
-        local iPlot = pPlot:GetIndex();
-        -- TODO CYP - check building
-        table.insert(tResults[CityOperationResults.PLOTS], iPlot);
+        if CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure) then
+          local iPlot = pPlot:GetIndex();
+          table.insert(tResults[CityOperationResults.PLOTS], iPlot);
+        end
       end
     end
-
   end
   
   -- Return
@@ -229,33 +288,20 @@ CypWorOriginal_CityManager_GetCommandTargets = CityManager.GetCommandTargets;
 CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : table )
   -- Original
   local tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
-  -- Get city and player ID
-  local iCity = pCity:GetID();
-  local iPlayer = pCity:GetOwner();
   -- Get purchasable plots
   if xCommandType == CityCommandTypes.PURCHASE 
   and tParameters ~= nil
   and tParameters[CityCommandTypes.PARAM_PLOT_PURCHASE] ~= nil
   then
     -- Add outer ring purchasable plots
-    -- TODO CYP
-    -- table.insert(tResults[CityCommandResults.PLOTS], iPlot);
+    local tReachableUnownedOuterRingPlots = CypWorGetPurchasableOuterRingPlots(pCity);
+    for _,pPlot in pairs(tReachableUnownedOuterRingPlots) do
+      local iPlot = pPlot:GetIndex();
+      table.insert(tResults[CityCommandResults.PLOTS], iPlot);
+    end
   end
   -- Return
   return tResults;
-end
-
-
--- ---------------------------------------------------------------------------
-CypWorOriginal_AddAdjacentPlotBonuses = AddAdjacentPlotBonuses;
--- ---------------------------------------------------------------------------
--- CityManager.GetCommandTargets
--- ---------------------------------------------------------------------------
-function AddAdjacentPlotBonuses( pPlot : table, sDistrictType : string, pCity : table, tCurrentBonuses : table )
-  -- TODO CYP
-  
-  -- Original
-  return CypWorOriginal_AddAdjacentPlotBonuses(pPlot, sDistrictType, pCity, tCurrentBonuses);
 end
 
 
@@ -266,9 +312,38 @@ CypWorOriginal_Plot_GetAdjacencyBonusType = getmetatable(Plot).__index.GetAdjace
 -- ---------------------------------------------------------------------------
 getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, eDistrict, pOtherPlot )
   -- TODO CYP
+  
   -- Original
-  CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
+  return CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
 end
+
+-- ---------------------------------------------------------------------------
+-- Plot:GetAdjacencyYield
+-- ---------------------------------------------------------------------------
+CypWorOriginal_Plot_GetAdjacencyYield = getmetatable(Plot).__index.GetAdjacencyYield;
+-- ---------------------------------------------------------------------------
+getmetatable(Plot).__index.GetAdjacencyYield = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
+  -- TODO CYP
+  
+  -- Original
+  return CypWorOriginal_Plot_GetAdjacencyYield(self, iPlayer, iCity, eDistrict, iYieldType);
+end
+
+-- ---------------------------------------------------------------------------
+-- Plot:GetAdjacencyBonusTooltip
+-- ---------------------------------------------------------------------------
+CypWorOriginal_Plot_GetAdjacencyBonusTooltip = getmetatable(Plot).__index.GetAdjacencyBonusTooltip;
+-- ---------------------------------------------------------------------------
+getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
+  -- TODO CYP
+  
+  -- Original
+  return CypWorOriginal_Plot_GetAdjacencyBonusTooltip(self, iPlayer, iCity, eDistrict, iYieldType);
+end
+
+--
+
+--
 
 
 -- ---------------------------------------------------------------------------
@@ -289,10 +364,10 @@ getmetatable(Plot).__index.CanHaveWonder = function ( self, iBuilding : number, 
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
   if iDistance <= 3 then
-    CypWorOriginal_Plot_CanHaveWonder(self, iBuilding, iPlayer, iCity);
+    return CypWorOriginal_Plot_CanHaveWonder(self, iBuilding, iPlayer, iCity);
   end
   -- Determine for outer rings
-  return true; -- TODO CYP
+  return CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, false, iBuilding);
 end
 
 -- ---------------------------------------------------------------------------
@@ -313,8 +388,8 @@ getmetatable(Plot).__index.CanHaveDistrict = function ( self, iDistrict : number
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
   if iDistance <= 3 then
-    CypWorOriginal_Plot_CanHaveDistrict(self, iDistrict, iPlayer, iCity);
+    return CypWorOriginal_Plot_CanHaveDistrict(self, iDistrict, iPlayer, iCity);
   end
   -- Determine for outer rings
-  return true; -- TODO CYP
+  return CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, true, iDistrict);
 end
