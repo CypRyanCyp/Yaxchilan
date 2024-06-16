@@ -2,6 +2,8 @@
 -- Plotinfo UI
 -- ===========================================================================
 
+-- TODO CYP - also check suk plotinfo
+
 
 
 -- ===========================================================================
@@ -47,9 +49,6 @@ local YIELD_VARIATION_MAP		:table = {
 -- ===========================================================================
 -- MEMBERS
 -- ===========================================================================
-local m_CypWorPlotIM				                  :table = InstanceManager:new("InfoInstance",	"Anchor", Controls.PlotInfoContainer);
-local m_CypWorUiCitizens			                :table = {};
-local m_CypWorUiWorkableCityPlotsLensMask	    :table = {};
 local m_CypWorUiPurchase			                :table = {};
 local m_CypWorUiPurchasableCityPlotsLensMask	:table = {};
 local m_CypWorUiSwapTiles		                  :table = {};
@@ -210,118 +209,6 @@ function CypWorPlotInfoGetPlotYieldsWithWorkerCompensations( iPlot : number, yie
 			end
 		end
 	end
-end
-
--- ---------------------------------------------------------------------------
--- CypWorPlotInfoGetOuterRingInstanceAt
--- ---------------------------------------------------------------------------
-function CypWorPlotInfoGetOuterRingInstanceAt( iPlot : number )
-	local pInstance = m_CypWorUiCitizens[iPlot];
-	if pInstance == nil then
-		pInstance = m_CypWorPlotIM:GetInstance();
-		m_CypWorUiCitizens[iPlot] = pInstance;
-		local worldX, worldY = UI.GridToWorld(iPlot);
-		pInstance.Anchor:SetWorldPositionVal(worldX, worldY, 20);
-		pInstance.Anchor:SetHide(false);
-	end
-	return pInstance;
-end
-
--- ---------------------------------------------------------------------------
--- CypWorPlotInfoReleaseOuterRingInstanceAt
--- Note: This is actually never used, just like the original in PlotInfo.lua.
--- ---------------------------------------------------------------------------
-function CypWorPlotInfoReleaseOuterRingInstanceAt( iPlot : number )
-	local pInstance = m_CypWorUiCitizens[iPlot];
-  if pInstance == nil then return end
-  pInstance.Anchor:SetHide(true);
-  m_CypWorUiCitizens[iPlot] = nil;
-end
-
-
--- ---------------------------------------------------------------------------
--- CypWorPlotInfoUpdateWorCitizens
--- Override visualization of WOR citizens, when autto assigned
--- ---------------------------------------------------------------------------
-function CypWorPlotInfoUpdateWorCitizens()
-  
-  -- Get city
-  local pCity :table = UI.GetHeadSelectedCity();
-	if pCity == nil then return end
-  
-  -- Validate city has WOR district
-  if not CypWorDistrictExists(pCity) then return end
-  local iCypWorPlot = CypWorDistrictPlotId(pCity);
-  
-  -- Get instance
-  local pInstance : table = GetInstanceAt(iCypWorPlot);
-  if pInstance == nil then return end
-  table.insert(m_CypWorUiCitizens, pInstance);
-  
-  -- Hide instance
-	pInstance.Anchor:SetHide(true);
-end
-
--- ---------------------------------------------------------------------------
--- CypWorPlotInfoShowOuterRingCitizens
--- Update outer ring workers. This is only called when the city management 
--- UI lens is already selected.
--- ---------------------------------------------------------------------------
-function CypWorPlotInfoShowOuterRingCitizens()
-  
-  -- TODO CYP - remove this and override CityManager.GetCommandTargets( pSelectedCity, CityCommandTypes.MANAGE, tParameters );
-  -- TODO CYP override CypWorOnClickOuterRingCitizen in original function
-  
-  -- Get city
-  local pCity :table = UI.GetHeadSelectedCity();
-	if pCity == nil then return end
-  local iCity = pCity:GetID();
-  
-  -- Validate is local player
-  local iPlayer = pCity:GetOwner();
-	if iPlayer ~= Game.GetLocalPlayer() then return end
-  
-  -- Validate is city management
-	if UI.GetInterfaceMode() ~= InterfaceModeTypes.CITY_MANAGEMENT then return end
-  
-  -- Get outer ring plot data
-  local tOuterRingPlotsData : table = pCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
-  if tOuterRingPlotsData == nil or table.count(tOuterRingPlotsData) == 0 then return end
-  
-  -- Show icon on each worked outer ring plot and disable shadow hex
-  m_CypWorUiWorkableCityPlotsLensMask = {};
-  for iPlot, xPlotData in pairs(tOuterRingPlotsData) do
-    -- Add to lens hexes
-		table.insert(m_CypWorUiWorkableCityPlotsLensMask, iPlot);
-  -- Update instance
-    local pInstance = CypWorPlotInfoGetOuterRingInstanceAt(iPlot);
-    if pInstance ~= nil then
-      if xPlotData.bIsWorked then
-        pInstance.CitizenButton:SetTextureOffsetVal(0, CITIZEN_BUTTON_HEIGHT*4);
-      else
-        pInstance.CitizenButton:SetTextureOffsetVal(0, 0);
-      end
-      pInstance.CitizenButton:SetHide(false);
-      pInstance.CitizenMeterBG:SetHide(true);
-      pInstance.LockedIcon:SetHide(not xPlotData.bIsLocked);
-      pInstance.CitizenButton:SetVoid1(iPlot);
-      pInstance.CitizenButton:SetDisabled(false);
-      pInstance.CitizenButton:RegisterCallback( Mouse.eLClick, function() CypWorOnClickOuterRingCitizen( iPlayer, iCity, iPlot ); end );
-    end
-  end
-end
-
--- ---------------------------------------------------------------------------
--- CypWorPlotInfoHideOuterRingCitizens
--- ---------------------------------------------------------------------------
-function CypWorPlotInfoHideOuterRingCitizens()
-	for iPlot, pInstance in pairs(m_CypWorUiCitizens) do
-		--CypWorPlotInfoReleaseOuterRingInstanceAt(iPlot);
-		pInstance.CitizenButton:SetHide(true);
-		pInstance.CitizenMeterBG:SetHide(true);
-	end
-  m_CypWorUiCitizens = {};
-  m_CypWorUiWorkableCityPlotsLensMask = {};
 end
 
 -- ---------------------------------------------------------------------------
@@ -713,10 +600,6 @@ end
 -- ---------------------------------------------------------------------------
 -- Plot yields
 CypWorOriginal_GetPlotYields = GetPlotYields;
--- Citizens
-CypWorOriginal_ShowCitizens = ShowCitizens;
-CypWorOriginal_HideCitizens = HideCitizens;
-CypWorOriginal_OnClickCitizen = OnClickCitizen;
 -- Purchase tiles
 CypWorOriginal_ShowPurchases = ShowPurchases;
 CypWorOriginal_HidePurchases = HidePurchases;
@@ -748,57 +631,6 @@ function GetPlotYields( iPlot : number, tYields : table)
   else
     return CypWorOriginal_GetPlotYields(iPlot, tYields);
   end
-end
-
--- ---------------------------------------------------------------------------
--- ShowCitizens
--- Overwrites original PlotInfo.ShowCitizens function.
--- Show outer ring workers in city management UI lens.
--- ---------------------------------------------------------------------------
-function ShowCitizens()
-  -- Call original
-  CypWorOriginal_ShowCitizens();
-  -- Update WOR specialists
-  CypWorPlotInfoUpdateWorCitizens();
-  -- Show outer ring workers
-  CypWorPlotInfoShowOuterRingCitizens();
-end
-
--- ---------------------------------------------------------------------------
--- HideCitizens
--- Overwrites original PlotInfo.HideCitizens function.
--- Hide outer ring workers in city management UI lens.
--- ---------------------------------------------------------------------------
-function HideCitizens()
-  -- Call original
-  CypWorOriginal_HideCitizens();
-  -- Hide outer ring workers
-  CypWorPlotInfoHideOuterRingCitizens();
-end
-
-
--- ---------------------------------------------------------------------------
--- OnClickCitizen
--- ---------------------------------------------------------------------------
-function OnClickCitizen( iPlot : number )
-  -- Get and validate city
-  local pCity :table = UI.GetHeadSelectedCity();
-  if pCity == nil then return end
-  local iCity = pCity:GetID();
-  -- Get and validate player
-  local iPlayer = pCity:GetOwner();
-  -- Check if can toggle lock
-  local bCanToggleCitizenPlot = CypWorCanToggleCitizenPlot(iPlayer, iCity, iPlot, true);
-  if not bCanToggleCitizenPlot then return false end
-  -- Call original
-	local bResult = CypWorOriginal_OnClickCitizen(iPlot);
-  -- Call to clear plot lock cache
-  local tParameters = {};
-  tParameters.iCity = iCity;
-  tParameters.OnStart = "CypWor_CC_ClearPlotLockCache";
-  UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-  -- Return
-  return bResult;
 end
 
 -- ---------------------------------------------------------------------------
@@ -858,10 +690,6 @@ end
 function AggregateLensHexes( tKeys : table )
   -- Call original
   local tResults : table = CypWorOriginal_AggregateLensHexes(tKeys);
-  -- Add outer ring plots to lens hexes
-  for i, iPlot in pairs(m_CypWorUiWorkableCityPlotsLensMask) do
-    table.insert(tResults, iPlot);
-  end
   -- Add unowned outer ring plots to lens hexes
   for i, iPlot in pairs(m_CypWorUiPurchasableCityPlotsLensMask) do
     table.insert(tResults, iPlot);
@@ -872,22 +700,6 @@ function AggregateLensHexes( tKeys : table )
   end
   -- Return new result
   return tResults;
-end
-
--- ---------------------------------------------------------------------------
--- ClearEverything
--- Overwrites original PlotInfo.ClearEverything function.
--- Clear outer ring worker instances.
--- ---------------------------------------------------------------------------
-function ClearEverything()
-  -- Call original
-  CypWorOriginal_ClearEverything();
-  -- Clear outer ring worker instances
-  for key,pInstance in pairs(m_CypWorUiCitizens) do
-		pInstance.Anchor:SetHide(true);
-		m_CypWorPlotIM:ReleaseInstance(pInstance);
-		m_CypWorUiCitizens[key] = nil;
-	end
 end
 
 -- ---------------------------------------------------------------------------

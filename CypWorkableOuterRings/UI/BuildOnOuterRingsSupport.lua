@@ -25,6 +25,51 @@ local Plot = Map.GetPlot(0,0);
 -- ===========================================================================
 
 -- ---------------------------------------------------------------------------
+-- CypWorBoorsCanToggleCitizenPlot
+-- Note: Must be defined before CypWorOnClickOuterRingCitizen.
+-- ---------------------------------------------------------------------------
+function CypWorBoorsCanToggleCitizenPlot( iPlayer : number, iCity : number, iPlot : number, bIsInnerRing )
+  -- Get and validate city
+  local pCity :table = UI.GetHeadSelectedCity();
+  if pCity == nil then return false end
+  if pCity:GetID() ~= iCity then return false end
+  -- Get locked plots
+  local tCityLockedPlots = {};
+  local iCityLockedCount = -1;
+  local bHasInnerRingData = false;
+  local tLockedOuterRingPlots = {};
+  local bHasOuterRingData = false;
+  -- Determine if is locked
+  local bPlotIsLocked = false;
+  if bIsInnerRing then
+    tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
+    bHasInnerRingData = true;
+    bPlotIsLocked = tCityLockedPlots[iPlot] ~= nil;
+  else
+    tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
+    bHasOuterRingData = true;
+    bPlotIsLocked = tLockedOuterRingPlots[iPlot] == true;
+  end
+  if bPlotIsLocked then return true end
+  -- Get missing data
+  if not bHasInnerRingData then
+    tCityLockedPlots, iCityLockedCount = ExposedMembers.CypWor.CityGetLockedPlots(iPlayer, iCity);
+  end
+  if not bHasOuterRingData then
+    tLockedOuterRingPlots = pCity:GetProperty(CYP_WOR_PROPERTY_LOCKED_OUTER_RING_PLOTS);
+    if tLockedOuterRingPlots == nil then tLockedOuterRingPlots = {} end
+  end
+  -- Count locks
+  local iLockedOuterRingPlots = table.count(tLockedOuterRingPlots);
+  local iTotalLockedPlots = iLockedOuterRingPlots + iCityLockedCount;
+  local iTotalAvailableWorkerCount = pCity:GetPopulation();
+  if iTotalLockedPlots + 1 > iTotalAvailableWorkerCount then return false end
+  -- Return can lock
+  return true;
+end
+
+-- ---------------------------------------------------------------------------
 -- CypWorBoorsGetInfrastructureTypeInfo
 -- ---------------------------------------------------------------------------
 local function CypWorBoorsGetInfrastructureTypeInfo( tParameters : table )
@@ -286,18 +331,101 @@ CypWorOriginal_CityManager_GetCommandTargets = CityManager.GetCommandTargets;
 -- CityManager.GetCommandTargets
 -- ---------------------------------------------------------------------------
 CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : table )
-  -- Original
-  local tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
+  
+  -- Prepare result 
+  local tResults = nil;
+  
   -- Get purchasable plots
   if xCommandType == CityCommandTypes.PURCHASE 
   and tParameters ~= nil
   and tParameters[CityCommandTypes.PARAM_PLOT_PURCHASE] ~= nil
   then
+    -- Original
+    tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
     -- Add outer ring purchasable plots
     local tReachableUnownedOuterRingPlots = CypWorGetPurchasableOuterRingPlots(pCity);
     for _,pPlot in pairs(tReachableUnownedOuterRingPlots) do
       local iPlot = pPlot:GetIndex();
       table.insert(tResults[CityCommandResults.PLOTS], iPlot);
+    end
+    
+  -- Get city citizen info
+  elseif xCommandType == CityCommandTypes.MANAGE 
+  and tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] ~= nil
+  and (tParameters[CityCommandTypes.PARAM_X] == nil or tParameters[CityCommandTypes.PARAM_Y] == nil)
+  then
+    -- Original
+    tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
+  -- Validate city has WOR district
+    if CypWorDistrictExists(pCity) then
+      -- Remove WOR district citizen info
+      local iCypWorPlot = CypWorDistrictPlotId(pCity);
+      for i,iPlotX in pairs(tResults[CityCommandResults.PLOTS]) do
+        if iPlotX == iCypWorPlot then
+          tResults[CityCommandResults.CITIZENS][i] = 0;
+          tResults[CityCommandResults.MAX_CITIZENS][i] = 0;
+          tResults[CityCommandResults.LOCKED_CITIZENS][i] = 0;
+          break;
+        end
+      end
+      -- Append outer ring plots data
+      local tOuterRingPlotsData : table = pCity:GetProperty(CYP_WOR_PROPERTY_OUTER_RING_PLOTS_DATA);
+      if tOuterRingPlotsData ~= nil and table.count(tOuterRingPlotsData) > 0 then
+        for iPlot, xPlotData in pairs(tOuterRingPlotsData) do
+          local iNumUnits = 0;
+          if xPlotData.bIsWorked then
+            iNumUnits = 1;
+          end
+          local iMaxUnits = 1; -- TODO CYP - districts?
+          local iLockedUnits = 0;
+          if bIsLocked then
+            iLockedUnits = 1; -- TODO CYP - districts
+          end
+          table.insert(tResults[CityCommandResults.PLOTS], iPlot);
+          table.insert(tResults[CityCommandResults.CITIZENS], iNumUnits);
+          table.insert(tResults[CityCommandResults.MAX_CITIZENS], iMaxUnits);
+          table.insert(tResults[CityCommandResults.LOCKED_CITIZENS], iLockedUnits);
+        end
+      end
+    end
+        
+  -- Get city citizen info or toggle citizen lock
+  elseif xCommandType == CityCommandTypes.MANAGE 
+  and tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] ~= nil
+  and tParameters[CityCommandTypes.PARAM_X] ~= nil 
+  and tParameters[CityCommandTypes.PARAM_Y] ~= nil)
+  then
+    -- Collect params
+    local iX = tParameters[CityCommandTypes.PARAM_X];
+    local iY = tParameters[CityCommandTypes.PARAM_Y];
+    -- Determine if is inner ring
+    local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
+    local bIsInnerRing = iDistance < CYP_WOR_DST_MIN;
+    -- Check if can toggle this plot
+    if not CypWorBoorsCanToggleCitizenPlot(iPlayer, iCity, iPlot, bIsInnerRing) then 
+      tResults = false;
+    else
+      -- Toggle inner ring plot
+      if bIsInnerRing then
+        -- Original
+        tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
+        -- Call to clear plot lock cache
+        local tParameters = {};
+        tParameters.iCity = iCity;
+        tParameters.OnStart = "CypWor_CC_ClearPlotLockCache";
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+      -- Toggle outer ring plot
+      else
+        -- Cross context call if is outer ring
+        local tParameters = {};
+        tParameters.iPlayer = iPlayer;
+        tParameters.iCity = iCity;
+        tParameters.iPlot = iPlot;
+        tParameters.OnStart = "CypWor_CC_TogglePlotLock";
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+        -- Result
+        tResults = true;
+      end
     end
   end
   -- Return
