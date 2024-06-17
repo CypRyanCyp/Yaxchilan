@@ -11,7 +11,7 @@ include("PopupDialog");
 include("Civ6Common.lua");
 -- CYP START - Build support for outer rings
 include("BuildOnOuterRingsSupport.lua");
-print("StrategicView_MapPlacement.lua initialized!");
+print("StrategicView_MapPlacement.lua includes BuildOnOuterRingsSupport.lua");
 -- CYP END
 
 

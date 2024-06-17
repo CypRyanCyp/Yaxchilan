@@ -89,7 +89,7 @@ end
 local function CypWorBoorLateInitialize()
   -- Custom game event subscriptions
   GameEvents.CypWor_CC_BuildPlaceInfrastructure.Add( CypWorBuildPlaceInfrastructure );
-  GameEvents.CypWor_CC_PurchasInfrastructure.Add( CypWorPurchaseInfrastructure );
+  GameEvents.CypWor_CC_PurchaseInfrastructure.Add( CypWorPurchaseInfrastructure );
   -- Log the initialization
   print("CypWor_BuildOnOuterRings.lua initialized!");
 end

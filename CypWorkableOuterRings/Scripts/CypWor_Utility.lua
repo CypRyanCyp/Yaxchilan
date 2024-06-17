@@ -227,6 +227,9 @@ end
 -- ---------------------------------------------------------------------------
 function CypWorGetPurchasableOuterRingPlots( pCity )
   
+  -- Validate city has WOR district
+  if not CypWorDistrictExists(pCity) then return {} end
+  
   -- Determine purchase distance
   local iPurchaseDst = CYP_WOR_DST_MIN;
   if CypWorBuildingAExists(pCity) then 
