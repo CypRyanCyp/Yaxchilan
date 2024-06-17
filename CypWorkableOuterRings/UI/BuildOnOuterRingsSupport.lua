@@ -158,12 +158,16 @@ CypWorOriginal_CityManager_RequestCommand = CityManager.RequestCommand;
 -- CityManager.RequestCommand
 -- ---------------------------------------------------------------------------
 CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : table )
-  -- Allow building on outer rings
-  if xCityCommandType == CityCommandTypes.PURCHASE then
+  
+  -- Purchase infrastructure
+  if xCityCommandType == CityCommandTypes.PURCHASE 
+  and tParameters[CityCommandTypes.PARAM_PLOT_PURCHASE] ~= nil
+  then
     -- Collect data
     local iX = tParameters[CityCommandTypes.PARAM_X];
     local iY = tParameters[CityCommandTypes.PARAM_Y];
     if iX ~= nil and iY ~= nil then
+      -- Determine inner or outer ring
       local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
       if iDistance >= CYP_WOR_DST_MIN then
         -- Collect data
@@ -200,7 +204,48 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
         return;
       end
     end
+  
+  -- Toggle citizen lock
+  elseif xCityCommandType == CityCommandTypes.MANAGE 
+  and tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] ~= nil
+  then
+    -- Collect data
+    local iX = tParameters[CityCommandTypes.PARAM_X];
+    local iY = tParameters[CityCommandTypes.PARAM_Y];
+    if iX ~= nil and iY ~= nil then
+      -- Determine inner or outer ring
+      local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
+      local bIsInnerRing = iDistance < CYP_WOR_DST_MIN;
+      -- Check if can toggle this plot
+      if not CypWorBoorsCanToggleCitizenPlot(iPlayer, iCity, iPlot, bIsInnerRing) then return false end
+      -- Toggle inner ring plot
+      if bIsInnerRing then
+        -- Original
+        tResults = CypWorOriginal_CityManager_RequestCommand(pCity, xCityCommandType, tParameters);
+        -- Call to clear plot lock cache
+        local tParameters = {};
+        tParameters.iCity = iCity;
+        tParameters.OnStart = "CypWor_CC_ClearPlotLockCache";
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+        -- Return
+        return tResults;
+      -- Toggle outer ring plot
+      else
+        -- Cross context call if is outer ring
+        local tParameters = {};
+        tParameters.iPlayer = iPlayer;
+        tParameters.iCity = iCity;
+        tParameters.iPlot = iPlot;
+        tParameters.OnStart = "CypWor_CC_TogglePlotLock";
+        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
+        -- Return
+        return true;
+      end
+    end
+  
   end
+  
+  
   -- Original
   CypWorOriginal_CityManager_RequestCommand(pCity, xCityCommandType, tParameters);
 end
@@ -356,7 +401,7 @@ CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : tab
   then
     -- Original
     tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
-  -- Validate city has WOR district
+    -- Validate city has WOR district
     if CypWorDistrictExists(pCity) then
       -- Remove WOR district citizen info
       local iCypWorPlot = CypWorDistrictPlotId(pCity);
@@ -388,45 +433,12 @@ CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : tab
         end
       end
     end
-        
-  -- Get city citizen info or toggle citizen lock
-  elseif xCommandType == CityCommandTypes.MANAGE 
-  and tParameters[CityCommandTypes.PARAM_MANAGE_CITIZEN] ~= nil
-  and tParameters[CityCommandTypes.PARAM_X] ~= nil 
-  and tParameters[CityCommandTypes.PARAM_Y] ~= nil)
-  then
-    -- Collect params
-    local iX = tParameters[CityCommandTypes.PARAM_X];
-    local iY = tParameters[CityCommandTypes.PARAM_Y];
-    -- Determine if is inner ring
-    local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
-    local bIsInnerRing = iDistance < CYP_WOR_DST_MIN;
-    -- Check if can toggle this plot
-    if not CypWorBoorsCanToggleCitizenPlot(iPlayer, iCity, iPlot, bIsInnerRing) then 
-      tResults = false;
-    else
-      -- Toggle inner ring plot
-      if bIsInnerRing then
-        -- Original
-        tResults = CypWorOriginal_CityManager_GetCommandTargets(pCity, xCommandType, tParameters);
-        -- Call to clear plot lock cache
-        local tParameters = {};
-        tParameters.iCity = iCity;
-        tParameters.OnStart = "CypWor_CC_ClearPlotLockCache";
-        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-      -- Toggle outer ring plot
-      else
-        -- Cross context call if is outer ring
-        local tParameters = {};
-        tParameters.iPlayer = iPlayer;
-        tParameters.iCity = iCity;
-        tParameters.iPlot = iPlot;
-        tParameters.OnStart = "CypWor_CC_TogglePlotLock";
-        UI.RequestPlayerOperation(iPlayer, PlayerOperations.EXECUTE_SCRIPT, tParameters);
-        -- Result
-        tResults = true;
-      end
-    end
+  
+  -- Get swapable tiles
+  elseif
+  -- TODO CYP
+  PARAM_SWAP_TILE_OWNER
+  
   end
   -- Return
   return tResults;
