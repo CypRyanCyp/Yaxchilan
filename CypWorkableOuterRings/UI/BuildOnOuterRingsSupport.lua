@@ -13,6 +13,23 @@ include "CypWor_Utility.lua"
 
 
 -- ===========================================================================
+-- CONSTANTS
+-- ===========================================================================
+-- DLCs
+local CYP_WOR_DLC_GATHERING_STORM:boolean = Modding.IsModActive("4873eb62-8ccc-4574-b784-dda455e74e68"); -- Gathering Storm
+-- Districts
+local CYP_WOR_DISTRICT_TYPES = {};
+for tDistrict in GameInfo.Districts() do
+  CYP_WOR_DISTRICT_TYPES[tDistrict.Index] = tDistrict.DistrictType;
+end
+-- Buildings
+local CYP_WOR_BUILDING_TYPES = {};
+for tBuilding in GameInfo.Buildings() do
+  CYP_WOR_BUILDING_TYPES[tBuilding.Index] = tBuilding.BuildingType;
+end
+
+
+-- ===========================================================================
 -- MEMBERS
 -- ===========================================================================
 -- Dummy plot
@@ -276,11 +293,239 @@ end
 -- CypWorBoorsCanBuildInfrastructureOnPlot
 -- ---------------------------------------------------------------------------
 local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInfrastructure : number )
-  return true; -- TODO CYP
-  -- Determine IF can be placed
-  -- Check terrains and features
-  -- Check if terrain or feature can be removed?
-  -- If yes, is there a feature or whatever that will removed
+  
+  -- Get player
+  local iPlayer = pPlot:GetOwner();
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return false end
+  
+  -- Prepare data
+  local tSuccessConditions = {};
+  local sDistrictType = nil;
+  local tDistrict = nil;
+  local sBuildingType = nil;
+  local tBuilding = nil;
+  -- District
+  if bIsDistrict then
+    sDistrictType = CYP_WOR_DISTRICT_TYPES[iInfrastructure];
+    tDistrict = GameInfo.Districts[sDistrictType].Index;
+  -- Wonder (building)
+  else
+    sBuildingType = CYP_WOR_BUILDING_TYPES[iInfrastructure];
+    tBuilding = GameInfo.Buildings[sBuildingType].Index;
+  end
+  
+  -- XP2 placement rules
+  if CYP_WOR_DLC_GATHERING_STORM then
+    -- District
+    if bIsDistrict then
+      local tDistrictXp2 = GameInfo.Districts_XP2[tDistrict.DistrictType];
+      if tDistrictXp2 then
+        -- Canal
+        if tDistrictXp2.Canal then return false end
+        -- Dam
+        if tDistrictXp2.OnePerRiver then return false end
+      end
+    -- Wonder (building)
+    else
+      local tBuildingXp2 = GameInfo.Buildings_XP2[tBuilding.BuildingType];
+      if tBuildingXp2 then
+        -- Canal
+        if tBuildingXp2.CanalWonder then return false end
+    end
+  end
+  
+  -- Vanilla placement rules
+  local tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY());
+  -- District
+  if bIsDistrict then
+    -- Aqueduct
+    if tDistrict.Aqueduct then return false end
+    -- AdjacentToLand
+    if tDistrict.AdjacentToLand and not pPlot:IsAdjacentToLand() then return false end
+    -- Coast
+    if tDistrict.Coast and not pPlot:IsCoastalLand() then return false end
+    -- NoAdjacentCity
+    if tDistrict.NoAdjacentCity then
+      for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+        if pAdjacentPlot:IsCity() then return false end
+      end
+    end
+  -- Wonder (building)
+  else
+    -- AdjacentCapital (not possible in outer rings)
+    if tBuilding.AdjacentCapital then return false end
+    -- AdjacentDistrict
+    if tBuilding.AdjacentDistrict then
+      local bHasAdjacentDistrict = false;
+      for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+        if pAdjacentPlot:GetDistrictType() == tBuilding.AdjacentDistrict then
+          bHasAdjacentDistrict = true;
+          break;
+        end
+      end
+      if not bHasAdjacentDistrict then return false end
+    end
+    -- AdjacentImprovement
+    if tBuilding.AdjacentImprovement then
+      local bHasAdjacentImprovement = false;
+      for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+        if pAdjacentPlot:GetImprovementType() == tBuilding.AdjacentImprovement then
+          bHasAdjacentImprovement = true;
+          break;
+        end
+      end
+      if not bHasAdjacentImprovement then return false end
+    end
+    -- AdjacentToMountain
+    if tBuilding.AdjacentToMountain then
+      local bAdjacentToMountain = false;
+      for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+        if pAdjacentPlot:IsMountain() then
+          bAdjacentToMountain = true;
+          break;
+        end
+      end
+      if not bAdjacentToMountain then return false end
+    end
+    -- AdjacentResource
+    if tBuilding.AdjacentResource then
+      local bHasAdjacentResource = false;
+      for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+        if pAdjacentPlot:GetResourceType() == tBuilding.AdjacentResource then
+          bHasAdjacentResource = true;
+          break;
+        end
+      end
+      if not bHasAdjacentResource then return false end
+    end
+    -- Coast
+    if tBuilding.Coast and not pPlot:IsCoastalLand() then return false end
+    -- MustBeLake
+    if tBuilding.MustBeLake and not pPlot:IsLake() then return false end
+    -- MustNotBeLake
+    if tBuilding.MustNotBeLake and pPlot:IsLake() then return false end
+    -- RequiresAdjacentRiver
+    if tBuilding.RequiresAdjacentRiver and not pPlot:IsRiverAdjacent() then return false end
+    -- MustBeAdjacentLand
+    if tBuilding.MustBeAdjacentLand and not pPlot:IsAdjacentToLand() then return false end
+  end
+  
+  -- Valid terrain
+  local tValidTerrainTypes = {};
+  -- District
+  if bIsDistrict then
+    for tValidTerrain in GameInfo.District_ValidTerrains() do
+      if tValidTerrain.DistrictType == sDistrictType then
+        tValidTerrainTypes[tValidTerrain.TerrainType] = true;
+      end
+    end
+  -- Wonder (building)
+  else
+    for tValidTerrain in GameInfo.Building_ValidTerrains() do
+      if tValidTerrain.BuildingType == sBuildingType then
+        tValidTerrainTypes[tValidTerrain.TerrainType] = true;
+      end
+    end
+  end
+  -- Check terrain
+  if table.count(tValidTerrainTypes) > 0 
+  and not tValidTerrainTypes[pPlot:GetTerrainType()] 
+  then return false end
+  
+  -- Feature
+  local sPlotFeatureType = pPlot:GetFeatureType();
+  
+  -- Required Feature | District
+  if bIsDistrict then
+    local tRequiredFeatureTypes = {};
+    for tRequiredFeature in GameInfo.Building_ValidFeatures() do
+      if tRequiredFeature.DistrictType == sDistrictType then
+        tRequiredFeatureTypes[tRequiredFeature.FeatureType] = true;
+      end
+    end
+    if table.count(tRequiredFeatureTypes) > 0 
+    and not tRequiredFeatureTypes[sPlotFeatureType]
+    then return false end
+  end
+  
+  -- Valid and removable feature
+  if sPlotFeatureType ~= nil then
+    -- Valid feature
+    local bValidFeature = false;
+    -- XP2 valid placements
+    if CYP_WOR_DLC_GATHERING_STORM then
+      local tFeatureXp2 = GameInfo.Features_XP2[sPlotFeatureType];
+      if tFeatureXp2 ~= nil then
+        if (bIsDistrict and tFeatureXp2.IsValidDistrictPlacement)
+        or (not bIsDistrict and tFeatureXp2.IsValidWonderPlacement)
+        then
+          bValidFeature = true;
+        end
+      end
+    end
+    -- Wonder (building)
+    if not bValidFeature and not bIsDistrict then
+      for tValidFeature in GameInfo.Building_ValidFeatures() do
+        if tValidFeature.BuildingType == sBuildingType then
+          tValidFeatureTypes[tValidFeature.FeatureType] = true;
+          if tValidFeature.FeatureType == sPlotFeatureType then
+            bValidFeature = true;
+            break;
+          end
+        end
+      end
+    end
+    -- Removable feature
+    if not bValidFeature then
+      -- Get feature
+      local tFeature = GameInfo.Features[sPlotFeatureType];
+      if tFeature == nil then return false end
+      -- Check removable
+      if not tFeature.Removable then return false end
+      -- Check required tech for removal
+      if tFeature.RemoveTech ~= nil then
+        local iTech = GameInfo.Technologies[tFeature.RemoveTech].Index;
+        if pPlayer:GetTech():HasTech(iTech) then return false end
+      end
+      -- Add remove improvement info
+      table.insert(
+        tSuccessConditions, 
+        Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_FEATURE', tFeature.Name));
+      -- TODO CYP - is the feature removed without extra script code?
+    end
+  end
+  
+  -- Resource
+  local sResourceType = pPlot:GetResourceType();
+  if sResourceType ~= nil then
+    -- Check if can harvest
+    local tHarvest = GameInfo.Resource_Harvests[sResourceType];
+    if tHarvest == nil then return false end
+    -- Check harvest tech requirement
+    if tHarvest.PrereqTech ~= nil then
+      local iTech = GameInfo.Technologies[tHarvest.PrereqTech].Index;
+      if pPlayer:GetTech():HasTech(iTech) then return false end
+    end
+    -- Add harvest resource info
+    table.insert(
+      tSuccessConditions, 
+      Locale.Lookup('LOC_DISTRICT_ZONE_WILL_HARVEST_RESOURCE', GameInfo.Resources[sResourceType].Name));
+    -- TODO CYP - is the resource removed without extra script code?
+  end
+  
+  -- Improvement
+  local sImprovementType = pPlot:GetImprovementType();
+  if sImprovementType ~= nil then
+    -- Add remove improvement info
+    table.insert(
+      tSuccessConditions, 
+      Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_IMPROVEMENT', GameInfo.Improvements[sImprovementType].Name));
+    -- TODO CYP - is the improvement removed without extra script code?
+  end
+  
+  -- Return
+  return true, tSuccessConditions;
 end
 
 
@@ -334,11 +579,15 @@ CityManager.CanStartCommand = function( pCity, xCityCommandType, tParameters : t
       return false, {};
     end
     -- Validate can place infrastructure on this plot
-    if not CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure) then
-      return false, {}; -- TODO CYP - more info?
+    local bCanStart, tSuccessConditions = CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure);
+    if not bCanStart then
+      return false, {};
     end
     -- Return
-    local tResults = {}; -- TODO CYP - more info?
+    local tResults = {};
+    if table.count(tSuccessConditions) > 0 then
+      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditions;
+    end
     return true, tResults;
   
   -- Purchase outer ring plot
@@ -685,11 +934,15 @@ CityManager.CanStartOperation = function( pCity, xCityOperationType, tParameters
       return false, {};
     end
     -- Validate can place infrastructure on this plot
-    if not CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure) then
-      return false, {}; -- TODO CYP - more info?
+    local bCanStart, tSuccessConditions = CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure);
+    if not bCanStart then
+      return false, {};
     end
+    -- Return
     local tResults = {};
-    tResults[CityOperationResults.SUCCESS_CONDITIONS] = {};
+    if table.count(tSuccessConditions) > 0 then
+      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditions;
+    end
     return true, tResults;
   end
   
