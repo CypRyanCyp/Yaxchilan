@@ -209,7 +209,7 @@ local function CypWorBoorsPlotInfoUpdateGoldCostInfo( iPlayer : number )
   end
   
   -- Gold cost per distance
-  local iGoldCostPerDistance iGoldCostPerDistance * iTechScaling * iCivicScaling * iModifierScaling;
+  local iGoldCostPerDistance = iGoldCostPerDistance * iTechScaling * iCivicScaling * iModifierScaling;
 
   -- Merge and store
   m_CypWorBoors_Players_GoldCostsPerDistance[iPlayer] = iGoldCostPerDistance;
