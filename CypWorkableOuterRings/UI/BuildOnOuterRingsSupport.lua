@@ -40,12 +40,95 @@ local m_CypWorBoors_Players_TerrainModifierScalings = {};
 local m_CypWorBoors_Plots_GoldCosts = {};
 -- Function extension flags
 local m_CypWorBoors_CityGoldGetPlotPurchaseCost_HasBeenExtended = false;
+-- Plot district adjacency cache
+m_CypWorBoors_DistrictYieldChangeIds = {};
+m_CypWorBoors_PlotDistrictAdjacencyCache = {};
 
 
 
 -- ===========================================================================
 -- FUNCTIONS (UTILITY)
 -- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- CypWorBoorsUpdatePlotDistrictAdjacencyCache
+-- ---------------------------------------------------------------------------
+local function CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, sDistrictType, pCity)
+  -- Collect data
+  local iPlot = pPlot:GetIndex();
+  local iCity = pCity:GetID();
+  local iPlayer = pCity:GetOwner();
+  -- Clear cache
+  if m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot] == nil then
+    m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot] = {};
+  end
+  m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot][sDistrictType] = {};
+  -- Determine yield change IDs
+  if m_CypWorBoors_DistrictYieldChangeIds[sDistrictType] == nil then
+    m_CypWorBoors_DistrictYieldChangeIds[sDistrictType] = {};
+    for kDistrictAdjacency in GameInfo.District_Adjacencies() do
+      if kDistrictAdjacency.DistrictType == sDistrictType then
+        table.insert(m_CypWorBoors_DistrictYieldChangeIds[sDistrictType], kDistrictAdjacency.YieldChangeId);
+      end
+    end
+  end
+  -- Prepare
+  local tAdjacencyDirectionBonuses = {};
+  for _,iDirection in pairs(DirectionTypes) do
+    tAdjacencyDirectionBonuses[iDirection] = {};
+  end
+  local tAdjacencyBonuses = {};
+  -- Loop adjacencies
+  for _,sYieldChangeId in ipairs(m_CypWorBoors_DistrictYieldChangeIds[sDistrictType]) do
+    local tYieldChange = GameInfo.Adjacency_YieldChanges[sYieldChangeId];
+    -- Get adjacent plots
+    local tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY());
+    -- Check adjacency types
+    local eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_DISTRICT;
+    -- Determine adjacency bonuses
+    local iAdjacentPlotsWithMatchingReqs = 0;
+    for _,iDirection in pairs(DirectionTypes) do
+      local pAdjacentPlot = tAdjacentPlots[iDirection];
+      local bAdjacentPlotRequirementsMet = false;
+      -- OtherDistrictAdjacent
+      if tYieldChange.OtherDistrictAdjacent then
+        if pAdjacentPlot:GetDistrictType() ~= -1 then bAdjacentPlotRequirementsMet = true end
+      -- AdjacentSeaResource
+      elseif tYieldChange.AdjacentSeaResource
+          or tYieldChange.AdjacentResource ~= nil
+          or tYieldChange.AdjacentResourceClass ~= 'NO_RESOURCECLASS' then
+        local tResource = pPlot:GetResourceType();
+        if tResource ~= nil then 
+          -- TODO CYP
+        end
+      end
+      -- TODO CYP
+      -- Store adjacency bonu
+      if bAdjacentPlotRequirementsMet then
+        if tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] == nil then
+          tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] = {};
+        end
+        if tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] == nil then
+          tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType] = 0;
+        end
+        tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType] =
+            tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType]
+            + tYieldChange.YieldChange / tYieldChange.TilesRequired;
+        iAdjacentPlotsWithMatchingReqs = iAdjacentPlotsWithMatchingReqs + 1;
+      end
+    end
+    -- Determine yield
+    if tAdjacencyBonuses[eAdjacencyType] == nil then
+      tAdjacencyBonuses[eAdjacencyType] = {};
+    end
+    if tAdjacencyBonuses[eAdjacencyType] == nil then
+      tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType] = 0;
+    end
+    tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType] = 
+        tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType]
+        + tYieldChange.YieldChange * iAdjacentPlotsWithMatchingReqs / tYieldChange.TilesRequired;
+  end
+end
 
 -- ---------------------------------------------------------------------------
 -- CypWorBoorsPlotInfoGetGoldCostInfo
@@ -187,9 +270,9 @@ end
 -- CypWorPlotInfoPlotIsNextToOwnedPlot
 -- ---------------------------------------------------------------------------
 local function CypWorPlotInfoPlotIsNextToOwnedPlot( pPlot, iCity : number )
-  local tNeighborPlots = Map.GetNeighborPlots(pPlot:GetX(), pPlot:GetY(), 1);
-  for _, pNeighborPlot in ipairs(tNeighborPlots) do
-    local pWorkingCity = Cities.GetPlotPurchaseCity(pNeighborPlot:GetIndex());
+  local tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY());
+  for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
+    local pWorkingCity = Cities.GetPlotPurchaseCity(pAdjacentPlot:GetIndex());
     if pWorkingCity ~= nil and iCity == pWorkingCity:GetID() then 
       return true;
     end
@@ -499,19 +582,24 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
   -- Resource
   local sResourceType = pPlot:GetResourceType();
   if sResourceType ~= nil then
-    -- Check if can harvest
-    local tHarvest = GameInfo.Resource_Harvests[sResourceType];
-    if tHarvest == nil then return false end
-    -- Check harvest tech requirement
-    if tHarvest.PrereqTech ~= nil then
-      local iTech = GameInfo.Technologies[tHarvest.PrereqTech].Index;
-      if pPlayer:GetTech():HasTech(iTech) then return false end
+    -- Get resource
+    local tResource = GameInfo.Resources[sResourceType];
+    -- Check if resource is visible
+    if pPlayer:GetResources():IsResourceVisible(tResource.Hash) then
+      -- Check if can harvest
+      local tHarvest = GameInfo.Resource_Harvests[sResourceType];
+      if tHarvest == nil then return false end
+      -- Check harvest tech requirement
+      if tHarvest.PrereqTech ~= nil then
+        local iTech = GameInfo.Technologies[tHarvest.PrereqTech].Index;
+        if pPlayer:GetTech():HasTech(iTech) then return false end
+      end
+      -- Add harvest resource info
+      table.insert(
+        tSuccessConditions, 
+        Locale.Lookup('LOC_DISTRICT_ZONE_WILL_HARVEST_RESOURCE', tResource.Name));
+      -- TODO CYP - is the resource removed without extra script code?
     end
-    -- Add harvest resource info
-    table.insert(
-      tSuccessConditions, 
-      Locale.Lookup('LOC_DISTRICT_ZONE_WILL_HARVEST_RESOURCE', GameInfo.Resources[sResourceType].Name));
-    -- TODO CYP - is the resource removed without extra script code?
   end
   
   -- Improvement
@@ -1037,42 +1125,6 @@ CityManager.GetOperationTargets = function( pCity, xOperationType, tParameters :
 end
 
 -- ---------------------------------------------------------------------------
--- Plot:GetAdjacencyBonusType
--- ---------------------------------------------------------------------------
-CypWorOriginal_Plot_GetAdjacencyBonusType = getmetatable(Plot).__index.GetAdjacencyBonusType;
--- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, eDistrict, pOtherPlot )
-  -- TODO CYP
-  
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
-end
-
--- ---------------------------------------------------------------------------
--- Plot:GetAdjacencyYield
--- ---------------------------------------------------------------------------
-CypWorOriginal_Plot_GetAdjacencyYield = getmetatable(Plot).__index.GetAdjacencyYield;
--- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyYield = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
-  -- TODO CYP
-  
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyYield(self, iPlayer, iCity, eDistrict, iYieldType);
-end
-
--- ---------------------------------------------------------------------------
--- Plot:GetAdjacencyBonusTooltip
--- ---------------------------------------------------------------------------
-CypWorOriginal_Plot_GetAdjacencyBonusTooltip = getmetatable(Plot).__index.GetAdjacencyBonusTooltip;
--- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
-  -- TODO CYP
-  
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyBonusTooltip(self, iPlayer, iCity, eDistrict, iYieldType);
-end
-
--- ---------------------------------------------------------------------------
 -- Plot:CanHaveWonder
 -- ---------------------------------------------------------------------------
 CypWorOriginal_Plot_CanHaveWonder = getmetatable(Plot).__index.CanHaveWonder;
@@ -1118,4 +1170,56 @@ getmetatable(Plot).__index.CanHaveDistrict = function ( self, iDistrict : number
   end
   -- Determine for outer rings
   return CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, true, iDistrict);
+end
+
+-- ---------------------------------------------------------------------------
+-- AddAdjacentPlotBonuses
+-- ---------------------------------------------------------------------------
+CypWorOriginal_AddAdjacentPlotBonuses = AddAdjacentPlotBonuses;
+-- ---------------------------------------------------------------------------
+function AddAdjacentPlotBonuses( pPlot, sDistrictType, pCity, tCurrentBonuses : table )
+  -- Update plot adjacency cache
+  --CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, sDistrictType, pCity);
+  -- Original
+  return CypWorOriginal_AddAdjacentPlotBonuses(pPlot, sDistrictType, pCity, tCurrentBonuses);
+end
+
+-- ---------------------------------------------------------------------------
+-- Plot:GetAdjacencyBonusType
+-- ---------------------------------------------------------------------------
+-- Used in AdjacencyBonusSupport.lua via
+-- AddAdjacentPlotBonuses > GetAdjacentIconArtdefName > pPlot:GetAdjacencyBonusType();
+-- ---------------------------------------------------------------------------
+CypWorOriginal_Plot_GetAdjacencyBonusType = getmetatable(Plot).__index.GetAdjacencyBonusType;
+-- ---------------------------------------------------------------------------
+getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, eDistrict, pOtherPlot )
+  -- TODO CYP - required?!
+  print("plot", self:GetX(), self:GetY(), "GetAdjacencyBonusType");
+  -- Original
+  return CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
+end
+
+-- ---------------------------------------------------------------------------
+-- Plot:GetAdjacencyYield
+-- ---------------------------------------------------------------------------
+CypWorOriginal_Plot_GetAdjacencyYield = getmetatable(Plot).__index.GetAdjacencyYield;
+-- ---------------------------------------------------------------------------
+getmetatable(Plot).__index.GetAdjacencyYield = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
+  -- TODO CYP - required?!
+  print("plot", self:GetX(), self:GetY(), "GetAdjacencyYield");
+  -- Original
+  return CypWorOriginal_Plot_GetAdjacencyYield(self, iPlayer, iCity, eDistrict, iYieldType);
+end
+
+-- ---------------------------------------------------------------------------
+-- Plot:GetAdjacencyBonusTooltip
+-- ---------------------------------------------------------------------------
+CypWorOriginal_Plot_GetAdjacencyBonusTooltip = getmetatable(Plot).__index.GetAdjacencyBonusTooltip;
+-- ---------------------------------------------------------------------------
+getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
+  -- TODO CYP - required?!
+  print("plot", self:GetX(), self:GetY(), "GetAdjacencyBonusTooltip");
+  
+  -- Original
+  return CypWorOriginal_Plot_GetAdjacencyBonusTooltip(self, iPlayer, iCity, eDistrict, iYieldType);
 end
