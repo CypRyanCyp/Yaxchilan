@@ -190,7 +190,7 @@ local function CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, iDistrict : nu
         if pAdjacentPlot ~= nil then
           -- Determine value
           local bAdjacentPlotRequirementsMet = false;
-          if tYieldChange.OtherDistrictAdjacent 
+          if tYieldChange.OtherDistrictAdjacent then
             if pAdjacentPlot:GetDistrictType() ~= -1 then bAdjacentPlotRequirementsMet = true end
           elseif tYieldChange.AdjacentDistrict ~= nil then
             if CYP_WOR_DISTRICT_TYPES[pAdjacentPlot:GetDistrictType()] == tYieldChange.AdjacentDistrict then bAdjacentPlotRequirementsMet = true end
@@ -768,7 +768,7 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorBoorsGetSuccessConditionTexts
 -- ---------------------------------------------------------------------------
-local function CypWorBoorsGetSuccessConditionTexts( tSuccessConditions :table );
+local function CypWorBoorsGetSuccessConditionTexts( tSuccessConditions :table )
   local tSuccessConditionTexts = {};
   if tSuccessConditions.sFeatureType then
     table.insert(
@@ -1066,7 +1066,6 @@ CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : tab
         end
         -- Collect data for gold purchase cost
         CypWorBoorsPlotInfoUpdateGoldCostInfo(iPlayer);
-        
         -- Extend CityGold:GetPlotPurchaseCost
         if not m_CypWorBoors_CityGoldGetPlotPurchaseCost_HasBeenExtended then
           -- Get instance to access metadable
@@ -1081,7 +1080,7 @@ CityManager.GetCommandTargets = function( pCity, xCommandType, tParameters : tab
             local pCity = Cities.GetPlotPurchaseCity(iPlot);
             if pCity == nil then return 0 end
             -- Determine inner or outer ring
-            local iDistance : number = Map.GetPlotDistance(pCity:GetX(), pCity:GetY() pPlot:GetX(), pPlot:GetY());
+            local iDistance = Map.GetPlotDistance(pCity:GetX(), pCity:GetY(), pPlot:GetX(), pPlot:GetY());
             -- Original for inner ring
             if iDistance < CYP_WOR_DST_MIN then
               return fCypWorOriginal_CityGold_GetPlotPurchaseCost(self, iPlot);
@@ -1172,7 +1171,7 @@ CityManager.CanStartOperation = function( pCity, xCityOperationType, tParameters
   and iDistance >= CYP_WOR_DST_MIN 
   then
     -- Validate city has WOR district
-    if not CypWorDistrictExists(pCity) then return 
+    if not CypWorDistrictExists(pCity) then 
       return false, {};
     end
     -- Validate distance
@@ -1455,11 +1454,11 @@ getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer :
   local tYieldBonuses = ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict][iYield];
   local tYieldTooltipLines = {};
   for i,tAdjacencyInfo in pairs(tYieldBonuses) do
-    table.insert(tYieldTooltipLines, Locale.Lookup(tAdjacencyInfo.sLocTag, tAdjacencyInfo.iValue);
+    table.insert(tYieldTooltipLines, Locale.Lookup(tAdjacencyInfo.sLocTag, tAdjacencyInfo.iValue));
   end
   -- Merge lines
   local sYieldTooltip = table.concat(tYieldTooltipLines, "[NEWLINE]");
-  local sYieldRequireText "";
+  local sYieldRequireText = "";
   -- Return
   return sYieldTooltip, sYieldRequireText;
 end

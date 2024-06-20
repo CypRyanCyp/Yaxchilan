@@ -37,3 +37,10 @@ function ClearEveything()
   -- Original
   CypWorOriginal_ClearEveything();
 end
+
+
+
+-- ===========================================================================
+-- INITIALIZE
+-- ===========================================================================
+print("DistrictPlotIconManager_CypWor.lua initialized!");
