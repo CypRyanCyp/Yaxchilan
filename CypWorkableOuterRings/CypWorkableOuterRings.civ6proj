@@ -119,7 +119,7 @@
   </ImportFiles>
   <ImportFiles id="Import_UI_Replacements">
     <File>UI/Replacements/CitySupport.lua</File>
-    <File>UI/Replacements/StrategicView_MapPlacement.lua</File>
+    <File>UI/Replacements/AdjacencyBonusSupport.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_UI">
     <Properties>
@@ -140,6 +140,7 @@
     <File>UI/ThirdParty/SSUA/Suk_CityPanelOverview.lua</File>
     <File>UI/ThirdParty/SSUA/PlotInfo_Citizens.lua</File>
     <File>UI/PlotInfo_Citizens_CypWor.lua</File>
+    <File>UI/DistrictPlotIconManager_CypWor.lua</File>
   </ImportFiles>
   <ImportFiles id="Import_Icons">
     <File>Icons/WOR_District_256.dds</File>
@@ -182,6 +183,13 @@
       <LuaContext>PlotInfo_Citizens</LuaContext>
       <LuaReplace>UI/PlotInfo_Citizens_CypWor.lua</LuaReplace>
     </Properties>
+  </ReplaceUIScript>
+  <ReplaceUIScript id="ReplaceUIScript_DistrictPlotIconManager">
+      <Properties>
+          <LoadOrder>51</LoadOrder>
+          <LuaContext>DistrictPlotIconManager</LuaContext>
+          <LuaReplace>UI/DistrictPlotIconManager_CypWor.lua</LuaReplace>
+      </Properties>
   </ReplaceUIScript>
   <!-- Scripts -->
   <AddGameplayScripts id="Scripts">
@@ -346,7 +354,7 @@
     <Content Include="UI\Replacements\CitySupport.lua">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="UI\Replacements\StrategicView_MapPlacement.lua">
+    <Content Include="UI\Replacements\AdjacencyBonusSupport.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\ThirdParty\SSUA\PlotInfo_Citizens.lua">
@@ -371,6 +379,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\PlotInfo_Citizens_CypWor.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="UI\DistrictPlotIconManager_CypWor.lua">
       <SubType>Content</SubType>
     </Content>
     <Content Include="UI\PlotToolTip_CypWor.lua">

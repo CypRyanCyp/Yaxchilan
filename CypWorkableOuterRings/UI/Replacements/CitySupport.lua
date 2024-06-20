@@ -542,7 +542,7 @@ function GetCityData( pCity:table )
   if IsExpansion1Active() or IsExpansion2Active() then
     data.AmenitiesFromGovernors			= pCityGrowth:GetAmenitiesFromGovernors();
   end
-  -- CYP GOV_AMENITIES START
+  -- CYP GOV_AMENITIES END
 	data.AmenitiesFromDistricts			= pCityGrowth:GetAmenitiesFromDistricts();
 	data.AmenitiesFromNaturalWonders			= pCityGrowth:GetAmenitiesFromNaturalWonders();
 	data.AmenitiesFromTraits			= pCityGrowth:GetAmenitiesFromTraits();

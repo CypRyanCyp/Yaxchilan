@@ -27,6 +27,33 @@ local CYP_WOR_BUILDING_TYPES = {};
 for tBuilding in GameInfo.Buildings() do
   CYP_WOR_BUILDING_TYPES[tBuilding.Index] = tBuilding.BuildingType;
 end
+-- Terrains
+local CYP_WOR_TERRAIN_TYPES = {};
+for tTerrain in GameInfo.Terrains() do
+  CYP_WOR_TERRAIN_TYPES[tTerrain.Index] = tTerrain.TerrainType;
+end
+-- Features
+local CYP_WOR_FEATURE_TYPES = {};
+for tFeature in GameInfo.Features() do
+  CYP_WOR_FEATURE_TYPES[tFeature.Index] = tFeature.FeatureType;
+end
+-- Improvements
+local CYP_WOR_IMPROVEMENT_TYPES = {};
+for tImprovement in GameInfo.Improvements() do
+  CYP_WOR_IMPROVEMENT_TYPES[tImprovement.Index] = tImprovement.ImprovementType;
+end
+-- Resources
+local CYP_WOR_RESOURCE_TYPES = {};
+for tResource in GameInfo.Resources() do
+  CYP_WOR_RESOURCE_TYPES[tResource.Index] = tResource.ResourceType;
+end
+-- AdjacencyDirections
+local CYP_WOR_ADJACENCY_DIRECTIONS = {};
+for _,iDir in ipairs(DirectionTypes) do
+  if iDir ~= DirectionTypes.NO_DIRECTION then
+    table.insert(CYP_WOR_ADJACENCY_DIRECTIONS, iDir);
+  end
+end
 
 
 -- ===========================================================================
@@ -41,8 +68,9 @@ local m_CypWorBoors_Plots_GoldCosts = {};
 -- Function extension flags
 local m_CypWorBoors_CityGoldGetPlotPurchaseCost_HasBeenExtended = false;
 -- Plot district adjacency cache
-m_CypWorBoors_DistrictYieldChangeIds = {};
-m_CypWorBoors_PlotDistrictAdjacencyCache = {};
+ExposedMembers.CypWor.DistrictYieldChangeIds = {};
+ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache = {};
+ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache = {};
 
 
 
@@ -53,81 +81,210 @@ m_CypWorBoors_PlotDistrictAdjacencyCache = {};
 -- ---------------------------------------------------------------------------
 -- CypWorBoorsUpdatePlotDistrictAdjacencyCache
 -- ---------------------------------------------------------------------------
-local function CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, sDistrictType, pCity)
+-- TODO CYP - also consider modifiers
+-- ---------------------------------------------------------------------------
+local function CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, iDistrict : number, pCity)
   -- Collect data
   local iPlot = pPlot:GetIndex();
   local iCity = pCity:GetID();
   local iPlayer = pCity:GetOwner();
-  -- Clear cache
-  if m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot] == nil then
-    m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot] = {};
+  local tDistrict = GameInfo.Districts[iDistrict];
+  local sDistrictType = tDistrict.DistrictType;
+  -- Ensure ExposedMembers.CypWor exists
+  if not ExposedMembers.CypWor then ExposedMembers.CypWor = {} end
+  -- Clear cache for direction adjacency types
+  if ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot] == nil then
+    ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot] = {};
   end
-  m_CypWorBoors_PlotDistrictAdjacencyCache[iPlot][sDistrictType] = {};
+  ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot][iDistrict] = {};
+  -- Clear cache for adjacency yield bonuses
+  if ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot] == nil then
+    ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot] = {};
+  end
+  ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict] = {};
   -- Determine yield change IDs
-  if m_CypWorBoors_DistrictYieldChangeIds[sDistrictType] == nil then
-    m_CypWorBoors_DistrictYieldChangeIds[sDistrictType] = {};
+  if ExposedMembers.CypWor.DistrictYieldChangeIds[iDistrict] == nil then
+    ExposedMembers.CypWor.DistrictYieldChangeIds[iDistrict] = {};
     for kDistrictAdjacency in GameInfo.District_Adjacencies() do
       if kDistrictAdjacency.DistrictType == sDistrictType then
-        table.insert(m_CypWorBoors_DistrictYieldChangeIds[sDistrictType], kDistrictAdjacency.YieldChangeId);
+        table.insert(ExposedMembers.CypWor.DistrictYieldChangeIds[iDistrict], kDistrictAdjacency.YieldChangeId);
       end
     end
   end
   -- Prepare
-  local tAdjacencyDirectionBonuses = {};
+  local tAdjacencyDirectionBonuseTypes = {};
   for _,iDirection in pairs(DirectionTypes) do
-    tAdjacencyDirectionBonuses[iDirection] = {};
+    tAdjacencyDirectionBonuseTypes[iDirection] = {};
   end
-  local tAdjacencyBonuses = {};
+  local tAdjacencyTypeBonuses = {};
   -- Loop adjacencies
-  for _,sYieldChangeId in ipairs(m_CypWorBoors_DistrictYieldChangeIds[sDistrictType]) do
+  for _,sYieldChangeId in ipairs(ExposedMembers.CypWor.DistrictYieldChangeIds[iDistrict]) do
     local tYieldChange = GameInfo.Adjacency_YieldChanges[sYieldChangeId];
-    -- Get adjacent plots
-    local tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY());
-    -- Check adjacency types
-    local eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_DISTRICT;
-    -- Determine adjacency bonuses
-    local iAdjacentPlotsWithMatchingReqs = 0;
-    for _,iDirection in pairs(DirectionTypes) do
-      local pAdjacentPlot = tAdjacentPlots[iDirection];
-      local bAdjacentPlotRequirementsMet = false;
-      -- OtherDistrictAdjacent
-      if tYieldChange.OtherDistrictAdjacent then
-        if pAdjacentPlot:GetDistrictType() ~= -1 then bAdjacentPlotRequirementsMet = true end
-      -- AdjacentSeaResource
-      elseif tYieldChange.AdjacentSeaResource
-          or tYieldChange.AdjacentResource ~= nil
-          or tYieldChange.AdjacentResourceClass ~= 'NO_RESOURCECLASS' then
-        local tResource = pPlot:GetResourceType();
-        if tResource ~= nil then 
-          -- TODO CYP
+    -- Check if active
+    local bIsActive = true;
+    -- PrereqTech
+    if bIsActive
+    and tYieldChange.PrereqTech
+    and not pPlayer:GetTech():HasTech(GameInfo.Technologies[tYieldChange.PrereqTech].Index)
+    then bIsActive = false end
+    -- ObsoleteTech
+    if bIsActive
+    and tYieldChange.ObsoleteTech
+    and pPlayer:GetTech():HasTech(GameInfo.Technologies[tYieldChange.ObsoleteTech].Index)
+    then bIsActive = false end
+    -- PrereqCivic
+    if bIsActive
+    and tYieldChange.PrereqCivic 
+    and not pPlayer:GetCulture():HasCivic(GameInfo.Civics[tYieldChange.PrereqCivic].Index)
+    then bIsActive = false end
+    -- ObsoleteCivic
+    if bIsActive
+    and tYieldChange.ObsoleteCivic 
+    and pPlayer:GetCulture():HasCivic(GameInfo.Civics[tYieldChange.ObsoleteCivic].Index)
+    then bIsActive = false end
+    -- Only process if active
+    if bIsActive then
+      -- Determine adjacency type
+      local eAdjacencyType = nil;
+      local iSubType = -1;
+      if tYieldChange.OtherDistrictAdjacent 
+      or tYieldChange.AdjacentDistrict ~= nil 
+      or tYieldChange.Self
+      then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_DISTRICT;
+      elseif tYieldChange.AdjacentTerrain then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_TERRAIN;
+      elseif tYieldChange.AdjacentFeature then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_FEATURE;
+      elseif tYieldChange.AdjacentWonder then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_WONDER;
+      elseif tYieldChange.AdjacentNaturalWonder then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_NATURAL_WONDER;
+      elseif tYieldChange.AdjacentRiver then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_RIVER;
+      elseif tYieldChange.AdjacentSeaResource then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_SEA_RESOURCE;
+      elseif tYieldChange.AdjacentResource then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_RESOURCE;
+      elseif tYieldChange.AdjacentResourceClass ~= 'NO_RESOURCECLASS' then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_RESOURCE_CLASS;
+      elseif tYieldChange.AdjacentImprovement ~= nil then
+        eAdjacencyType = AdjacencyBonusTypes.ADJACENCY_IMPROVEMENT;
+      end
+      -- Prepare directions and adjacent plots
+      local tDirections = nil;
+      local tAdjacentPlots = nil;
+      if tYieldChange.Self or tYieldChange.AdjacentRiver then
+        tDirections = { DirectionTypes.NO_DIRECTION };
+        tAdjacentPlots = { };
+        tAdjacentPlots[DirectionTypes.NO_DIRECTION] = pPlot;
+      else
+        tDirections = CYP_WOR_ADJACENCY_DIRECTIONS;
+        tAdjacentPlots = Map.GetAdjacentPlots(pPlot:GetX(), pPlot:GetY());
+      end
+      -- Determine adjacency bonuses
+      local iReqMatchingPlots = 0;
+      for _,iDirection in pairs(tDirections) do
+        -- Get plot
+        local pAdjacentPlot = tAdjacentPlots[iDirection];
+        if pAdjacentPlot ~= nil then
+          -- Determine value
+          local bAdjacentPlotRequirementsMet = false;
+          if tYieldChange.OtherDistrictAdjacent 
+            if pAdjacentPlot:GetDistrictType() ~= -1 then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.AdjacentDistrict ~= nil then
+            if CYP_WOR_DISTRICT_TYPES[pAdjacentPlot:GetDistrictType()] == tYieldChange.AdjacentDistrict then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.Self then
+            bAdjacentPlotRequirementsMet = true;
+          elseif tYieldChange.AdjacentTerrain then
+            if CYP_WOR_TERRAIN_TYPES[pAdjacentPlot:GetTerrainype()] == tYieldChange.AdjacentTerrain then 
+              bAdjacentPlotRequirementsMet = true;
+              local tTerrain = GameInfo.Resources[CYP_WOR_TERRAIN_TYPES[pAdjacentPlot:GetTerrainype()]];
+              iSubType = tTerrain.Index;
+              --if tYieldChange.AdjacentTerrain == 'TERRAIN_TUNDRA' then
+              --  iSubType = g_TERRAIN_TYPE_TUNDRA;
+              --elseif tYieldChange.AdjacentTerrain == 'TERRAIN_TUNDRA_HILLS' then
+              --  iSubType = g_TERRAIN_TYPE_TUNDRA_HILLS;
+              --elseif tYieldChange.AdjacentTerrain == 'TERRAIN_DESERT' then
+              --  iSubType = g_TERRAIN_TYPE_DESERT;
+              --elseif tYieldChange.AdjacentTerrain == 'TERRAIN_DESERT_HILLS' then
+              --  iSubType = g_TERRAIN_TYPE_DESERT_HILLS;
+              --elseif tYieldChange.AdjacentTerrain == 'TERRAIN_COAST' then
+              --  iSubType = g_TERRAIN_TYPE_COAST;
+              --end
+            end
+          elseif tYieldChange.AdjacentFeature then
+            if CYP_WOR_FEATURE_TYPES[pAdjacentPlot:GetFeatureType()] == tYieldChange.AdjacentFeature then 
+              bAdjacentPlotRequirementsMet = true;
+              local tFeature = GameInfo.Resources[pAdjacentPlot:GetFeatureType()];
+              iSubType = tFeature.Index;
+              --if tYieldChange.AdjacentFeature == 'FEATURE_JUNGLE' then
+              --  iSubType = g_FEATURE_JUNGLE;
+              --elseif tYieldChange.AdjacentFeature == 'FEATURE_FOREST' then
+              --  iSubType = g_FEATURE_FOREST;
+              --elseif tYieldChange.AdjacentFeature == 'FEATURE_GEOTHERMAL_FISSURE' then
+              --  iSubType = g_FEATURE_GEOTHERMAL_FISSURE;
+              --elseif tYieldChange.AdjacentFeature == 'FEATURE_REEF' then
+              --  iSubType = g_FEATURE_REEF;
+              --end
+            end
+          elseif tYieldChange.AdjacentWonder then
+            if pAdjacentPlot:IsWonderComplete() then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.AdjacentNaturalWonder then
+            if pAdjacentPlot:IsNaturalWonder() then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.AdjacentRiver then
+            if pAdjacentPlot:IsRiverAdjacent() then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.AdjacentSeaResource then
+            if pAdjacentPlot:GetResourceType() ~= -1 then
+              local tResource = GameInfo.Resources[pAdjacentPlot:GetResourceType()];
+              if tResource.SeaFrequency > 0 then bAdjacentPlotRequirementsMet = true end
+            end
+          elseif tYieldChange.AdjacentResource then
+            if pAdjacentPlot:GetResourceType() ~= -1 then bAdjacentPlotRequirementsMet = true end
+          elseif tYieldChange.AdjacentResourceClass ~= 'NO_RESOURCECLASS' then
+            if pAdjacentPlot:GetResourceType() ~= -1 then
+              local tResource = GameInfo.Resources[pAdjacentPlot:GetResourceType()];
+              if tResource.ResourceClassType == tYieldChange.AdjacentResourceClass then bAdjacentPlotRequirementsMet = true end
+            end
+          elseif tYieldChange.AdjacentImprovement ~= nil then
+            if CYP_WOR_IMPROVEMENT_TYPES[pAdjacentPlot:GetImprovementType()] == tYieldChange.AdjacentImprovement then 
+              bAdjacentPlotRequirementsMet = true;
+              local tImprovement = GameInfo.Resources[pAdjacentPlot:GetImprovementType()];
+              iSubType = tImprovement.Index;
+              --if tYieldChange.AdjacentImprovement == 'IMPROVEMENT_FARM' then
+              --  iSubType = 1;
+              --elseif tYieldChange.AdjacentImprovement == 'IMPROVEMENT_MINE' then
+              --  iSubType = 2;
+              --elseif tYieldChange.AdjacentImprovement == 'IMPROVEMENT_QUARRY' then
+              --  iSubType = 3;
+              --end
+            end
+          end
+          -- Store adjacency bonus
+          if bAdjacentPlotRequirementsMet then
+            iReqMatchingPlots = iReqMatchingPlots + 1;
+            tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] = iSubType;
+          end
         end
       end
-      -- TODO CYP
-      -- Store adjacency bonu
-      if bAdjacentPlotRequirementsMet then
-        if tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] == nil then
-          tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] = {};
+      -- Store sum value by adjacency and yield type
+      local iValue = math.floor(tYieldChange.YieldChange * iReqMatchingPlots / tYieldChange.TilesRequired);
+      local iYield = GameInfo.Yields[tYieldChange.YieldType].Index;
+      if iValue > 0 then
+        if tAdjacencyTypeBonuses[iYield] == nil then
+          tAdjacencyTypeBonuses[iYield] = {};
         end
-        if tAdjacencyDirectionBonuses[iDirection][eAdjacencyType] == nil then
-          tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType] = 0;
-        end
-        tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType] =
-            tAdjacencyDirectionBonuses[iDirection][eAdjacencyType][tYieldChange.YieldType]
-            + tYieldChange.YieldChange / tYieldChange.TilesRequired;
-        iAdjacentPlotsWithMatchingReqs = iAdjacentPlotsWithMatchingReqs + 1;
+        local tAdjacencyInfo = {};
+        tAdjacencyInfo.iValue = iValue;
+        tAdjacencyInfo.eAdjacencyType = eAdjacencyType;
+        tAdjacencyInfo.sLocTag = tYieldChange.Description;
+        table.insert(tAdjacencyTypeBonuses[iYield], tAdjacencyInfo);
       end
     end
-    -- Determine yield
-    if tAdjacencyBonuses[eAdjacencyType] == nil then
-      tAdjacencyBonuses[eAdjacencyType] = {};
-    end
-    if tAdjacencyBonuses[eAdjacencyType] == nil then
-      tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType] = 0;
-    end
-    tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType] = 
-        tAdjacencyBonuses[eAdjacencyType][tYieldChange.YieldType]
-        + tYieldChange.YieldChange * iAdjacentPlotsWithMatchingReqs / tYieldChange.TilesRequired;
   end
+  -- Store cache
+  ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot][iDistrict] = tAdjacencyDirectionBonuses;
+  ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict] = tAdjacencyTypeBonuses;
 end
 
 -- ---------------------------------------------------------------------------
@@ -415,6 +572,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
       if tBuildingXp2 then
         -- Canal
         if tBuildingXp2.CanalWonder then return false end
+      end
     end
   end
   
@@ -442,7 +600,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
     if tBuilding.AdjacentDistrict then
       local bHasAdjacentDistrict = false;
       for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
-        if pAdjacentPlot:GetDistrictType() == tBuilding.AdjacentDistrict then
+        if CYP_WOR_IMPROVEMENT_TYPES[pAdjacentPlot:GetDistrictType()] == tBuilding.AdjacentDistrict then
           bHasAdjacentDistrict = true;
           break;
         end
@@ -453,7 +611,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
     if tBuilding.AdjacentImprovement then
       local bHasAdjacentImprovement = false;
       for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
-        if pAdjacentPlot:GetImprovementType() == tBuilding.AdjacentImprovement then
+        if CYP_WOR_IMPROVEMENT_TYPES[pAdjacentPlot:GetImprovementType()] == tBuilding.AdjacentImprovement then
           bHasAdjacentImprovement = true;
           break;
         end
@@ -475,7 +633,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
     if tBuilding.AdjacentResource then
       local bHasAdjacentResource = false;
       for _, pAdjacentPlot in ipairs(tAdjacentPlots) do
-        if pAdjacentPlot:GetResourceType() == tBuilding.AdjacentResource then
+        if CYP_WOR_IMPROVEMENT_TYPES[pAdjacentPlot:GetResourceType()] == tBuilding.AdjacentResource then
           bHasAdjacentResource = true;
           break;
         end
@@ -513,11 +671,11 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
   end
   -- Check terrain
   if table.count(tValidTerrainTypes) > 0 
-  and not tValidTerrainTypes[pPlot:GetTerrainType()] 
+  and not tValidTerrainTypes[CYP_WOR_TERRAIN_TYPES[pPlot:GetTerrainType()]] 
   then return false end
   
   -- Feature
-  local sPlotFeatureType = pPlot:GetFeatureType();
+  local sPlotFeatureType = CYP_WOR_FEATURE_TYPES[pPlot:GetFeatureType()];
   
   -- Required Feature | District
   if bIsDistrict then
@@ -580,7 +738,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
   end
   
   -- Resource
-  local sResourceType = pPlot:GetResourceType();
+  local sResourceType = CYP_WOR_RESOURCE_TYPES[pPlot:GetResourceType()];
   if sResourceType ~= nil then
     -- Get resource
     local tResource = GameInfo.Resources[sResourceType];
@@ -603,7 +761,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
   end
   
   -- Improvement
-  local sImprovementType = pPlot:GetImprovementType();
+  local sImprovementType = CYP_WOR_IMPROVEMENT_TYPES[pPlot:GetImprovementType()];
   if sImprovementType ~= nil then
     -- Add remove improvement info
     table.insert(
@@ -727,7 +885,7 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
   if xCityCommandType == CityCommandTypes.PURCHASE 
   and tParameters[CityCommandTypes.PARAM_PLOT_PURCHASE] == nil
   and iX ~= nil and iY ~= nil
-  and iDistance > = CYP_WOR_DST_MIN
+  and iDistance >= CYP_WOR_DST_MIN
   then
     -- Validate
     if not CityManager.CanStartCommand(pCity, xCityCommandType, tParameters) then return false end
@@ -802,7 +960,7 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
   elseif xCityCommandType == CityCommandTypes.SWAP_TILE_OWNER 
   and tParameters[CityCommandTypes.PARAM_SWAP_TILE_OWNER] ~= nil
   and iX ~= nil and iY ~= nil
-  and iDistance > = CYP_WOR_DST_MIN
+  and iDistance >= CYP_WOR_DST_MIN
   then
     -- Collect data
     local pPlot = Map.GetPlot(iX,iY);
@@ -838,7 +996,7 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
   elseif xCityCommandType == CityCommandTypes.PURCHASE 
   and tParameters[CityCommandTypes.PARAM_PLOT_PURCHASE] ~= nil
   and iX ~= nil and iY ~= nil
-  and iDistance > = CYP_WOR_DST_MIN
+  and iDistance >= CYP_WOR_DST_MIN
   then
     -- Validate
     if not CityManager.CanStartCommand(pCity, xCityCommandType, tParameters) then return false end
@@ -864,7 +1022,6 @@ CityManager.RequestCommand = function( pCity, xCityCommandType, tParameters : ta
   -- Original
   CypWorOriginal_CityManager_RequestCommand(pCity, xCityCommandType, tParameters);
 end
-
 
 -- ---------------------------------------------------------------------------
 CypWorOriginal_CityManager_GetCommandTargets = CityManager.GetCommandTargets;
@@ -1141,7 +1298,7 @@ getmetatable(Plot).__index.CanHaveWonder = function ( self, iBuilding : number, 
   -- Determine distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
-  if iDistance <= 3 then
+  if iDistance < CYP_WOR_DST_MIN then
     return CypWorOriginal_Plot_CanHaveWonder(self, iBuilding, iPlayer, iCity);
   end
   -- Determine for outer rings
@@ -1165,23 +1322,11 @@ getmetatable(Plot).__index.CanHaveDistrict = function ( self, iDistrict : number
   -- Determine distance
   local iDistance : number = Map.GetPlotDistance(pPlot:GetX(), pPlot:GetY(), pCity:GetX(), pCity:GetY());
   -- Call original function for inner rings
-  if iDistance <= 3 then
+  if iDistance < CYP_WOR_DST_MIN then
     return CypWorOriginal_Plot_CanHaveDistrict(self, iDistrict, iPlayer, iCity);
   end
   -- Determine for outer rings
   return CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, true, iDistrict);
-end
-
--- ---------------------------------------------------------------------------
--- AddAdjacentPlotBonuses
--- ---------------------------------------------------------------------------
-CypWorOriginal_AddAdjacentPlotBonuses = AddAdjacentPlotBonuses;
--- ---------------------------------------------------------------------------
-function AddAdjacentPlotBonuses( pPlot, sDistrictType, pCity, tCurrentBonuses : table )
-  -- Update plot adjacency cache
-  --CypWorBoorsUpdatePlotDistrictAdjacencyCache(pPlot, sDistrictType, pCity);
-  -- Original
-  return CypWorOriginal_AddAdjacentPlotBonuses(pPlot, sDistrictType, pCity, tCurrentBonuses);
 end
 
 -- ---------------------------------------------------------------------------
@@ -1192,11 +1337,39 @@ end
 -- ---------------------------------------------------------------------------
 CypWorOriginal_Plot_GetAdjacencyBonusType = getmetatable(Plot).__index.GetAdjacencyBonusType;
 -- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, eDistrict, pOtherPlot )
-  -- TODO CYP - required?!
+getmetatable(Plot).__index.GetAdjacencyBonusType = function ( self, iPlayer : number, iCity : number, iDistrict : number, eDirection )
+  -- Collect data
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return false end
+  local pCity = pPlayer:GetCities():FindID(iCity);
+  
+  -- Call original if is inner ring
+  local iDistance : number = Map.GetPlotDistance(self:GetX(), self:GetY(), pCity:GetX(), pCity:GetY());
+  if iDistance < CYP_WOR_DST_MIN then
+    return CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, iDistrict, eDirection);
+  end
+  
   print("plot", self:GetX(), self:GetY(), "GetAdjacencyBonusType");
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyBonusType(self, iPlayer, iCity, eDistrict, pOtherPlot);
+  -- Update cache
+  CypWorBoorsUpdatePlotDistrictAdjacencyCache(self, iDistrict, pCity);
+  -- Collect data
+  local iPlot = self:GetIndex();
+  -- Check if has data
+  if ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot] == nil
+  or ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot][iDistrict] == nil
+  or ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot][iDistrict][eDirection] == nil
+  then return AdjacencyBonusTypes.NO_ADJACENCY, nil end
+  -- Get most relevant type
+  local eMostRelevantAdjacencyType = AdjacencyBonusTypes.NO_ADJACENCY;
+  local iMostRelevantSubType = -1;
+  for eAdjacencyType,iSubType in pairs(ExposedMembers.CypWor.PlotDistrictDirectionAdjacencyTypeCache[iPlot][iDistrict][eDirection]) do
+    if eAdjacencyType > eMostRelevantAdjacencyType then
+      eMostRelevantAdjacencyType = eAdjacencyType;
+      iMostRelevantSubType = iSubType;
+    end
+  end
+  -- Return
+  return eMostRelevantAdjacencyType, iMostRelevantSubType;
 end
 
 -- ---------------------------------------------------------------------------
@@ -1204,11 +1377,36 @@ end
 -- ---------------------------------------------------------------------------
 CypWorOriginal_Plot_GetAdjacencyYield = getmetatable(Plot).__index.GetAdjacencyYield;
 -- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyYield = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
-  -- TODO CYP - required?!
+getmetatable(Plot).__index.GetAdjacencyYield = function ( self, iPlayer : number, iCity : number, iDistrict, iYield : number )
+  -- Collect data
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return false end
+  local pCity = pPlayer:GetCities():FindID(iCity);
+  
+  -- Call original if is inner ring
+  local iDistance : number = Map.GetPlotDistance(iX, iY, pCity:GetX(), pCity:GetY());
+  if iDistance < CYP_WOR_DST_MIN then
+  return CypWorOriginal_Plot_GetAdjacencyYield(self, iPlayer, iCity, iDistrict, iYield);
+  end
+  
   print("plot", self:GetX(), self:GetY(), "GetAdjacencyYield");
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyYield(self, iPlayer, iCity, eDistrict, iYieldType);
+  -- Update cache
+  CypWorBoorsUpdatePlotDistrictAdjacencyCache(self, iDistrict, pCity);
+  -- Collect data
+  local iPlot = self:GetIndex();
+  -- Check if has data
+  if ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot] == nil
+  or ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict] == nil
+  or ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict][iYield] == nil
+  then return 0 end
+  -- Sum yields
+  local tYieldBonuses = ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict][iYield];
+  local iBonusValueSum = 0;
+  for i,tAdjacencyInfo in pairs(tYieldBonuses) do
+    iBonusValueSum = iBonusValueSum + tAdjacencyInfo.iValue;
+  end
+  -- Return
+  return iBonusValueSum;
 end
 
 -- ---------------------------------------------------------------------------
@@ -1216,10 +1414,36 @@ end
 -- ---------------------------------------------------------------------------
 CypWorOriginal_Plot_GetAdjacencyBonusTooltip = getmetatable(Plot).__index.GetAdjacencyBonusTooltip;
 -- ---------------------------------------------------------------------------
-getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer : number, iCity : number, eDistrict, iYieldType : number )
-  -- TODO CYP - required?!
-  print("plot", self:GetX(), self:GetY(), "GetAdjacencyBonusTooltip");
+getmetatable(Plot).__index.GetAdjacencyBonusTooltip = function ( self, iPlayer : number, iCity : number, iDistrict, iYield : number )
+  -- Collect data
+  local pPlayer = Players[iPlayer];
+  if pPlayer == nil then return false end
+  local pCity = pPlayer:GetCities():FindID(iCity);
   
-  -- Original
-  return CypWorOriginal_Plot_GetAdjacencyBonusTooltip(self, iPlayer, iCity, eDistrict, iYieldType);
+  -- Call original if is inner ring
+  local iDistance : number = Map.GetPlotDistance(self:GetX(), self:GetY(), pCity:GetX(), pCity:GetY());
+  if iDistance < CYP_WOR_DST_MIN then
+    return CypWorOriginal_Plot_GetAdjacencyBonusTooltip(self, iPlayer, iCity, iDistrict, iYield);
+  end
+  
+  -- Update cache
+  CypWorBoorsUpdatePlotDistrictAdjacencyCache(self, iDistrict, pCity);
+  -- Collect data
+  local iPlot = self:GetIndex();
+  -- Check if has data
+  if ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot] == nil
+  or ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict] == nil
+  or ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict][iYield] == nil
+  then return "", "" end
+  -- Create tooltip
+  local tYieldBonuses = ExposedMembers.CypWor.PlotDistrictAdjacencyYieldBonusCache[iPlot][iDistrict][iYield];
+  local tYieldTooltipLines = {};
+  for i,tAdjacencyInfo in pairs(tYieldBonuses) do
+    table.insert(tYieldTooltipLines, Locale.Lookup(tAdjacencyInfo.sLocTag, tAdjacencyInfo.iValue);
+  end
+  -- Merge lines
+  local sYieldTooltip = table.concat(tYieldTooltipLines, "[NEWLINE]");
+  local sYieldRequireText "";
+  -- Return
+  return sYieldTooltip, sYieldRequireText;
 end
