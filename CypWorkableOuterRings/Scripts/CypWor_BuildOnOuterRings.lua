@@ -7,8 +7,8 @@
 -- ===========================================================================
 -- INCLUDES
 -- ===========================================================================
--- Utility
-include "CypWor_Utility.lua"
+-- BuildOnOuterRings
+include "CypWor_BuildOnOuterRings.lua"
 
 
 
@@ -23,20 +23,45 @@ local function CypWorBuildPlaceInfrastructure( iPlayer : number, tParameters : t
   -- Get params
   local iCity = tParameters.iCity;
   local iPlot = tParameters.iPlot;
+  local bIsDistrict = tParameters.bIsDistrict;
   -- Get player
   local pPlayer = Players[iPlayer];
   if pPlayer == nil then return end
   -- Get city
   local pCity = pPlayer:GetCities():FindID(iCity);
   if pCity == nil then return end
+  -- Get plot
+  local pPlot = Map.GetPlotByIndex(iPlot);
+  if pPlot == nil then return end
+  -- Validate
+  local iInfrastructure = -1;
+  if bIsDistrict then
+    iInfrastructure = tParameters.iDistrict;
+  else
+    iInfrastructure = tParameters.iBuilding;
+  end
+  local bCanStart, tSuccessConditions = CypWorBoorsCanBuildInfrastructureOnPlot(pPlot, bIsDistrict, iInfrastructure);
+  if not bCanStart then return end
   -- Place infrastructure
   local tQueueParameters = {};
-  if tParameters.bIsDistrict then
+  if bIsDistrict then
     pCity:GetBuildQueue():CreateIncompleteDistrict(tParameters.iDistrict, iPlot, 0);
     tQueueParameters[CityOperationTypes.PARAM_DISTRICT_TYPE] = tParameters.sDistrictHash;
   else
     pCity:GetBuildQueue():CreateIncompleteBuilding(tParameters.iBuilding, iPlot, 0);
     tQueueParameters[CityOperationTypes.PARAM_BUILDING_TYPE] = tParameters.sBuildingHash;
+  end
+  -- Remove feature
+  if tSuccessConditions.sFeatureType then
+    TerrainBuilder.SetFeatureType(pPlot, -1);
+  end
+  -- Remove improvement
+  if tSuccessConditions.sImprovementsType then
+    ImprovementBuilder:SetImprovementType(pPlot, -1);
+  end
+  -- Remove resource
+  if tSuccessConditions.sResourcesType then
+    ResourceBuilder.SetResourceType(pPlot, -1);
   end
   -- Add to queue
   tQueueParameters[CityOperationTypes.PARAM_INSERT_MODE] = tParameters.xInsertMode;

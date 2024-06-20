@@ -532,7 +532,7 @@ end
 -- ---------------------------------------------------------------------------
 -- CypWorBoorsCanBuildInfrastructureOnPlot
 -- ---------------------------------------------------------------------------
-local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInfrastructure : number )
+function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInfrastructure : number )
   
   -- Get player
   local iPlayer = pPlot:GetOwner();
@@ -729,11 +729,8 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
         local iTech = GameInfo.Technologies[tFeature.RemoveTech].Index;
         if pPlayer:GetTech():HasTech(iTech) then return false end
       end
-      -- Add remove improvement info
-      table.insert(
-        tSuccessConditions, 
-        Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_FEATURE', tFeature.Name));
-      -- TODO CYP - is the feature removed without extra script code?
+      -- Add remove feature info
+      tSuccessConditions.sFeatureType = tFeature.FeatureType;
     end
   end
   
@@ -753,10 +750,7 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
         if pPlayer:GetTech():HasTech(iTech) then return false end
       end
       -- Add harvest resource info
-      table.insert(
-        tSuccessConditions, 
-        Locale.Lookup('LOC_DISTRICT_ZONE_WILL_HARVEST_RESOURCE', tResource.Name));
-      -- TODO CYP - is the resource removed without extra script code?
+      tSuccessConditions.sResourceType = tFeature.FeatureType;
     end
   end
   
@@ -764,14 +758,34 @@ local function CypWorBoorsCanBuildInfrastructureOnPlot( pPlot, bIsDistrict, iInf
   local sImprovementType = CYP_WOR_IMPROVEMENT_TYPES[pPlot:GetImprovementType()];
   if sImprovementType ~= nil then
     -- Add remove improvement info
-    table.insert(
-      tSuccessConditions, 
-      Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_IMPROVEMENT', GameInfo.Improvements[sImprovementType].Name));
-    -- TODO CYP - is the improvement removed without extra script code?
+    tSuccessConditions.sImprovementType = sImprovementType;
   end
   
   -- Return
   return true, tSuccessConditions;
+end
+
+-- ---------------------------------------------------------------------------
+-- CypWorBoorsGetSuccessConditionTexts
+-- ---------------------------------------------------------------------------
+local function CypWorBoorsGetSuccessConditionTexts( tSuccessConditions :table );
+  local tSuccessConditionTexts = {};
+  if tSuccessConditions.sFeatureType then
+    table.insert(
+      tSuccessConditionTexts, Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_FEATURE', 
+      GameInfo.Features[tSuccessConditions.sFeatureType].Name));
+  end
+  if tSuccessConditions.sImprovementsType then
+    table.insert(
+      tSuccessConditionTexts, Locale.Lookup('LOC_DISTRICT_ZONE_WILL_REMOVE_IMPROVEMENT', 
+      GameInfo.Improvements[tSuccessConditions.sImprovementsType].Name));
+  end
+  if tSuccessConditions.sResourcesType then
+    table.insert(
+      tSuccessConditionTexts, Locale.Lookup('LOC_DISTRICT_ZONE_WILL_HARVEST_RESOURCE', 
+      GameInfo.Resources[tSuccessConditions.sResourcesType].Name));
+  end
+  return tSuccessConditionTexts;
 end
 
 
@@ -831,8 +845,9 @@ CityManager.CanStartCommand = function( pCity, xCityCommandType, tParameters : t
     end
     -- Return
     local tResults = {};
-    if table.count(tSuccessConditions) > 0 then
-      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditions;
+    local tSuccessConditionTexts = CypWorBoorsGetSuccessConditionTexts(tSuccessConditions);
+    if table.count(tSuccessConditionTexts) then
+      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditionTexts;
     end
     return true, tResults;
   
@@ -1185,8 +1200,9 @@ CityManager.CanStartOperation = function( pCity, xCityOperationType, tParameters
     end
     -- Return
     local tResults = {};
-    if table.count(tSuccessConditions) > 0 then
-      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditions;
+    local tSuccessConditionTexts = CypWorBoorsGetSuccessConditionTexts(tSuccessConditions);
+    if table.count(tSuccessConditionTexts) then
+      tResults[CityOperationResults.SUCCESS_CONDITIONS] = tSuccessConditionTexts;
     end
     return true, tResults;
   end
