@@ -1,0 +1,85 @@
+新增[b]拓荒驻地[/b]区域，允许公民在第四和第五环工作。
+
+[img]https://i.imgur.com/VogbSSm.gif[/img]
+
+
+[h1]详细信息[/h1]
+[list][*]这并非专业化区域，所以不受人口限制。
+[*]公民可以像三环的单元格一样在外环的单元格工作。
+[*]奇观或区域不能放在外环。
+[*]外环的单元格可以交换。[/list]
+
+[quote][h2][img]https://i.ibb.co/jZ9VBMG/District-Wor-Text-zh.png[/img][/h2]
+[i]区域 (中世纪 - 封建主义)[/i]
+
+城市人口可以在此城市四环内工作。
+此城市可使用金币购买四环单元格。
+建成时触发文化炸弹，对相邻中立单元格施放文化炸弹。可以通过文化炸弹获得此城市4环的单元格。
+
++1 住房
+[i]不能靠近市中心。[/i][/quote]
+
+[quote][h2][img]https://i.ibb.co/LSXC2bd/Building-LS-Text-zh.png[/img][/h2]
+[i]区域 (工业时代 - 城市化)[/i]
+
+城市人口可以在此城市五环内工作。
+此城市可使用金币购买五环单元格。
+若建成时已研究“蒸汽动力”科技，则在1单元格内所有陆地单元格铺设铁路。
+可以通过文化炸弹获得此城市5环的单元格。
+
+[i]需求：拓荒驻地[/i][/quote]
+
+
+[h1]已知问题和如何贡献？[/h1]
+[list][*]外环工作瓦片动画：目前，外环中的工作瓦片缺乏动画效果，例如旋转的风车。如果您具有改进3D模型的经验，并且愿意为此做出贡献，请与我们联系。
+[*]外圈山形牌的修改器延迟：通过购买、交换或文化炸弹获得的外圈牌在重新加载游戏（例如印加生产）之前不会应用修改器。[/list]
+请在此报告错误或建议功能：
+[list][*][url=https://discord.gg/44m2uSTwcU][b]不和[/b][/url] (首选)
+[*][url=steamcommunity.com/workshop/filedetails/discussion/3208124358/4361247820931424905]错误报告讨论[/url][/list]
+
+
+[h1]关联MOD[/h1]
+此模组基于[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url]的[b]Neighborhood Tall Expansion[/b]。
+当同时启用时，[b]Neighborhood Expansion[/b]将失效，[b]拓荒驻地[/b]继续有效。
+若你认为外环解锁应该推迟，你可以考虑不使用这个MOD，改为使用[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][b]CypRyan's Wide&Tall[/b][/url]。
+[url=steamcommunity.com/sharedfiles/filedetails/?id=2706527619][img]https://i.ibb.co/D8ZTTJM/Workshop-Link.png[/img][/url]
+另外，记得也去看看 [url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][b]Phantagonist：亚斯奇兰的舒克夫人[/b][/url] 。
+[url=steamcommunity.com/sharedfiles/filedetails/?id=3013728616][img]https://i.ibb.co/Bt7SfNT/Phantagonists-Lady-Xoc-Of-Yaxchilan.png[/img][/url]
+
+
+[h1]手册下载[/h1]
+请登录 [url=https://discord.gg/PnWGUXphBF][b]纪和声[/b][/url] 手动下载最新版本。
+
+
+[h1]语言[/h1]
+[list][*][b]English[/b]
+[*][b]Chinese | 汉语/漢語[/b] (Phantagonist)
+[*][b]German | Deutsch[/b] (CypRyan)
+[*][b]French | Français[/b] (DeepL)
+[*][b]Spanish | Español[/b] (TheColdHands)
+[*][b]Portuguese | Português[/b] (TheColdHands)
+[*][b]Italian | Italiano[/b] (DeepL)
+[*][b]Japanese | 日本語[/b] (Phantagonist)[/list]
+
+
+[h1]开发者和贡献者[/h1]
+[list][*][b]CypRyan[/b]
+[*][b]Mikecro[/b] (三维模型)
+[*][b]Phantagonist[/b] (翻译成中文和日文)
+[*][b]TheColdHands[/b] (译文)[/list]
+
+
+[h1]特别感谢[/h1]
+[list][*]Zegangani
+[*]SailorCat
+[*]ZeAmadhe
+[*]Jamie-nyanchi
+[*]JNR
+[*]MC
+[*]Zolaar
+[*][url=https://discord.gg/jSVhyBYvZR][b]Civ VI Modding Helpline[/b][/url][/list]
+[url=https://discord.gg/jSVhyBYvZR][img]https://i.imgur.com/q7qlltt.png[/img][/url]
+
+
+[h1]请作者喝咖啡[/h1]
+[url=https://ko-fi.com/cypryan77331][img]https://i.imgur.com/QUjAJUT.png[/img][/url]
