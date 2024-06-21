@@ -791,6 +791,24 @@ end
 
 
 -- ===========================================================================
+-- DEBUG
+-- ===========================================================================
+-- CityManager
+print("----------------------------------------------");
+print("CityManager", CityManager);
+print("ExposedMembers.CityManager", ExposedMembers.CityManager);
+print("WorldBuilder.CityManager", WorldBuilder.CityManager);
+print("----------------------------------------------");
+print("CityManager.CanStartCommand", CityManager.CanStartCommand);
+print("CityManager.RequestCommand", CityManager.RequestCommand);
+print("CityManager.GetCommandTargets", CityManager.GetCommandTargets);
+print("CityManager.CanStartOperation", CityManager.CanStartOperation);
+print("CityManager.RequestOperation", CityManager.RequestOperation);
+print("CityManager.GetOperationTargets", CityManager.GetOperationTargets);
+print("----------------------------------------------");
+
+
+-- ===========================================================================
 -- OVERWRITES
 -- ===========================================================================
 
