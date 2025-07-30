@@ -26,6 +26,7 @@
   <Reference type="Mod" title="Sukritact's Simple UI Adjustments" id="805cc499-c534-4e0a-bdce-32fb3c53ba38" />
   <Block type="Mod" title="At a glance UI" id="017fba02-3052-11e9-b210-d663bd873d93" />
   <Block type="Mod" title="PhantomJM's Workable 4th Ring" id="8f5e69f9-53ea-4dce-b589-b78d21153ad3" />
+  <Block type="Mod" title="Districts Dont Remove Yields" id="6dee5a28-7b4a-4fd5-8672-5f18f4b0919b" />
 </Associations>]]></AssociationData>
     <ActionCriteriaData><![CDATA[
 <ActionCriteria>
